@@ -163,7 +163,7 @@ export default function ContainerFleetPage() {
               )}
 
               {c.notes && (
-                <p className="text-xs text-gray-500 mb-3 italic">"{c.notes}"</p>
+                <p className="text-xs text-gray-500 mb-3 italic">&ldquo;{c.notes}&rdquo;</p>
               )}
 
               <div className="flex gap-2 flex-wrap">

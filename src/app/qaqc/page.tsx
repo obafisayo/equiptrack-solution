@@ -10,7 +10,6 @@ import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
 import { WORK_ORDERS, CONTAINERS, type WorkOrder, type Container } from '@/lib/mock-data'
 import { STAGE_SLA_HOURS, fmtHours } from '@/config/sla'
-import { type Stage } from '@/lib/lifecycle'
 
 const QAQC_OFFICER = 'QA1'
 const QAQC_OFFICER_NAME = 'Femi Emmanuel'
@@ -150,7 +149,7 @@ export default function QAQCPage() {
     setContainerModalOrder(null)
   }
 
-  function handleApprove(orderId: string, notes: string) {
+  function handleApprove(orderId: string, _notes: string) {
     setOrders(prev => prev.map(o =>
       o.id === orderId
         ? {

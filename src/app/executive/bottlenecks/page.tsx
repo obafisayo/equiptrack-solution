@@ -1,14 +1,13 @@
 'use client'
 
-import { useState } from 'react'
 import AppShell from '@/components/layout/AppShell'
 import { StatCard } from '@/components/domain/StatCard'
 import { StagePill } from '@/components/domain/Pills'
 import { SectionTitle } from '@/components/domain/OrderGrid'
 import { Card } from '@/components/ui/Card'
-import { WORK_ORDERS, PERSONNEL } from '@/lib/mock-data'
-import { LIFECYCLE, STAGE_DEPARTMENT, DEPARTMENT_COLOR, type Stage } from '@/lib/lifecycle'
-import { STAGE_SLA_HOURS, fmtHours, getSlaStatus } from '@/config/sla'
+import { WORK_ORDERS } from '@/lib/mock-data'
+import { LIFECYCLE, STAGE_DEPARTMENT, DEPARTMENT_COLOR } from '@/lib/lifecycle'
+import { STAGE_SLA_HOURS, fmtHours } from '@/config/sla'
 
 const allOrders = WORK_ORDERS.filter(o => !['Shipped', 'Completed'].includes(o.stage))
 
@@ -195,8 +194,6 @@ export default function BottlenecksPage() {
             </thead>
             <tbody className="divide-y divide-border-default">
               {oldestOrders.map((o, i) => {
-                const sla = STAGE_SLA_HOURS[o.stage]
-                const status = getSlaStatus(o.elapsedHours, sla)
                 return (
                   <tr key={o.id} className="hover:bg-gray-50">
                     <td className="px-4 py-3">

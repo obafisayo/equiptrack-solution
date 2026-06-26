@@ -17,8 +17,6 @@ export function StageStrip({ currentStage, compact = false }: StageStripProps) {
         const color = DEPARTMENT_COLOR[dept]
         const isPast = i < currentIdx
         const isCurrent = i === currentIdx
-        const isFuture = i > currentIdx
-
         return (
           <div key={stage} className="flex items-center gap-0.5 shrink-0">
             <div
@@ -64,7 +62,7 @@ interface StageHistoryProps {
   currentStage: Stage
 }
 
-export function StageHistory({ history, currentStage }: StageHistoryProps) {
+export function StageHistory({ history }: StageHistoryProps) {
   return (
     <div className="space-y-0">
       {history.map((entry, i) => {

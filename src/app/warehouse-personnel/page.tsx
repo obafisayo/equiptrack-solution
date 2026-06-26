@@ -10,7 +10,7 @@ import { StagePill } from '@/components/domain/Pills'
 import { SLABar } from '@/components/domain/SLABar'
 import { WORK_ORDERS, type WorkOrder } from '@/lib/mock-data'
 import { STAGE_SLA_HOURS, fmtHours, type UrgencyLevel } from '@/config/sla'
-import { type Stage, STAGE_REVERSAL } from '@/lib/lifecycle'
+import { type Stage } from '@/lib/lifecycle'
 
 // Emeka Okonkwo = WH1
 const MY_ID = 'WH1'

@@ -7,7 +7,7 @@ import { StatCard } from '@/components/domain/StatCard'
 import { DetailPanel } from '@/components/domain/DetailPanel'
 import { AssignModal } from '@/components/domain/AssignModal'
 import { SectionTitle } from '@/components/domain/OrderGrid'
-import { WORK_ORDERS, PERSONNEL, type WorkOrder, getPersonnelByDept } from '@/lib/mock-data'
+import { WORK_ORDERS, type WorkOrder, getPersonnelByDept } from '@/lib/mock-data'
 import { STAGE_REVERSAL, type Stage } from '@/lib/lifecycle'
 import { STAGE_SLA_HOURS, type UrgencyLevel } from '@/config/sla'
 

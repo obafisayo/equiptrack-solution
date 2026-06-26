@@ -1,14 +1,13 @@
 ﻿'use client'
 
-import { useState, useMemo } from 'react'
+import { useState } from 'react'
 import AppShell from '@/components/layout/AppShell'
 import { WorkOrderCard } from '@/components/domain/WorkOrderCard'
 import { StatCard } from '@/components/domain/StatCard'
 import { AssignModal } from '@/components/domain/AssignModal'
 import { SectionTitle } from '@/components/domain/OrderGrid'
-import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
-import { WORK_ORDERS, PERSONNEL, type WorkOrder, type Personnel, getPersonnelByDept } from '@/lib/mock-data'
+import { WORK_ORDERS, type WorkOrder, getPersonnelByDept } from '@/lib/mock-data'
 import { type Stage } from '@/lib/lifecycle'
 
 const DISPATCH_ACTIVE_STAGES: Stage[] = ['Dispatch Assigned', 'Preload QAQC', 'Containerization', 'Post QAQC', 'Waybill Pending Signature', 'Waybill Done', 'Awaiting Deckspace']

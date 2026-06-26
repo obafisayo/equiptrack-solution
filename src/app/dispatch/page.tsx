@@ -7,11 +7,9 @@ import { StatCard } from '@/components/domain/StatCard'
 import { DetailPanel } from '@/components/domain/DetailPanel'
 import { AssignModal } from '@/components/domain/AssignModal'
 import { SectionTitle } from '@/components/domain/OrderGrid'
-import { StagePill } from '@/components/domain/Pills'
-import { Button } from '@/components/ui/Button'
-import { WORK_ORDERS, PERSONNEL, type WorkOrder, getPersonnelByDept } from '@/lib/mock-data'
+import { WORK_ORDERS, type WorkOrder, getPersonnelByDept } from '@/lib/mock-data'
 import { STAGE_REVERSAL, type Stage } from '@/lib/lifecycle'
-import { STAGE_SLA_HOURS, fmtHours } from '@/config/sla'
+import { STAGE_SLA_HOURS } from '@/config/sla'
 
 const DISPATCH_STAGES: Stage[] = [
   'Dispatch Queue', 'Dispatch Assigned', 'Preload QAQC',

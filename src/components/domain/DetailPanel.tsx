@@ -3,7 +3,7 @@
 import type { WorkOrder } from '@/lib/mock-data'
 import type { Role } from '@/lib/lifecycle'
 import { STAGE_REVERSAL } from '@/lib/lifecycle'
-import { STAGE_SLA_HOURS, URGENCY_CONFIG, fmtHours } from '@/config/sla'
+import { STAGE_SLA_HOURS, fmtHours } from '@/config/sla'
 import { StagePill, UrgencyPill, TypeBadge } from './Pills'
 import { SLABar } from './SLABar'
 import { StageHistory } from './StageTimeline'

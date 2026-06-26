@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useMemo } from 'react'
+import { useState } from 'react'
 import AppShell from '@/components/layout/AppShell'
 import { StatCard } from '@/components/domain/StatCard'
 import { DetailPanel } from '@/components/domain/DetailPanel'

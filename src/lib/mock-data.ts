@@ -1,5 +1,6 @@
 import type { Stage, Role } from '@/lib/lifecycle'
 import type { UrgencyLevel } from '@/config/sla'
+import { STAGE_SLA_HOURS } from '@/config/sla'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -796,7 +797,6 @@ export function getPersonnelByDept(dept: PersonnelDept): Personnel[] {
 
 export function getSlaBreachedOrders(): WorkOrder[] {
   return WORK_ORDERS.filter(o => {
-    const { STAGE_SLA_HOURS } = require('@/config/sla')
     const slaH = STAGE_SLA_HOURS[o.stage]
     return slaH != null && o.elapsedHours > slaH
   })

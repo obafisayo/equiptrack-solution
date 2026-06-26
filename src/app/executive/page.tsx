@@ -8,7 +8,7 @@ import { ChartCard, TrendChart, BarChart, LoadBars, DonutChart } from '@/compone
 import { SectionTitle } from '@/components/domain/OrderGrid'
 import { StagePill } from '@/components/domain/Pills'
 import { WORK_ORDERS, PERSONNEL } from '@/lib/mock-data'
-import { LIFECYCLE, STAGE_DEPARTMENT, type Stage } from '@/lib/lifecycle'
+import { LIFECYCLE, STAGE_DEPARTMENT } from '@/lib/lifecycle'
 import { STAGE_SLA_HOURS, fmtHours, getSlaStatus } from '@/config/sla'
 
 // ── Derived metrics ──────────────────────────────────────────────────────────

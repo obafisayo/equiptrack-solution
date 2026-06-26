@@ -40,7 +40,6 @@ export function OrderGrid({
   onAssign,
   onReverse,
   showActions = true,
-  role,
   compact = false,
 }: OrderGridProps) {
   return (

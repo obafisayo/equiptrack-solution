@@ -8,7 +8,7 @@ import { StagePill } from '@/components/domain/Pills'
 import { SLABar } from '@/components/domain/SLABar'
 import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
-import { WORK_ORDERS, CONTAINERS, type WorkOrder, type Container } from '@/lib/mock-data'
+import { WORK_ORDERS, type WorkOrder } from '@/lib/mock-data'
 import { STAGE_SLA_HOURS, fmtHours } from '@/config/sla'
 import { type Stage } from '@/lib/lifecycle'
 
