@@ -1,6 +1,8 @@
 'use client'
 
 import { useState, useMemo } from 'react'
+import { Timer, Package, CheckCircle2, AlertTriangle, TrendingUp, Users, Settings } from 'lucide-react'
+import Link from 'next/link'
 import AppShell from '@/components/layout/AppShell'
 import { StatCard } from '@/components/domain/StatCard'
 import { BottleneckHeatmap } from '@/components/domain/BottleneckHeatmap'
@@ -14,7 +16,6 @@ import { STAGE_SLA_HOURS, fmtHours, getSlaStatus } from '@/config/sla'
 // ── Derived metrics ──────────────────────────────────────────────────────────
 
 const allOrders = WORK_ORDERS
-
 const activeOrders = allOrders.filter(o => !['Shipped', 'Completed'].includes(o.stage))
 
 const shippedThisWeek = allOrders.filter(o =>
@@ -37,7 +38,7 @@ const TARGET_CYCLE_HOURS = 72 // 3 days
 function fmtCycleTime(h: number) {
   const d = Math.floor(h / 24)
   const hr = h % 24
-  return d > 0 ? `${d}d ${hr}h` : `${hr}h`
+  return d > 0 ? d + 'd ' + hr + 'h' : hr + 'h'
 }
 
 // ── Stage heatmap data ──────────────────────────────────────────────────────
@@ -123,10 +124,11 @@ const SUPERVISOR_PERF = [
 ]
 
 function SlaComplianceBadge({ pct }: { pct: number }) {
-  const color = pct >= 90 ? '#22C55E' : pct >= 75 ? '#F59E0B' : '#EF4444'
-  const bg    = pct >= 90 ? '#F0FDF4' : pct >= 75 ? '#FFFBEB' : '#FEF2F2'
+  const isGood = pct >= 90
+  const isWarn = pct >= 75 && pct < 90
+  const className = isGood ? 'bg-status-success-bg text-status-success' : isWarn ? 'bg-status-medium-bg text-status-medium' : 'bg-status-critical-bg text-status-critical'
   return (
-    <span className="text-xs font-bold px-2 py-0.5 rounded-full" style={{ color, background: bg }}>
+    <span className={['text-xs font-bold px-2.5 py-0.5 rounded-badge', className].join(' ')}>
       {pct}%
     </span>
   )
@@ -134,8 +136,8 @@ function SlaComplianceBadge({ pct }: { pct: number }) {
 
 function TrendArrow({ direction }: { direction: 'up' | 'down' }) {
   return direction === 'up'
-    ? <span className="text-green-500 font-bold">↑</span>
-    : <span className="text-red-500 font-bold">↓</span>
+    ? <span className="text-status-success font-bold text-lg">&uarr;</span>
+    : <span className="text-status-critical font-bold text-lg">&darr;</span>
 }
 
 export default function ExecutivePage() {
@@ -161,28 +163,55 @@ export default function ExecutivePage() {
   }))
 
   return (
-    <AppShell role="exec" currentPath="/executive" title="Executive Overview">
+    <AppShell
+      role="exec"
+      currentPath="/executive"
+      title="Executive Overview"
+      breadcrumb={[{ label: 'Home', href: '/' }, { label: 'Executive' }]}
+      actionLabel="Bottleneck Analysis"
+      actionHref="/executive/bottlenecks"
+    >
+      {/* ── Admin quick links ────────────────────────────────────────────── */}
+      <div className="bg-white rounded-card border border-border-default shadow-sm p-4 mb-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div>
+          <h2 className="text-sm font-bold text-neutral-900 m-0">Organization Administration</h2>
+          <p className="text-xs text-neutral-500 m-0 mt-0.5">Manage your team, settings, and integrations</p>
+        </div>
+        <div className="flex gap-3">
+          <Link href="/executive/users" className="bg-brand-50 text-brand-500 hover:bg-brand-100 px-4 py-2 rounded-md text-xs font-semibold flex items-center gap-2 transition-colors">
+            <Users size={14} />
+            User Management
+          </Link>
+          <Link href="/executive/settings" className="bg-neutral-50 text-neutral-700 hover:bg-neutral-100 border border-border-default px-4 py-2 rounded-md text-xs font-semibold flex items-center gap-2 transition-colors">
+            <Settings size={14} />
+            Org Settings
+          </Link>
+        </div>
+      </div>
 
       {/* KPI STRIP */}
-      <div className="grid grid-cols-2 xl:grid-cols-5 gap-4 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
         <StatCard
           label="Avg Cycle Time"
           value={fmtCycleTime(avgCycleHours)}
           color={avgCycleHours > TARGET_CYCLE_HOURS ? '#EF4444' : '#22C55E'}
-          trend={{ direction: avgCycleHours > TARGET_CYCLE_HOURS ? 'up' : 'down', value: `Target: ${fmtCycleTime(TARGET_CYCLE_HOURS)}`, positive: avgCycleHours <= TARGET_CYCLE_HOURS }}
+          trend={{ direction: avgCycleHours > TARGET_CYCLE_HOURS ? 'up' : 'down', value: 'Target: ' + fmtCycleTime(TARGET_CYCLE_HOURS), positive: avgCycleHours <= TARGET_CYCLE_HOURS }}
+          icon={Timer}
         />
-        <StatCard label="Active Requests"  value={activeOrders.length}  color="#3B82F6" />
-        <StatCard label="Shipped This Week" value={shippedThisWeek}     color="#10B981" />
+        <StatCard label="Active Requests"   value={activeOrders.length} color="#3B82F6" icon={Package} />
+        <StatCard label="Shipped This Week" value={shippedThisWeek}     color="#10B981" icon={CheckCircle2} />
         <StatCard
           label="SLA Breach Rate"
-          value={`${slaBreachRate}%`}
+          value={slaBreachRate + '%'}
           color={slaBreachRate > 10 ? '#EF4444' : '#22C55E'}
-          trend={{ direction: slaBreachRate > 10 ? 'up' : 'down', value: `${breachedCount} orders`, positive: slaBreachRate <= 10 }}
+          trend={{ direction: slaBreachRate > 10 ? 'up' : 'down', value: breachedCount + ' orders', positive: slaBreachRate <= 10 }}
+          icon={AlertTriangle}
         />
         <StatCard
           label="On-Time Delivery"
-          value={`${100 - slaBreachRate}%`}
+          value={(100 - slaBreachRate) + '%'}
           color={100 - slaBreachRate >= 90 ? '#22C55E' : '#F59E0B'}
+          icon={TrendingUp}
         />
       </div>
 
@@ -190,18 +219,21 @@ export default function ExecutivePage() {
       <section className="mb-8">
         <div className="flex items-center justify-between mb-3">
           <div>
-            <h2 className="text-sm font-bold text-gray-800 tracking-wide">Department Dwell Time</h2>
-            <p className="text-xs text-gray-500 mt-0.5">Avg hours per stage vs SLA target — color indicates breach severity</p>
+            <h2 className="text-sm font-bold text-neutral-900 tracking-wide m-0">Department Dwell Time</h2>
+            <p className="text-xs text-neutral-500 mt-0.5 m-0">Avg hours per stage vs SLA target — color indicates breach severity</p>
           </div>
-          <a href="/executive/bottlenecks" className="text-xs text-brand-500 hover:text-brand-600 font-medium">
-            View detailed analysis →
-          </a>
+          <Link href="/executive/bottlenecks" className="text-xs font-semibold text-brand-500 hover:text-brand-600 no-underline transition-colors">
+            View detailed analysis &rarr;
+          </Link>
         </div>
         <BottleneckHeatmap data={heatmapData} />
       </section>
 
+      {/* ANALYTICS */}
+      <h2 className="text-[15px] font-bold text-neutral-900 mb-4">Analytics</h2>
+
       {/* CHARTS ROW 1 */}
-      <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 mb-4">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
         <ChartCard title="Requests Submitted vs Shipped" subtitle="Last 7 days">
           <TrendChart
             series={[
@@ -218,7 +250,7 @@ export default function ExecutivePage() {
       </div>
 
       {/* CHARTS ROW 2 */}
-      <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 mb-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-8">
         <ChartCard title="Weekly Volume" subtitle="Requests processed per day">
           <BarChart data={BAR_DATA} height={160} color="#8B5CF6" />
         </ChartCard>
@@ -230,22 +262,24 @@ export default function ExecutivePage() {
       {/* PERFORMANCE TABLE */}
       <section className="mb-8">
         <SectionTitle title="Performance by Supervisor" count={SUPERVISOR_PERF.length} />
-        <div className="mt-3 bg-white border border-border-default rounded-card shadow-card overflow-hidden">
+        <div className="mt-3 bg-white border border-border-default rounded-card shadow-card overflow-x-auto">
           <table className="w-full text-sm">
-            <thead className="bg-gray-50 border-b border-border-default">
+            <thead className="bg-neutral-50 border-b border-border-default">
               <tr>
                 {['Supervisor', 'Team', 'Active Orders', 'Avg Stage Time', 'SLA Compliance', 'Trend'].map(col => (
-                  <th key={col} className="text-left text-xs font-semibold text-gray-500 uppercase tracking-wider px-4 py-3">{col}</th>
+                  <th key={col} className="text-left text-xs font-semibold text-neutral-500 uppercase tracking-wider px-4 py-3">
+                    {col}
+                  </th>
                 ))}
               </tr>
             </thead>
             <tbody className="divide-y divide-border-default">
               {SUPERVISOR_PERF.map(sup => (
-                <tr key={sup.name} className="hover:bg-gray-50 transition-colors duration-100">
-                  <td className="px-4 py-3 font-medium text-gray-900">{sup.name}</td>
-                  <td className="px-4 py-3 text-gray-600">{sup.team}</td>
-                  <td className="px-4 py-3 font-semibold text-gray-900">{sup.activeOrders}</td>
-                  <td className="px-4 py-3 text-gray-600">{sup.avgStageTime}</td>
+                <tr key={sup.name} className="hover:bg-neutral-50 transition-colors">
+                  <td className="px-4 py-3 font-semibold text-neutral-900">{sup.name}</td>
+                  <td className="px-4 py-3 text-neutral-600 font-medium">{sup.team}</td>
+                  <td className="px-4 py-3 font-bold text-neutral-900">{sup.activeOrders}</td>
+                  <td className="px-4 py-3 text-neutral-600 font-medium">{sup.avgStageTime}</td>
                   <td className="px-4 py-3"><SlaComplianceBadge pct={sup.slaCompliance} /></td>
                   <td className="px-4 py-3"><TrendArrow direction={sup.trend} /></td>
                 </tr>
@@ -259,16 +293,16 @@ export default function ExecutivePage() {
       <section>
         <button
           onClick={() => setOrdersOpen(o => !o)}
-          className="flex items-center gap-2 mb-3 text-sm font-semibold text-gray-700 hover:text-gray-900"
+          className="flex items-center gap-2 mb-3 text-sm font-semibold text-neutral-700 hover:text-neutral-900 focus:outline-none"
         >
           <span>All Active Orders ({activeOrders.length})</span>
-          <span className="text-gray-400 text-xs">{ordersOpen ? '▲' : '▼'}</span>
+          <span className="text-neutral-400 text-xs">{ordersOpen ? '▲' : '▼'}</span>
         </button>
 
         {ordersOpen && (
-          <div className="bg-white border border-border-default rounded-card shadow-card overflow-hidden animate-fade-in">
+          <div className="bg-white border border-border-default rounded-card shadow-card overflow-x-auto animate-fade-in">
             <table className="w-full text-sm">
-              <thead className="bg-gray-50 border-b border-border-default">
+              <thead className="bg-neutral-50 border-b border-border-default">
                 <tr>
                   {[
                     { key: 'id',      label: 'Delivery No.' },
@@ -281,10 +315,10 @@ export default function ExecutivePage() {
                     <th
                       key={col.label}
                       onClick={() => col.key && setSortCol(col.key as 'id' | 'stage' | 'elapsed')}
-                      className={`text-left text-xs font-semibold text-gray-500 uppercase tracking-wider px-4 py-3 ${col.key ? 'cursor-pointer hover:text-gray-700' : ''}`}
+                      className={['text-left text-xs font-semibold text-neutral-500 uppercase tracking-wider px-4 py-3', col.key ? 'cursor-pointer hover:text-neutral-700' : ''].join(' ')}
                     >
                       {col.label}
-                      {col.key && sortCol === col.key && <span className="ml-1 text-brand-500">↓</span>}
+                      {col.key && sortCol === col.key && <span className="ml-1 text-brand-500">&darr;</span>}
                     </th>
                   ))}
                 </tr>
@@ -294,19 +328,19 @@ export default function ExecutivePage() {
                   const sla     = STAGE_SLA_HOURS[o.stage]
                   const status  = getSlaStatus(o.elapsedHours, sla)
                   return (
-                    <tr key={o.id} className="hover:bg-gray-50 transition-colors duration-100">
-                      <td className="px-4 py-2.5 font-mono font-semibold text-brand-500 text-xs">{o.id}</td>
-                      <td className="px-4 py-2.5"><StagePill stage={o.stage} /></td>
-                      <td className="px-4 py-2.5">
-                        <span className="text-xs font-semibold" style={{ color: status.color }}>
+                    <tr key={o.id} className="hover:bg-neutral-50 transition-colors">
+                      <td className="px-4 py-3 font-mono font-bold text-brand-500 text-xs">{o.id}</td>
+                      <td className="px-4 py-3"><StagePill stage={o.stage} /></td>
+                      <td className="px-4 py-3">
+                        <span className="text-xs font-bold" style={{ color: status.color }}>
                           {fmtHours(o.elapsedHours)}
                         </span>
                       </td>
-                      <td className="px-4 py-2.5 text-gray-700 text-xs truncate max-w-[140px]">{o.destination}</td>
-                      <td className="px-4 py-2.5">
-                        <span className="text-xs font-medium text-gray-600">{o.urgency}</span>
+                      <td className="px-4 py-3 text-neutral-700 text-xs truncate max-w-[140px] font-medium">{o.destination}</td>
+                      <td className="px-4 py-3">
+                        <span className="text-[11px] font-bold text-neutral-600 bg-neutral-100 px-2 py-0.5 rounded-badge">{o.urgency}</span>
                       </td>
-                      <td className="px-4 py-2.5 text-gray-600 text-xs">{o.assignedToName ?? 'Unassigned'}</td>
+                      <td className="px-4 py-3 text-neutral-600 text-xs font-medium">{o.assignedToName ?? 'Unassigned'}</td>
                     </tr>
                   )
                 })}

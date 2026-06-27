@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { Package, AlertCircle, Users, AlertTriangle } from 'lucide-react'
 import AppShell from '@/components/layout/AppShell'
 import { WorkOrderCard } from '@/components/domain/WorkOrderCard'
 import { StatCard } from '@/components/domain/StatCard'
@@ -64,13 +65,15 @@ export default function DispatchPersonnelPage() {
       currentPath="/dispatch/personnel"
       title="Personnel Load"
       breadcrumb={[{ label: 'Dispatch Dashboard', href: '/dispatch' }]}
+      actionLabel="Dispatch Queue"
+      actionHref="/dispatch"
     >
       {/* STATS */}
-      <div className="grid grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
-        <StatCard label="Total Active Orders" value={totalActive} color="#8B5CF6" />
-        <StatCard label="Unassigned" value={unassigned} color={unassigned > 0 ? '#EF4444' : '#22C55E'} />
-        <StatCard label="Personnel" value={personnel.length} color="#3B82F6" />
-        <StatCard label="Overloaded" value={overloaded} color={overloaded > 0 ? '#F97316' : '#22C55E'} />
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <StatCard label="Total Active Orders" value={totalActive}       color="#8B5CF6"                              icon={Package} />
+        <StatCard label="Unassigned"          value={unassigned}        color={unassigned > 0 ? '#EF4444' : '#22C55E'} icon={AlertCircle} />
+        <StatCard label="Personnel"           value={personnel.length}  color="#3B82F6"                              icon={Users} />
+        <StatCard label="Overloaded"          value={overloaded}        color={overloaded > 0 ? '#F97316' : '#22C55E'} icon={AlertTriangle} />
       </div>
 
       {/* PERSONNEL LOAD VISUAL */}

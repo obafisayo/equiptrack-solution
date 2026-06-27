@@ -1,6 +1,7 @@
 ﻿'use client'
 
 import { useState } from 'react'
+import { ShieldCheck, Package, CheckCircle2, Archive } from 'lucide-react'
 import AppShell from '@/components/layout/AppShell'
 import { StatCard } from '@/components/domain/StatCard'
 import { SectionTitle } from '@/components/domain/OrderGrid'
@@ -176,14 +177,24 @@ export default function QAQCPage() {
   }
 
   return (
-    <AppShell role="qaqc" currentPath="/qaqc" title="QAQC Dashboard">
+    <AppShell
+      role="qaqc"
+      currentPath="/qaqc"
+      title="QAQC Dashboard"
+      breadcrumb={[{ label: 'Home', href: '/' }, { label: 'QAQC' }]}
+      actionLabel="Container Fleet"
+      actionHref="/qaqc/containers"
+    >
       {/* STATS */}
-      <div className="grid grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
-        <StatCard label="Pending Inspection"     value={preloadQAQC.length}        color="#F59E0B" />
-        <StatCard label="Containerization Active" value={inContainerization.length} color="#8B5CF6" />
-        <StatCard label="Post QAQC Pending"       value={postQAQC.length}           color="#3B82F6" />
-        <StatCard label="Containers Available"    value={availableContainers}       color="#22C55E" />
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <StatCard label="Pending Inspection"      value={preloadQAQC.length}        color="#F59E0B" icon={ShieldCheck} />
+        <StatCard label="Containerization Active" value={inContainerization.length} color="#8B5CF6" icon={Package} />
+        <StatCard label="Post QAQC Pending"       value={postQAQC.length}           color="#3B82F6" icon={CheckCircle2} />
+        <StatCard label="Containers Available"    value={availableContainers}       color="#22C55E" icon={Archive} />
       </div>
+
+      {/* QA/QC QUEUE */}
+      <h2 style={{ fontSize: 15, fontWeight: 600, color: '#111827', margin: '0 0 16px' }}>QA/QC Queue</h2>
 
       {/* PRELOAD QAQC QUEUE */}
       <section className="mb-8">

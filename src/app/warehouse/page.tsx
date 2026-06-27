@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useMemo } from 'react'
+import { Package, AlertTriangle, Clock, Timer } from 'lucide-react'
 import AppShell from '@/components/layout/AppShell'
 import { WorkOrderCard } from '@/components/domain/WorkOrderCard'
 import { StatCard } from '@/components/domain/StatCard'
@@ -109,7 +110,14 @@ export default function WarehouseDashboard() {
   const processingToday = Math.round(activeOrders.length * 0.25)
 
   return (
-    <AppShell role="wh_sup" currentPath="/warehouse" title="Warehouse Dashboard">
+    <AppShell
+      role="wh_sup"
+      currentPath="/warehouse"
+      title="Warehouse Dashboard"
+      breadcrumb={[{ label: 'Home', href: '/' }, { label: 'Warehouse' }]}
+      actionLabel="All Orders"
+      actionHref="/warehouse/orders"
+    >
       {/* SLA BREACHES */}
       <section className="mb-6">
         <button
@@ -159,16 +167,20 @@ export default function WarehouseDashboard() {
       </section>
 
       {/* STAT ROW */}
-      <div className="grid grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
-        <StatCard label="Total Active Orders" value={activeOrders.length} />
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <StatCard label="Total Active Orders" value={activeOrders.length} icon={Package} />
         <StatCard
           label="SLA Breaches"
           value={breachedOrders.length}
           color={breachedOrders.length > 0 ? '#EF4444' : '#22C55E'}
+          icon={AlertTriangle}
         />
-        <StatCard label="Processing Today" value={processingToday} />
-        <StatCard label="Avg Cycle Time" value="4h 12m" />
+        <StatCard label="Processing Today" value={processingToday} icon={Clock} />
+        <StatCard label="Avg Cycle Time" value="4h 12m" icon={Timer} />
       </div>
+
+      {/* WORK ORDERS */}
+      <h2 style={{ fontSize: 15, fontWeight: 600, color: '#111827', margin: '0 0 16px' }}>Work Orders</h2>
 
       {/* PENDING INCOMING QUEUE */}
       <section className="mb-6">

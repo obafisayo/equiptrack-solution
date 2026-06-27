@@ -104,7 +104,9 @@ export default function NewRequestPage() {
         role="requester"
         currentPath="/requester/new"
         title="Request Submitted"
-        breadcrumb={[{ label: 'My Requests', href: '/requester' }]}
+        breadcrumb={[{ label: 'My Requests', href: '/requester' }, { label: 'Request Submitted' }]}
+        actionLabel="New Request"
+        actionHref="/requester/new"
       >
         <div className="max-w-xl mx-auto mt-10">
           <div className="bg-white rounded-card shadow-card border border-border-default p-8 text-center">
@@ -159,7 +161,9 @@ export default function NewRequestPage() {
       role="requester"
       currentPath="/requester/new"
       title="Create Request"
-      breadcrumb={[{ label: 'My Requests', href: '/requester' }]}
+      breadcrumb={[{ label: 'My Requests', href: '/requester' }, { label: 'New Request' }]}
+      actionLabel="Back to Requests"
+      actionHref="/requester"
     >
       <form onSubmit={handleSubmit} className="max-w-2xl mx-auto">
         <div className="bg-white rounded-card shadow-card border border-border-default p-6 space-y-6">

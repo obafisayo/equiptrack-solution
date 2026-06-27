@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useMemo } from 'react'
+import { Truck, UserCheck, ShieldCheck, Anchor } from 'lucide-react'
 import AppShell from '@/components/layout/AppShell'
 import { WorkOrderCard } from '@/components/domain/WorkOrderCard'
 import { StatCard } from '@/components/domain/StatCard'
@@ -96,7 +97,14 @@ export default function DispatchSupervisorPage() {
   }
 
   return (
-    <AppShell role="dsp_sup" currentPath="/dispatch" title="Dispatch Dashboard">
+    <AppShell
+      role="dsp_sup"
+      currentPath="/dispatch"
+      title="Dispatch Dashboard"
+      breadcrumb={[{ label: 'Home', href: '/' }, { label: 'Dispatch' }]}
+      actionLabel="Personnel Load"
+      actionHref="/dispatch/personnel"
+    >
       {/* SLA BREACHES */}
       {slaBreaches.length > 0 && (
         <section className="mb-6">
@@ -131,12 +139,15 @@ export default function DispatchSupervisorPage() {
       )}
 
       {/* STAT ROW */}
-      <div className="grid grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
-        <StatCard label="Dispatch Queue" value={queueCount} color="#8B5CF6" />
-        <StatCard label="Active (Assigned)" value={assignedCount} color="#3B82F6" />
-        <StatCard label="QAQC Pending" value={qaqcCount} color="#F59E0B" />
-        <StatCard label="Awaiting Deckspace" value={deckspaceCount} color="#10B981" />
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <StatCard label="Dispatch Queue"    value={queueCount}    color="#8B5CF6" icon={Truck} />
+        <StatCard label="Active (Assigned)" value={assignedCount} color="#3B82F6" icon={UserCheck} />
+        <StatCard label="QAQC Pending"      value={qaqcCount}     color="#F59E0B" icon={ShieldCheck} />
+        <StatCard label="Awaiting Deckspace" value={deckspaceCount} color="#10B981" icon={Anchor} />
       </div>
+
+      {/* DISPATCH QUEUE */}
+      <h2 style={{ fontSize: 15, fontWeight: 600, color: '#111827', margin: '0 0 16px' }}>Dispatch Queue</h2>
 
       {/* TABS */}
       <div className="mb-4 border-b border-border-default">

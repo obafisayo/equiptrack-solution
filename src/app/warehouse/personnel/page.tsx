@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { Users, AlertTriangle, BarChart2, Layers } from 'lucide-react'
 import AppShell from '@/components/layout/AppShell'
 import { StatCard } from '@/components/domain/StatCard'
 import { DetailPanel } from '@/components/domain/DetailPanel'
@@ -174,17 +175,20 @@ export default function PersonnelLoadPage() {
       currentPath="/warehouse/personnel"
       title="Personnel Load"
       breadcrumb={[{ label: 'Dashboard', href: '/warehouse' }]}
+      actionLabel="All Orders"
+      actionHref="/warehouse/orders"
     >
       {/* Stats */}
-      <div className="grid grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
-        <StatCard label="Total Personnel" value={warehousePersonnel.length} />
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <StatCard label="Total Personnel"   value={warehousePersonnel.length} icon={Users} />
         <StatCard
           label="Overloaded"
           value={overloaded.length}
           color={overloaded.length > 0 ? '#EF4444' : '#22C55E'}
+          icon={AlertTriangle}
         />
-        <StatCard label="Avg Active Orders" value={avgLoad} />
-        <StatCard label="Total Capacity" value={totalCap} />
+        <StatCard label="Avg Active Orders" value={avgLoad}    icon={BarChart2} />
+        <StatCard label="Total Capacity"    value={totalCap}   icon={Layers} />
       </div>
 
       {/* Personnel cards */}

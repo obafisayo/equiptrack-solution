@@ -1,10 +1,12 @@
 ﻿'use client'
 
 import { useState } from 'react'
+import { Truck } from 'lucide-react'
 import AppShell from '@/components/layout/AppShell'
 import { SectionTitle } from '@/components/domain/OrderGrid'
 import { StagePill } from '@/components/domain/Pills'
 import { Card } from '@/components/ui/Card'
+import { EmptyState } from '@/components/ui/EmptyState'
 import { WORK_ORDERS } from '@/lib/mock-data'
 import { fmtHours } from '@/config/sla'
 
@@ -36,7 +38,11 @@ export default function DispatchPersonnelHistoryPage() {
       <SectionTitle title="Completed Dispatch Tasks" count={filtered.length} />
 
       {filtered.length === 0 && (
-        <div className="text-center py-16 text-gray-400 text-sm">No completed tasks found.</div>
+        <EmptyState
+          icon={Truck}
+          title="No dispatch history"
+          description="Completed dispatch tasks will appear here once orders have been shipped."
+        />
       )}
 
       <div className="mt-4 space-y-3">

@@ -1,115 +1,135 @@
-import type { ReactNode } from 'react'
+'use client'
+
+import { Bell, Search, Menu, ChevronRight } from 'lucide-react'
 import Link from 'next/link'
+import type { ReactNode } from 'react'
+import type { Role } from '@/lib/lifecycle'
+import { Avatar } from '@/components/ui/Avatar'
 
-interface BreadcrumbItem {
-  label: string
-  href?: string
-}
-
-interface SearchProps {
-  placeholder: string
-  value: string
-  onChange: (v: string) => void
+const ROLE_USER: Record<Role, string> = {
+  requester:   'Kenneth Nwosu',
+  wh_sup:      'Yinka Adeyemi',
+  wh_per:      'Emeka Okonkwo',
+  dsp_sup:     'Chika Obi',
+  dsp_per:     'Biodun Adekunle',
+  qaqc:        'Femi Emmanuel',
+  exec:        'O. Bello',
+  safety:      'Aisha Musa',
+  logistics:   'Danjuma Yusuf',
+  inventory:   'Ngozi Eze',
+  maintenance: 'Segun Folarin',
+  sysadmin:    'System Admin',
 }
 
 interface TopbarProps {
   title: string
-  breadcrumb?: BreadcrumbItem[]
+  breadcrumb?: { label: string; href?: string }[]
   actions?: ReactNode
-  search?: SearchProps
+  search?: {
+    placeholder?: string
+    value: string
+    onChange: (v: string) => void
+  }
+  actionLabel?: string
+  actionHref?: string
+  role: Role
+  onMobileMenuToggle: () => void
 }
 
-export function Topbar({ title, breadcrumb, actions, search }: TopbarProps) {
+export function Topbar({
+  title,
+  breadcrumb,
+  actions,
+  search,
+  actionLabel,
+  actionHref,
+  role,
+  onMobileMenuToggle,
+}: TopbarProps) {
+  const userName = ROLE_USER[role]
+
   return (
-    <header
-      className="flex items-center gap-4 px-6 flex-shrink-0 bg-white"
-      style={{ height: 64, borderBottom: '1px solid #E2E8F0' }}
-    >
-      {/* Left: breadcrumb + title */}
-      <div className="flex items-center gap-1 min-w-0 mr-auto">
-        {breadcrumb && breadcrumb.length > 0 && (
-          <>
-            {breadcrumb.map((crumb, i) => (
-              <span key={i} className="flex items-center gap-1">
-                {crumb.href ? (
-                  <Link
-                    href={crumb.href}
-                    className="text-sm text-gray-400 hover:text-gray-600 transition-colors duration-150"
-                  >
-                    {crumb.label}
-                  </Link>
-                ) : (
-                  <span className="text-sm text-gray-400">{crumb.label}</span>
-                )}
-                <svg
-                  width="12"
-                  height="12"
-                  viewBox="0 0 12 12"
-                  fill="none"
-                  className="text-gray-300 flex-shrink-0"
-                >
-                  <path
-                    d="M4.5 3L7.5 6L4.5 9"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </span>
-            ))}
-          </>
+    <header className="bg-white border-b border-border-default h-16 flex items-center justify-between px-4 lg:px-6 sticky top-0 z-20">
+
+      {/* Left side: Mobile menu toggle + Breadcrumbs/Title */}
+      <div className="flex items-center gap-4">
+        {/* Mobile menu toggle */}
+        <button
+          onClick={onMobileMenuToggle}
+          className="md:hidden p-2 -ml-2 text-neutral-500 hover:bg-neutral-100 rounded-md focus:outline-none"
+        >
+          <Menu size={20} />
+        </button>
+
+        {breadcrumb ? (
+          <nav className="hidden sm:flex items-center gap-2 text-sm font-medium">
+            {breadcrumb.map((b, i) => {
+              const isLast = i === breadcrumb.length - 1
+              return (
+                <div key={i} className="flex items-center gap-2">
+                  {b.href && !isLast ? (
+                    <Link href={b.href} className="text-neutral-500 hover:text-neutral-900 transition-colors">
+                      {b.label}
+                    </Link>
+                  ) : (
+                    <span className={isLast ? 'text-neutral-900' : 'text-neutral-500'}>
+                      {b.label}
+                    </span>
+                  )}
+                  {!isLast && <ChevronRight size={14} className="text-neutral-400" />}
+                </div>
+              )
+            })}
+          </nav>
+        ) : (
+          <h1 className="text-lg font-bold text-neutral-900 m-0">{title}</h1>
         )}
-        <h1 className="text-base font-semibold text-gray-900 truncate">{title}</h1>
       </div>
 
-      {/* Center: search */}
-      {search && (
-        <div className="relative w-64 flex-shrink-0">
-          <svg
-            width="14"
-            height="14"
-            viewBox="0 0 14 14"
-            fill="none"
-            className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+      {/* Right side: Search, Actions, Profile */}
+      <div className="flex items-center gap-3 sm:gap-5">
+        {search && (
+          <div className="hidden md:flex relative w-64">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400" size={16} />
+            <input
+              type="text"
+              placeholder={search.placeholder || 'Search...'}
+              value={search.value}
+              onChange={e => search.onChange(e.target.value)}
+              className="w-full pl-9 pr-3 py-1.5 text-sm bg-neutral-50 border border-border-default rounded-[7px] focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-all"
+            />
+          </div>
+        )}
+
+        {actions}
+
+        {actionLabel && actionHref && (
+          <Link
+            href={actionHref}
+            className="hidden sm:flex items-center justify-center bg-brand-500 hover:bg-brand-600 text-white text-sm font-semibold px-4 h-9 rounded-[7px] transition-colors"
           >
-            <circle cx="6" cy="6" r="4" stroke="currentColor" strokeWidth="1.5" />
-            <path d="M10 10L13 13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-          </svg>
-          <input
-            type="text"
-            placeholder={search.placeholder}
-            value={search.value}
-            onChange={e => search.onChange(e.target.value)}
-            className="w-full h-8 pl-8 pr-3 text-sm rounded-md border border-border-default bg-neutral-50 text-gray-700 placeholder-gray-400 outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-shadow duration-150"
-            style={{ borderColor: '#E2E8F0' }}
-          />
+            {actionLabel}
+          </Link>
+        )}
+
+        <div className="flex items-center gap-3 border-l border-border-default pl-3 sm:pl-5 ml-1">
+          <button className="relative p-1.5 text-neutral-500 hover:bg-neutral-100 rounded-full transition-colors focus:outline-none">
+            <Bell size={18} />
+            <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-status-critical rounded-full border-2 border-white" />
+          </button>
+          
+          {/* Avatar (mobile & desktop) */}
+          <div className="flex items-center gap-2 cursor-pointer group">
+            <Avatar name={userName} size={32} />
+            <div className="hidden lg:block">
+              <p className="text-sm font-bold text-neutral-900 group-hover:text-brand-500 transition-colors m-0 leading-tight">
+                {userName}
+              </p>
+            </div>
+          </div>
         </div>
-      )}
 
-      {/* Right: actions */}
-      {actions && <div className="flex items-center gap-2 flex-shrink-0">{actions}</div>}
-
-      {/* Notification bell */}
-      <button
-        className="flex items-center justify-center w-8 h-8 rounded-md text-gray-400 hover:text-gray-600 hover:bg-neutral-100 transition-colors duration-150 flex-shrink-0"
-        aria-label="Notifications"
-      >
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-          <path
-            d="M8 1.5C5.51 1.5 3.5 3.51 3.5 6V9.5L2 11V12H14V11L12.5 9.5V6C12.5 3.51 10.49 1.5 8 1.5Z"
-            stroke="currentColor"
-            strokeWidth="1.3"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-          <path
-            d="M6.5 12.5C6.5 13.33 7.17 14 8 14C8.83 14 9.5 13.33 9.5 12.5"
-            stroke="currentColor"
-            strokeWidth="1.3"
-          />
-        </svg>
-      </button>
+      </div>
     </header>
   )
 }

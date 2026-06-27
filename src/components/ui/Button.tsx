@@ -2,13 +2,14 @@
 
 import { ReactNode, ButtonHTMLAttributes } from 'react'
 
-type Variant = 'primary' | 'secondary' | 'ghost' | 'danger' | 'dark'
+type Variant = 'primary' | 'brand' | 'secondary' | 'ghost' | 'danger' | 'dark'
 type Size = 'sm' | 'md' | 'lg'
 
 interface ButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'onClick'> {
   variant?: Variant
   size?: Size
   disabled?: boolean
+  loading?: boolean
   fullWidth?: boolean
   icon?: ReactNode
   iconPosition?: 'left' | 'right'
@@ -18,23 +19,25 @@ interface ButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'onC
 }
 
 const variantClasses: Record<Variant, string> = {
-  primary:   'bg-brand-500 hover:bg-brand-600 text-white border-transparent',
-  secondary: 'bg-transparent hover:bg-brand-50 text-brand-500 border border-brand-500',
-  ghost:     'bg-transparent hover:bg-neutral-100 text-gray-700 border border-border-default',
-  danger:    'bg-status-critical hover:bg-red-600 text-white border-transparent',
+  primary:   'bg-[#111827] hover:bg-[#1F2937] active:bg-[#374151] text-white border-transparent',
+  brand:     'bg-brand-500 hover:bg-brand-600 text-white border-transparent',
+  secondary: 'bg-white hover:bg-[#F9FAFB] text-[#374151] border border-[#E2E8F0]',
+  ghost:     'bg-transparent hover:bg-[#F3F4F6] text-[#6B7280] hover:text-[#374151] border-transparent',
+  danger:    'bg-[#EF4444] hover:bg-[#DC2626] text-white border-transparent',
   dark:      'bg-sidebar hover:bg-neutral-800 text-white border-transparent',
 }
 
 const sizeClasses: Record<Size, string> = {
   sm: 'h-8 px-3 text-xs gap-1.5',
   md: 'h-9 px-4 text-sm gap-2',
-  lg: 'h-11 px-6 text-base gap-2.5',
+  lg: 'h-10 px-6 text-sm gap-2',
 }
 
 export function Button({
   variant = 'primary',
   size = 'md',
   disabled = false,
+  loading = false,
   fullWidth = false,
   icon,
   iconPosition = 'left',
@@ -44,11 +47,12 @@ export function Button({
   type = 'button',
   ...rest
 }: ButtonProps) {
+  const isDisabled = disabled || loading
   return (
     <button
       type={type}
-      onClick={disabled ? undefined : onClick}
-      disabled={disabled}
+      onClick={isDisabled ? undefined : onClick}
+      disabled={isDisabled}
       className={[
         'inline-flex items-center justify-center font-semibold rounded-button',
         'transition-colors duration-150 whitespace-nowrap select-none',
@@ -56,17 +60,31 @@ export function Button({
         variantClasses[variant],
         sizeClasses[size],
         fullWidth ? 'w-full' : '',
-        disabled ? 'opacity-45 cursor-not-allowed' : 'cursor-pointer',
+        isDisabled ? 'opacity-55 cursor-not-allowed' : 'cursor-pointer',
         className,
       ].join(' ')}
       {...rest}
     >
-      {icon && iconPosition === 'left' && (
-        <span className="flex items-center shrink-0">{icon}</span>
-      )}
-      {children}
-      {icon && iconPosition === 'right' && (
-        <span className="flex items-center shrink-0">{icon}</span>
+      {loading ? (
+        <span
+          className="animate-spin"
+          style={{
+            width: 14, height: 14, borderRadius: '50%',
+            border: '2px solid currentColor',
+            borderTopColor: 'transparent',
+            display: 'block',
+          }}
+        />
+      ) : (
+        <>
+          {icon && iconPosition === 'left' && (
+            <span className="flex items-center shrink-0">{icon}</span>
+          )}
+          {children}
+          {icon && iconPosition === 'right' && (
+            <span className="flex items-center shrink-0">{icon}</span>
+          )}
+        </>
       )}
     </button>
   )

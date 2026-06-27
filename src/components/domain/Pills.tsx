@@ -5,7 +5,7 @@ export function StagePill({ stage }: { stage: Stage }) {
   const color = STAGE_COLOR[stage] ?? '#94A3B8'
   return (
     <span
-      className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-medium"
+      className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold whitespace-nowrap"
       style={{ background: color + '18', color, border: `1px solid ${color}30` }}
     >
       <span className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: color }} />
@@ -18,7 +18,7 @@ export function UrgencyPill({ level }: { level: UrgencyLevel }) {
   const cfg = URGENCY_CONFIG[level]
   return (
     <span
-      className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-semibold"
+      className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold whitespace-nowrap"
       style={{ background: cfg.bg, color: cfg.color, border: `1px solid ${cfg.borderColor}` }}
     >
       <span className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: cfg.color }} />
@@ -39,7 +39,7 @@ export function TypeBadge({ type }: { type: 'SAP' | 'TR' | 'VENDOR' | 'NON_STOCK
   const label = type === 'NON_STOCK' ? 'Non-Stock' : type
   return (
     <span
-      className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium"
+      className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold whitespace-nowrap"
       style={{ background: s.bg, color: s.color }}
     >
       {label}
@@ -57,7 +57,7 @@ export function SLAChip({
   const status = getSlaStatus(elapsedHours, slaHours)
   return (
     <span
-      className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold"
+      className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold whitespace-nowrap"
       style={{ background: status.bg, color: status.color }}
     >
       <svg width="10" height="10" viewBox="0 0 10 10" fill="none">

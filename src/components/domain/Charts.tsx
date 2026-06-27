@@ -11,9 +11,9 @@ export function ChartCard({ title, subtitle, children, className = '' }: {
 }) {
   return (
     <div className={`bg-white rounded-card shadow-card border border-border-default p-5 ${className}`}>
-      <div className="mb-4">
-        <h3 className="text-sm font-semibold text-gray-800">{title}</h3>
-        {subtitle && <p className="text-xs text-gray-400 mt-0.5">{subtitle}</p>}
+      <div style={{ marginBottom: 16 }}>
+        <h3 style={{ fontSize: 14, fontWeight: 600, color: '#111827', margin: 0 }}>{title}</h3>
+        {subtitle && <p style={{ fontSize: 12, color: '#6B7280', margin: '3px 0 0' }}>{subtitle}</p>}
       </div>
       {children}
     </div>
@@ -101,9 +101,9 @@ export function TrendChart(props: TrendChartProps) {
           )
         })}
       </svg>
-      <div className="flex justify-between mt-1">
+      <div className="flex justify-between" style={{ marginTop: 4 }}>
         {labels.map((l, i) => (
-          <span key={i} className="text-[9px] text-gray-400">{l}</span>
+          <span key={i} style={{ fontSize: 11, color: '#9CA3AF' }}>{l}</span>
         ))}
       </div>
     </div>
@@ -118,31 +118,59 @@ export function BarChart({ data, color = '#3B82F6', height = 120 }: {
 }) {
   const max = Math.max(...data.map(d => Math.max(d.value, d.target ?? 0)), 1)
 
+  const chartH = height - 28
   return (
-    <div style={{ height }} className="flex items-end gap-2">
-      {data.map((d, i) => {
-        const barH = (d.value / max) * (height - 24)
-        const targetH = d.target ? (d.target / max) * (height - 24) : null
-
-        return (
-          <div key={i} className="flex-1 flex flex-col items-center justify-end gap-1 h-full">
-            <span className="text-[10px] text-gray-500 font-medium">{d.value}</span>
-            <div className="relative w-full flex items-end justify-center" style={{ height: height - 24 }}>
-              <div
-                className="w-full rounded-t-sm transition-all duration-300"
-                style={{ height: barH, background: color + 'CC' }}
-              />
-              {targetH && (
+    <div style={{ height }}>
+      {/* Grid lines */}
+      <div className="relative w-full" style={{ height: chartH, marginBottom: 4 }}>
+        {[0, 0.25, 0.5, 0.75, 1].map(t => (
+          <div
+            key={t}
+            className="absolute w-full"
+            style={{ bottom: `${t * 100}%`, height: 1, background: '#F3F4F6' }}
+          />
+        ))}
+        {/* Bars */}
+        <div className="absolute inset-0 flex items-end gap-2">
+          {data.map((d, i) => {
+            const barH = (d.value / max) * chartH
+            const targetH = d.target ? (d.target / max) * chartH : null
+            return (
+              <div key={i} className="flex-1 relative flex items-end justify-center h-full">
                 <div
-                  className="absolute w-full border-t-2 border-dashed"
-                  style={{ bottom: targetH, borderColor: color }}
-                />
-              )}
-            </div>
-            <span className="text-[9px] text-gray-400 text-center leading-tight">{d.label}</span>
-          </div>
-        )
-      })}
+                  className="relative w-full"
+                  style={{ height: barH }}
+                >
+                  <div
+                    className="absolute bottom-0 w-full rounded-t-sm transition-all duration-300"
+                    style={{ height: '100%', background: color + 'CC' }}
+                  />
+                  {targetH && (
+                    <div
+                      className="absolute w-full border-t-2 border-dashed"
+                      style={{ bottom: targetH - barH, borderColor: color }}
+                    />
+                  )}
+                </div>
+                <span
+                  className="absolute"
+                  style={{ bottom: barH + 2, fontSize: 11, color: '#9CA3AF', fontWeight: 500, left: 0, right: 0, textAlign: 'center' }}
+                >
+                  {d.value}
+                </span>
+              </div>
+            )
+          })}
+        </div>
+      </div>
+      {/* Axis labels */}
+      <div className="flex gap-2">
+        {data.map((d, i) => (
+          <span key={i} className="flex-1 text-center leading-tight" style={{ fontSize: 11, color: '#9CA3AF' }}>
+            {d.label}
+          </span>
+        ))}
+      </div>
     </div>
   )
 }

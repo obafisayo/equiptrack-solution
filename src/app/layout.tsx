@@ -5,8 +5,11 @@ import './globals.css'
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 
 export const metadata: Metadata = {
-  title: 'Equiptrack',
-  description: 'Equipment Lifecycle Tracking System',
+  title: {
+    default: 'Equiptrack',
+    template: '%s | Equiptrack',
+  },
+  description: 'Real-time equipment lifecycle tracking for oil & gas field operations — from request to delivery.',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

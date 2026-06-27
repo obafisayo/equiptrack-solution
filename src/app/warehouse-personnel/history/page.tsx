@@ -1,9 +1,11 @@
 ﻿'use client'
 
 import { useState } from 'react'
+import { Clock } from 'lucide-react'
 import AppShell from '@/components/layout/AppShell'
 import { DetailPanel } from '@/components/domain/DetailPanel'
 import { StagePill } from '@/components/domain/Pills'
+import { EmptyState } from '@/components/ui/EmptyState'
 import { WORK_ORDERS, type WorkOrder } from '@/lib/mock-data'
 import { fmtHours } from '@/config/sla'
 import { type Stage, STAGE_DEPARTMENT, DEPARTMENT_COLOR } from '@/lib/lifecycle'
@@ -70,9 +72,13 @@ export default function WarehousePersonnelHistoryPage() {
       <p className="text-xs text-gray-500 mb-4">{filtered.length} order{filtered.length !== 1 ? 's' : ''} previously handled</p>
 
       {filtered.length === 0 ? (
-        <div className="text-center py-16 text-gray-400 text-sm">No history found</div>
+        <EmptyState
+          icon={Clock}
+          title="No completed tasks"
+          description="Orders you have processed will appear here once they move past your stage."
+        />
       ) : (
-        <div className="bg-white rounded-card border border-border-default shadow-card overflow-hidden">
+        <div className="bg-white rounded-card border border-border-default shadow-card overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-border-default bg-gray-50">

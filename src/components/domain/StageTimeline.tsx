@@ -7,50 +7,29 @@ interface StageStripProps {
   compact?: boolean
 }
 
-export function StageStrip({ currentStage, compact = false }: StageStripProps) {
+export function StageStrip({ currentStage }: StageStripProps) {
   const currentIdx = LIFECYCLE.indexOf(currentStage)
 
   return (
-    <div className={`flex items-center gap-0.5 overflow-x-auto pb-1 ${compact ? 'text-[9px]' : 'text-[10px]'}`}>
+    <div style={{ display: 'flex', gap: 2, alignItems: 'center' }}>
       {LIFECYCLE.map((stage, i) => {
         const dept = STAGE_DEPARTMENT[stage]
         const color = DEPARTMENT_COLOR[dept]
         const isPast = i < currentIdx
         const isCurrent = i === currentIdx
+
         return (
-          <div key={stage} className="flex items-center gap-0.5 shrink-0">
-            <div
-              title={stage}
-              className={[
-                'rounded px-1.5 py-0.5 font-medium transition-all whitespace-nowrap',
-                compact ? 'max-w-[60px] truncate' : 'max-w-[80px] truncate',
-              ].join(' ')}
-              style={{
-                background: isCurrent
-                  ? color
-                  : isPast
-                  ? color + '25'
-                  : '#F1F3F5',
-                color: isCurrent
-                  ? '#fff'
-                  : isPast
-                  ? color
-                  : '#ADB5BD',
-                fontWeight: isCurrent ? 700 : 500,
-                fontSize: isCurrent ? '10px' : '9px',
-                outline: isCurrent ? `2px solid ${color}` : 'none',
-                outlineOffset: '1px',
-              }}
-            >
-              {i + 1}. {stage}
-            </div>
-            {i < LIFECYCLE.length - 1 && (
-              <div
-                className="w-2 h-px shrink-0"
-                style={{ background: isPast ? color + '60' : '#DEE2E6' }}
-              />
-            )}
-          </div>
+          <div
+            key={stage}
+            title={stage}
+            style={{
+              flex: 1,
+              height: isCurrent ? 4 : 3,
+              borderRadius: 1.5,
+              background: color,
+              opacity: isCurrent || isPast ? 1 : 0.35,
+            }}
+          />
         )
       })}
     </div>

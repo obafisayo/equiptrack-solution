@@ -1,5 +1,6 @@
 'use client'
 
+import { AlertTriangle, Clock, BarChart2, TrendingDown } from 'lucide-react'
 import AppShell from '@/components/layout/AppShell'
 import { StatCard } from '@/components/domain/StatCard'
 import { StagePill } from '@/components/domain/Pills'
@@ -109,16 +110,19 @@ export default function BottlenecksPage() {
       currentPath="/executive/bottlenecks"
       title="Bottleneck Analysis"
       breadcrumb={[{ label: 'Executive Overview', href: '/executive' }]}
+      actionLabel="Overview"
+      actionHref="/executive"
     >
       {/* STATS */}
-      <div className="grid grid-cols-2 xl:grid-cols-4 gap-4 mb-8">
-        <StatCard label="Active Bottleneck Stages" value={stageStats.filter(s => s.ratio > 1).length} color="#EF4444" />
-        <StatCard label="Orders Breaching SLA"      value={totalBreached}                               color="#F97316" />
-        <StatCard label="Avg SLA Ratio"             value={`${Math.round(avgRatio * 100)}%`}            color="#F59E0B" />
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <StatCard label="Active Bottleneck Stages" value={stageStats.filter(s => s.ratio > 1).length} color="#EF4444" icon={AlertTriangle} />
+        <StatCard label="Orders Breaching SLA"      value={totalBreached}                               color="#F97316" icon={Clock} />
+        <StatCard label="Avg SLA Ratio"             value={`${Math.round(avgRatio * 100)}%`}            color="#F59E0B" icon={BarChart2} />
         <StatCard
           label="Worst Stage"
           value={worstStage?.stage.split(' ').slice(0, 2).join(' ') ?? '—'}
           color="#EF4444"
+          icon={TrendingDown}
         />
       </div>
 
@@ -146,7 +150,7 @@ export default function BottlenecksPage() {
       {/* PER-PERSON AVG HANDLING TIME */}
       <section className="mb-8">
         <SectionTitle title="Avg Handling Time per Person (Top 10 Slowest)" />
-        <div className="mt-3 bg-white border border-border-default rounded-card shadow-card overflow-hidden">
+        <div className="mt-3 bg-white border border-border-default rounded-card shadow-card overflow-x-auto">
           <table className="w-full text-sm">
             <thead className="bg-gray-50 border-b border-border-default">
               <tr>
@@ -183,7 +187,7 @@ export default function BottlenecksPage() {
       {/* TOP 10 OLDEST ACTIVE ORDERS */}
       <section className="mb-8">
         <SectionTitle title="Top 10 Oldest Active Orders" />
-        <div className="mt-3 bg-white border border-border-default rounded-card shadow-card overflow-hidden">
+        <div className="mt-3 bg-white border border-border-default rounded-card shadow-card overflow-x-auto">
           <table className="w-full text-sm">
             <thead className="bg-gray-50 border-b border-border-default">
               <tr>

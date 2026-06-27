@@ -20,10 +20,10 @@ export function SLABar({ elapsedHours, slaHours, showLabel = true, className = '
       </div>
       {showLabel && (
         <div className="flex justify-between mt-1">
-          <span className="text-xs" style={{ color: status.color }}>
+          <span className="text-[11px]" style={{ color: status.color }}>
             {status.breached ? 'SLA BREACHED' : status.warning ? 'Warning' : 'On track'}
           </span>
-          <span className="text-xs text-gray-400">
+          <span className="text-[11px]" style={{ color: '#6B7280' }}>
             {fmtHours(elapsedHours)} / {fmtHours(slaHours)}
           </span>
         </div>

@@ -1,111 +1,133 @@
 'use client'
 
-import { DEPARTMENT_COLOR } from '@/lib/lifecycle'
-import { fmtHours } from '@/config/sla'
+import { Info } from 'lucide-react'
+import type { Stage } from '@/lib/lifecycle'
 
-interface HeatmapCell {
-  stage: string
-  department: 'pending' | 'warehouse' | 'dispatch' | 'qaqc' | 'final'
+interface HeatmapData {
+  stage: Stage
+  department: string
   avgHours: number
   slaHours: number
   count: number
 }
 
-const STATUS_CONFIG = {
-  CRITICAL: { bg: '#FEE2E2', border: '#EF4444', text: '#DC2626', bar: '#EF4444' },
-  BREACHED: { bg: '#FEE2E2', border: '#F87171', text: '#EF4444', bar: '#F87171' },
-  WARNING:  { bg: '#FEF3C7', border: '#F59E0B', text: '#D97706', bar: '#F59E0B' },
-  OK:       { bg: '#DCFCE7', border: '#4ADE80', text: '#16A34A', bar: '#22C55E' },
-  EMPTY:    { bg: '#F1F5F9', border: '#CBD5E1', text: '#94A3B8', bar: '#CBD5E1' },
+interface BottleneckHeatmapProps {
+  data: HeatmapData[]
 }
 
-export function BottleneckHeatmap({ data }: { data: HeatmapCell[] }) {
-  if (!data.length) {
-    return <p className="text-sm text-gray-400 text-center py-8">No data available.</p>
+export function BottleneckHeatmap({ data }: BottleneckHeatmapProps) {
+  // We want to color-code the "severity" of the dwell time relative to the SLA.
+  // Ratio = avgHours / slaHours
+  // < 0.75 => Good (green-ish)
+  // 0.75 - 1.0 => Warning (yellow/orange-ish)
+  // > 1.0 => Critical (red-ish)
+
+  function getSeverityColor(ratio: number) {
+    if (ratio < 0.75) return '#22C55E' // success
+    if (ratio <= 1.0) return '#F59E0B' // medium
+    if (ratio <= 1.5) return '#EF4444' // critical
+    return '#B91C1C' // very critical (dark red)
   }
 
+  // We can group by department for a better visual structure
+  const grouped = data.reduce((acc, curr) => {
+    if (!acc[curr.department]) acc[curr.department] = []
+    acc[curr.department].push(curr)
+    return acc
+  }, {} as Record<string, HeatmapData[]>)
+
+  const departments = Object.keys(grouped)
+
   return (
-    <div className="bg-white border border-border-default rounded-card shadow-card p-4">
-      {/* Legend */}
-      <div className="flex items-center gap-4 mb-4 flex-wrap">
-        {[
-          { label: 'Critical (>1.5× SLA)', color: '#DC2626', bg: '#FEE2E2' },
-          { label: 'Breached (>SLA)',       color: '#EF4444', bg: '#FEE2E2' },
-          { label: 'Warning (>75% SLA)',    color: '#D97706', bg: '#FEF3C7' },
-          { label: 'On Track',              color: '#16A34A', bg: '#DCFCE7' },
-        ].map(item => (
-          <div key={item.label} className="flex items-center gap-1.5">
-            <div
-              className="w-3 h-3 rounded-sm border"
-              style={{ background: item.bg, borderColor: item.color + '80' }}
-            />
-            <span className="text-[10px] text-gray-500">{item.label}</span>
+    <div className="bg-white rounded-card border border-border-default shadow-sm p-5">
+      
+      {/* ── Header & Legend ── */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+        <div>
+          <h3 className="text-[15px] font-bold text-neutral-900 m-0 flex items-center gap-2">
+            Department Dwell Time Heatmap
+            <div className="group relative cursor-help">
+              <Info size={14} className="text-neutral-400" />
+              <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 w-64 p-2 bg-neutral-900 text-white text-[11px] font-medium rounded-md opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
+                Visualizes the average time equipment spends in each stage compared to the target SLA. Red indicates severe bottlenecks.
+                <div className="absolute left-1/2 -translate-x-1/2 top-full border-4 border-transparent border-t-neutral-900" />
+              </div>
+            </div>
+          </h3>
+          <p className="text-xs text-neutral-500 mt-1 m-0">Avg actual hours vs target SLA hours per stage</p>
+        </div>
+
+        <div className="flex items-center gap-3 text-[11px] font-semibold text-neutral-600 bg-neutral-50 px-3 py-1.5 rounded-full border border-neutral-100">
+          <span className="flex items-center gap-1.5">
+            <span className="w-2.5 h-2.5 rounded-sm bg-[#22C55E]"></span> On Track
+          </span>
+          <span className="flex items-center gap-1.5">
+            <span className="w-2.5 h-2.5 rounded-sm bg-[#F59E0B]"></span> Near SLA
+          </span>
+          <span className="flex items-center gap-1.5">
+            <span className="w-2.5 h-2.5 rounded-sm bg-[#EF4444]"></span> Breached
+          </span>
+        </div>
+      </div>
+
+      {/* ── Heatmap Grid ── */}
+      <div className="space-y-6">
+        {departments.map(dept => (
+          <div key={dept}>
+            <h4 className="text-xs font-bold text-neutral-900 uppercase tracking-wider mb-3 pb-1 border-b border-neutral-100">
+              {dept}
+            </h4>
+            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
+              {grouped[dept].map(item => {
+                const ratio = item.avgHours / Math.max(item.slaHours, 1)
+                const color = getSeverityColor(ratio)
+                
+                return (
+                  <div 
+                    key={item.stage}
+                    className="relative p-3 rounded-lg border flex flex-col justify-between overflow-hidden group transition-all hover:shadow-md"
+                    style={{ borderColor: `${color}40`, backgroundColor: `${color}08` }}
+                  >
+                    {/* Top row: Stage name + count */}
+                    <div className="flex justify-between items-start mb-3">
+                      <span className="text-xs font-bold text-neutral-800 leading-tight pr-2">
+                        {item.stage}
+                      </span>
+                      <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-sm bg-white border border-neutral-200 text-neutral-600 shadow-sm">
+                        {item.count}
+                      </span>
+                    </div>
+
+                    {/* Bottom row: Hours vs SLA */}
+                    <div className="mt-auto">
+                      <div className="flex items-end justify-between mb-1.5">
+                        <span className="text-lg font-bold tracking-tight" style={{ color }}>
+                          {item.avgHours}h
+                        </span>
+                        <span className="text-[10px] font-semibold text-neutral-500 uppercase">
+                          / {item.slaHours}h SLA
+                        </span>
+                      </div>
+                      
+                      {/* Progress bar visual */}
+                      <div className="h-1.5 w-full bg-white/50 rounded-full overflow-hidden border border-[#00000010]">
+                        <div 
+                          className="h-full rounded-full transition-all duration-500"
+                          style={{ 
+                            width: `${Math.min(ratio * 100, 100)}%`, 
+                            backgroundColor: color 
+                          }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
           </div>
         ))}
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2">
-        {data.map((cell) => {
-          const ratio = cell.slaHours > 0 ? cell.avgHours / cell.slaHours : 0
-          const deptColor = DEPARTMENT_COLOR[cell.department]
-
-          const statusKey =
-            cell.count === 0
-              ? 'EMPTY'
-              : ratio >= 1.5
-              ? 'CRITICAL'
-              : ratio >= 1
-              ? 'BREACHED'
-              : ratio >= 0.75
-              ? 'WARNING'
-              : 'OK'
-
-          const cfg = STATUS_CONFIG[statusKey]
-
-          return (
-            <div
-              key={cell.stage}
-              className="rounded-lg p-3 border transition-all"
-              style={{
-                background: cfg.bg,
-                borderColor: cfg.border + '60',
-                borderLeftWidth: '3px',
-                borderLeftColor: deptColor,
-              }}
-            >
-              <p className="text-[11px] font-semibold text-gray-700 leading-tight mb-2 line-clamp-2" style={{ minHeight: '2rem' }}>
-                {cell.stage}
-              </p>
-              <div className="flex items-end justify-between">
-                <div>
-                  <p className="text-base font-bold" style={{ color: cfg.text }}>
-                    {cell.count === 0 ? '—' : fmtHours(cell.avgHours)}
-                  </p>
-                  <p className="text-[10px] text-gray-400">avg dwell</p>
-                </div>
-                <div className="text-right">
-                  <p className="text-[10px] font-bold uppercase tracking-wide" style={{ color: cfg.text }}>
-                    {statusKey}
-                  </p>
-                  <p className="text-[10px] text-gray-400">{cell.count} orders</p>
-                </div>
-              </div>
-              {cell.count > 0 && (
-                <div className="mt-2 w-full h-1.5 bg-white/70 rounded-full overflow-hidden">
-                  <div
-                    className="h-full rounded-full"
-                    style={{
-                      width: `${Math.min(ratio * 100, 100)}%`,
-                      background: cfg.bar,
-                    }}
-                  />
-                </div>
-              )}
-              <p className="text-[9px] text-gray-400 mt-1">SLA: {fmtHours(cell.slaHours)}</p>
-            </div>
-          )
-        })}
-      </div>
     </div>
   )
 }

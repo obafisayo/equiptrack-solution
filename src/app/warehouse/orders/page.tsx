@@ -1,11 +1,13 @@
 'use client'
 
 import { useState, useMemo } from 'react'
+import { Package } from 'lucide-react'
 import AppShell from '@/components/layout/AppShell'
 import { WorkOrderCard } from '@/components/domain/WorkOrderCard'
 import { DetailPanel } from '@/components/domain/DetailPanel'
 import { StagePill, TypeBadge } from '@/components/domain/Pills'
 import { SectionTitle } from '@/components/domain/OrderGrid'
+import { EmptyState } from '@/components/ui/EmptyState'
 import { WORK_ORDERS, type WorkOrder } from '@/lib/mock-data'
 import { STAGE_DEPARTMENT, type Stage } from '@/lib/lifecycle'
 import { STAGE_SLA_HOURS, fmtHours, type UrgencyLevel } from '@/config/sla'
@@ -83,6 +85,8 @@ export default function AllOrdersPage() {
       currentPath="/warehouse/orders"
       title="All Work Orders"
       breadcrumb={[{ label: 'Dashboard', href: '/warehouse' }]}
+      actionLabel="Personnel Load"
+      actionHref="/warehouse/personnel"
     >
       {/* Filter bar */}
       <div className="bg-white border border-border-default rounded-card shadow-card p-4 mb-5 space-y-3">
@@ -194,7 +198,12 @@ export default function AllOrdersPage() {
       {/* Card view */}
       {viewMode === 'cards' && (
         filtered.length === 0 ? (
-          <p className="text-sm text-gray-400 text-center py-12">No work orders match the current filters</p>
+          <EmptyState
+            icon={Package}
+            title="No work orders found"
+            description="No orders match the current filters. Try adjusting your search or filter criteria."
+            compact
+          />
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
             {filtered.map(order => (
@@ -213,17 +222,27 @@ export default function AllOrdersPage() {
       {/* Table view */}
       {viewMode === 'table' && (
         <div className="bg-white rounded-card border border-border-default shadow-card overflow-x-auto">
-          <table className="w-full text-sm">
+          <table className="w-full" style={{ fontSize: 13 }}>
             <thead>
-              <tr className="border-b border-border-default">
+              <tr style={{ background: '#F9FAFB', borderBottom: '1px solid #E2E8F0' }}>
                 {['Delivery No.', 'Destination', 'Type', 'Stage', 'Assigned To', 'Elapsed', 'SLA Status'].map(h => (
-                  <th key={h} className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide whitespace-nowrap">
+                  <th
+                    key={h}
+                    className="text-left whitespace-nowrap"
+                    style={{
+                      padding: '10px 16px',
+                      fontSize: 11, fontWeight: 600,
+                      color: '#6B7280',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.05em',
+                    }}
+                  >
                     {h}
                   </th>
                 ))}
               </tr>
             </thead>
-            <tbody className="divide-y divide-border-subtle">
+            <tbody>
               {filtered.map(order => {
                 const sla = STAGE_SLA_HOURS[order.stage]
                 const breached = sla != null && order.elapsedHours > sla
@@ -232,19 +251,29 @@ export default function AllOrdersPage() {
                   <tr
                     key={order.id}
                     onClick={() => setSelectedOrderId(order.id)}
-                    className={`cursor-pointer hover:bg-gray-50 transition-colors ${
-                      selectedOrderId === order.id ? 'bg-red-50' : ''
-                    }`}
+                    className="cursor-pointer transition-colors duration-150"
+                    style={{
+                      borderBottom: '1px solid #F3F4F6',
+                      background: selectedOrderId === order.id ? '#FFF5F5' : undefined,
+                    }}
+                    onMouseEnter={e => {
+                      if (selectedOrderId !== order.id)
+                        (e.currentTarget as HTMLElement).style.background = '#F9FAFB'
+                    }}
+                    onMouseLeave={e => {
+                      if (selectedOrderId !== order.id)
+                        (e.currentTarget as HTMLElement).style.background = ''
+                    }}
                   >
-                    <td className="px-4 py-3">
-                      <span className="font-mono-id text-brand-500 font-semibold text-xs">{order.id}</span>
+                    <td style={{ padding: '12px 16px' }}>
+                      <span className="font-mono-id font-semibold" style={{ fontSize: 12, color: '#F04A4A' }}>{order.id}</span>
                     </td>
-                    <td className="px-4 py-3 text-gray-700 max-w-[160px] truncate">{order.destination}</td>
-                    <td className="px-4 py-3"><TypeBadge type={order.requestType} /></td>
-                    <td className="px-4 py-3"><StagePill stage={order.stage as Stage} /></td>
-                    <td className="px-4 py-3 text-gray-600">{order.assignedToName ?? <span className="text-gray-400 italic">Unassigned</span>}</td>
-                    <td className="px-4 py-3 font-medium text-gray-700">{fmtHours(order.elapsedHours)}</td>
-                    <td className="px-4 py-3">
+                    <td className="max-w-[160px] truncate" style={{ padding: '12px 16px', color: '#374151' }}>{order.destination}</td>
+                    <td style={{ padding: '12px 16px' }}><TypeBadge type={order.requestType} /></td>
+                    <td style={{ padding: '12px 16px' }}><StagePill stage={order.stage as Stage} /></td>
+                    <td style={{ padding: '12px 16px', color: '#374151' }}>{order.assignedToName ?? <span style={{ color: '#9CA3AF', fontStyle: 'italic' }}>Unassigned</span>}</td>
+                    <td style={{ padding: '12px 16px', fontWeight: 500, color: '#374151' }}>{fmtHours(order.elapsedHours)}</td>
+                    <td style={{ padding: '12px 16px' }}>
                       {!sla ? (
                         <span className="text-gray-400 text-xs">—</span>
                       ) : breached ? (

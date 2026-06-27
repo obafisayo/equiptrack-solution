@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { Archive, CheckCircle2, Package, ShieldCheck } from 'lucide-react'
 import AppShell from '@/components/layout/AppShell'
 import { StatCard } from '@/components/domain/StatCard'
 import { SectionTitle } from '@/components/domain/OrderGrid'
@@ -120,13 +121,15 @@ export default function ContainerFleetPage() {
       currentPath="/qaqc/containers"
       title="Container Fleet"
       breadcrumb={[{ label: 'QAQC Dashboard', href: '/qaqc' }]}
+      actionLabel="QAQC Queue"
+      actionHref="/qaqc"
     >
       {/* STATS */}
-      <div className="grid grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
-        <StatCard label="Total Containers"  value={containers.length} color="#6B7280" />
-        <StatCard label="Available"          value={available}         color="#22C55E" />
-        <StatCard label="In Use"             value={inUse}             color="#3B82F6" />
-        <StatCard label="Inspection"         value={inspection}        color="#F59E0B" />
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <StatCard label="Total Containers" value={containers.length} color="#6B7280" icon={Archive} />
+        <StatCard label="Available"         value={available}         color="#22C55E" icon={CheckCircle2} />
+        <StatCard label="In Use"            value={inUse}             color="#3B82F6" icon={Package} />
+        <StatCard label="Inspection"        value={inspection}        color="#F59E0B" icon={ShieldCheck} />
       </div>
 
       <SectionTitle title="Container Fleet" count={containers.length} />

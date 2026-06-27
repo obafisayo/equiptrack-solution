@@ -1,6 +1,7 @@
 ﻿'use client'
 
 import { useState } from 'react'
+import { ClipboardCheck, ShieldCheck, FileText } from 'lucide-react'
 import AppShell from '@/components/layout/AppShell'
 import { StatCard } from '@/components/domain/StatCard'
 import { SectionTitle } from '@/components/domain/OrderGrid'
@@ -107,12 +108,19 @@ export default function DispatchPersonnelTasksPage() {
   }
 
   return (
-    <AppShell role="dsp_per" currentPath="/dispatch-personnel" title="My Tasks">
+    <AppShell
+      role="dsp_per"
+      currentPath="/dispatch-personnel"
+      title="My Tasks"
+      breadcrumb={[{ label: 'Home', href: '/' }, { label: 'My Tasks' }]}
+      actionLabel="View History"
+      actionHref="/dispatch-personnel/history"
+    >
       {/* STAT ROW */}
-      <div className="grid grid-cols-3 gap-4 mb-6">
-        <StatCard label="My Active Tasks"   value={assigned.length + packing.length} color="#8B5CF6" />
-        <StatCard label="Awaiting QAQC"     value={packing.length}                   color="#F59E0B" />
-        <StatCard label="Waybills Pending"  value={waybillPending.length}            color="#3B82F6" />
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+        <StatCard label="My Active Tasks"  value={assigned.length + packing.length} color="#8B5CF6" icon={ClipboardCheck} />
+        <StatCard label="Awaiting QAQC"    value={packing.length}                   color="#F59E0B" icon={ShieldCheck} />
+        <StatCard label="Waybills Pending" value={waybillPending.length}            color="#3B82F6" icon={FileText} />
       </div>
 
       {/* ASSIGNED TASKS */}

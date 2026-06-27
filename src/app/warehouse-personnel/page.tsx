@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from 'react'
 import Link from 'next/link'
+import { ClipboardCheck, CheckCircle2, AlertTriangle } from 'lucide-react'
 import AppShell from '@/components/layout/AppShell'
 import { StatCard } from '@/components/domain/StatCard'
 import { DetailPanel } from '@/components/domain/DetailPanel'
@@ -152,7 +153,14 @@ export default function WarehousePersonnelPage() {
   }
 
   return (
-    <AppShell role="wh_per" currentPath="/warehouse-personnel" title="My Tasks">
+    <AppShell
+      role="wh_per"
+      currentPath="/warehouse-personnel"
+      title="My Tasks"
+      breadcrumb={[{ label: 'Home', href: '/' }, { label: 'My Tasks' }]}
+      actionLabel="View History"
+      actionHref="/warehouse-personnel/history"
+    >
       {/* Header actions */}
       <div className="flex items-center justify-between mb-5">
         <div className="flex items-center gap-3">
@@ -173,13 +181,14 @@ export default function WarehousePersonnelPage() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-3 gap-4 mb-6">
-        <StatCard label="My Active Tasks" value={orders.length} />
-        <StatCard label="Completed Today" value={3} color="#22C55E" />
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+        <StatCard label="My Active Tasks" value={orders.length} icon={ClipboardCheck} />
+        <StatCard label="Completed Today" value={3} color="#22C55E" icon={CheckCircle2} />
         <StatCard
           label="SLA At Risk"
           value={atRisk}
           color={atRisk > 0 ? '#EF4444' : '#22C55E'}
+          icon={AlertTriangle}
         />
       </div>
 

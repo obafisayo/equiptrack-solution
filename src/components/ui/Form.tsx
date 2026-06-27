@@ -1,6 +1,7 @@
 'use client'
 
 import { InputHTMLAttributes, SelectHTMLAttributes, TextareaHTMLAttributes, ReactNode } from 'react'
+import { ChevronDown } from 'lucide-react'
 
 /* ── Field wrapper ──────────────────────────────────────── */
 
@@ -38,13 +39,13 @@ export function Input({ error, className = '', ...props }: InputProps) {
   return (
     <input
       className={[
-        'h-9 w-full rounded-button border bg-white px-3 text-sm text-gray-900',
+        'h-12 w-full rounded-[8px] border bg-[#F5F7FA] px-4 text-sm text-gray-900',
         'placeholder:text-gray-400 transition-colors duration-150',
         'focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-0 focus:border-brand-500',
         error
           ? 'border-status-critical focus:ring-status-critical'
-          : 'border-border-default hover:border-border-strong',
-        props.disabled ? 'opacity-45 cursor-not-allowed bg-neutral-50' : '',
+          : 'border-[#E5E7EB] hover:border-border-strong',
+        props.disabled ? 'opacity-45 cursor-not-allowed' : '',
         className,
       ].join(' ')}
       {...props}
@@ -61,21 +62,27 @@ interface SelectComponentProps extends SelectHTMLAttributes<HTMLSelectElement> {
 
 export function Select({ error, className = '', children, ...props }: SelectComponentProps) {
   return (
-    <select
-      className={[
-        'h-9 w-full rounded-button border bg-white px-3 text-sm text-gray-900',
-        'transition-colors duration-150 cursor-pointer appearance-none',
-        'focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500',
-        error
-          ? 'border-status-critical'
-          : 'border-border-default hover:border-border-strong',
-        props.disabled ? 'opacity-45 cursor-not-allowed bg-neutral-50' : '',
-        className,
-      ].join(' ')}
-      {...props}
-    >
-      {children}
-    </select>
+    <div className="relative">
+      <select
+        className={[
+          'h-12 w-full rounded-[8px] border bg-[#F5F7FA] px-4 pr-9 text-sm text-gray-900',
+          'transition-colors duration-150 cursor-pointer appearance-none',
+          'focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500',
+          error
+            ? 'border-status-critical'
+            : 'border-[#E5E7EB] hover:border-border-strong',
+          props.disabled ? 'opacity-45 cursor-not-allowed' : '',
+          className,
+        ].join(' ')}
+        {...props}
+      >
+        {children}
+      </select>
+      <ChevronDown
+        size={14}
+        className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"
+      />
+    </div>
   )
 }
 
@@ -90,13 +97,13 @@ export function Textarea({ error, className = '', ...props }: TextareaProps) {
   return (
     <textarea
       className={[
-        'w-full rounded-button border bg-white px-3 py-2 text-sm text-gray-900',
-        'placeholder:text-gray-400 transition-colors duration-150 resize-y min-h-[80px]',
+        'w-full rounded-[8px] border bg-[#F5F7FA] px-4 py-3 text-sm text-gray-900',
+        'placeholder:text-gray-400 transition-colors duration-150 resize-y min-h-[96px]',
         'focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500',
         error
           ? 'border-status-critical'
-          : 'border-border-default hover:border-border-strong',
-        props.disabled ? 'opacity-45 cursor-not-allowed bg-neutral-50' : '',
+          : 'border-[#E5E7EB] hover:border-border-strong',
+        props.disabled ? 'opacity-45 cursor-not-allowed' : '',
         className,
       ].join(' ')}
       {...props}
