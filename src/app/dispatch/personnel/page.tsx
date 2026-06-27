@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 
 import { useState } from 'react'
 import AppShell from '@/components/layout/AppShell'
@@ -16,12 +16,12 @@ function LoadBar({ active, cap }: { active: number; cap: number }) {
   const pct = Math.min((active / cap) * 100, 100)
   const color = pct >= 90 ? '#EF4444' : pct >= 70 ? '#F59E0B' : '#22C55E'
   return (
-    <div className="mt-2">
-      <div className="flex justify-between text-xs text-gray-500 mb-1">
+    <div className="mt-3">
+      <div className="flex justify-between text-xs text-gray-500 mb-1.5">
         <span>{active} active</span>
         <span>Cap: {cap}</span>
       </div>
-      <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
+      <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
         <div className="h-full rounded-full transition-all duration-300" style={{ width: `${pct}%`, background: color }} />
       </div>
     </div>
@@ -41,9 +41,12 @@ export default function DispatchPersonnelPage() {
     return orders.filter(o => o.assignedTo === pid)
   }
 
-  const totalActive  = orders.filter(o => o.assignedTo != null).length
-  const unassigned   = orders.filter(o => o.assignedTo == null).length
-  const overloaded   = personnel.filter(p => p.active >= p.capacity * 0.9).length
+  const totalActive = orders.filter(o => o.assignedTo != null).length
+  const unassigned  = orders.filter(o => o.assignedTo == null).length
+  const overloaded  = personnel.filter(p => {
+    const active = orders.filter(o => o.assignedTo === p.id).length
+    return active >= p.capacity * 0.9
+  }).length
 
   function handleReassign(personnelId: string, personnelName: string) {
     if (!reassigningOrder) return
@@ -73,64 +76,81 @@ export default function DispatchPersonnelPage() {
       {/* PERSONNEL LOAD VISUAL */}
       <section className="mb-6">
         <SectionTitle title="Dispatch Team Load" count={personnel.length} />
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-3">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-3 items-start">
           {personnel.map(p => {
             const pOrders = getPersonOrders(p.id)
-            const load = Math.round((p.active / p.capacity) * 100)
+            const load = Math.round((pOrders.length / p.capacity) * 100)
             const isExpanded = expandedPerson === p.id
             const isOverloaded = load >= 90
 
             return (
-              <Card key={p.id} className={`${isOverloaded ? 'border-amber-300' : ''}`}>
+              <Card key={p.id} className={`p-5 ${isOverloaded ? 'border-amber-300' : ''}`}>
+                {/* Header row */}
                 <div
-                  className="flex items-center justify-between cursor-pointer"
+                  className="flex items-center justify-between cursor-pointer select-none"
                   onClick={() => setExpandedPerson(isExpanded ? null : p.id)}
                 >
                   <div className="flex items-center gap-3">
                     <div
-                      className="w-9 h-9 rounded-full flex items-center justify-center text-white text-sm font-bold flex-shrink-0"
+                      className="w-10 h-10 rounded-full flex items-center justify-center text-white text-sm font-bold flex-shrink-0"
                       style={{ background: isOverloaded ? '#F97316' : '#8B5CF6' }}
                     >
-                      {p.name.split(' ').map(n => n[0]).join('').slice(0, 2)}
+                      {p.name.split(' ').map((n: string) => n[0]).join('').slice(0, 2)}
                     </div>
                     <div>
                       <p className="text-sm font-semibold text-gray-900">{p.name}</p>
                       <p className="text-xs text-gray-500">Dispatch Personnel</p>
                     </div>
                   </div>
-                  <div className="text-right">
-                    <span className={`text-lg font-bold ${isOverloaded ? 'text-amber-600' : 'text-gray-900'}`}>{load}%</span>
-                    <p className="text-xs text-gray-400">load</p>
+                  <div className="flex items-center gap-2">
+                    <div className="text-right">
+                      <span className={`text-xl font-bold ${isOverloaded ? 'text-amber-600' : 'text-gray-900'}`}>
+                        {load}%
+                      </span>
+                      <p className="text-xs text-gray-400">load</p>
+                    </div>
+                    <svg
+                      className={`w-4 h-4 text-gray-400 transition-transform duration-200 flex-shrink-0 ${isExpanded ? 'rotate-180' : ''}`}
+                      fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                    </svg>
                   </div>
                 </div>
 
-                <LoadBar active={p.active} cap={p.capacity} />
+                <LoadBar active={pOrders.length} cap={p.capacity} />
 
                 {isOverloaded && (
-                  <p className="mt-2 text-xs font-semibold text-amber-700 bg-amber-50 px-2 py-1 rounded">
-                    OVERLOADED â€” consider reassigning
+                  <p className="mt-3 text-xs font-semibold text-amber-700 bg-amber-50 px-3 py-1.5 rounded">
+                    OVERLOADED - consider reassigning
                   </p>
                 )}
 
-                {isExpanded && pOrders.length > 0 && (
-                  <div className="mt-3 space-y-2 border-t border-border-default pt-3">
-                    {pOrders.map(o => (
-                      <div key={o.id} className="flex items-center justify-between text-xs">
-                        <span className="font-mono text-brand-500 font-semibold">{o.id}</span>
-                        <span className="text-gray-500 truncate max-w-[120px]">{o.destination}</span>
-                        <button
-                          onClick={e => { e.stopPropagation(); setReassigningOrder(o) }}
-                          className="text-brand-500 hover:text-brand-600 font-medium ml-2 flex-shrink-0"
-                        >
-                          Reassign
-                        </button>
+                {isExpanded && (
+                  <div className="mt-4 border-t border-border-default pt-4">
+                    {pOrders.length === 0 ? (
+                      <p className="text-xs text-gray-400 italic">No active orders.</p>
+                    ) : (
+                      <div className="space-y-3 max-h-[172px] overflow-y-auto pr-1">
+                      {pOrders.map(o => (
+                        <div key={o.id} className="bg-gray-50 border border-gray-100 rounded-lg p-3">
+                          <div className="flex items-start justify-between gap-3 mb-2">
+                            <span className="font-mono text-brand-500 font-bold text-xs leading-tight">{o.id}</span>
+                            <button
+                              onClick={e => { e.stopPropagation(); setReassigningOrder(o) }}
+                              className="text-xs text-brand-500 hover:text-brand-600 font-semibold border border-brand-200 hover:border-brand-400 px-2.5 py-1 rounded transition-colors duration-150 flex-shrink-0"
+                            >
+                              Reassign
+                            </button>
+                          </div>
+                          <p className="text-sm text-gray-800 font-medium leading-snug">{o.destination}</p>
+                          <p className="text-xs text-gray-400 mt-1">{o.stage}</p>
+                        </div>
+                      ))
+                      }
                       </div>
-                    ))}
+                    )}
                   </div>
-                )}
-
-                {isExpanded && pOrders.length === 0 && (
-                  <p className="mt-3 text-xs text-gray-400 border-t border-border-default pt-3">No active orders.</p>
                 )}
               </Card>
             )
