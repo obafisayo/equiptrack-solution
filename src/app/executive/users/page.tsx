@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import AppShell from '@/components/layout/AppShell'
-import { Plus, Users, Search, Mail, ShieldAlert, CheckCircle2 } from 'lucide-react'
+import { Plus, Search, Mail, ShieldAlert } from 'lucide-react'
 import { PERSONNEL } from '@/lib/mock-data'
 
 export default function UserManagementPage() {
@@ -178,7 +178,7 @@ export default function UserManagementPage() {
 
               <div className="bg-status-info-bg border border-status-info/20 rounded-md p-3 flex gap-2.5 mt-2">
                 <ShieldAlert className="text-status-info shrink-0" size={16} />
-                <p className="text-xs text-status-info m-0">This user will be required to log in using the organization's SSO policy if enforced.</p>
+                <p className="text-xs text-status-info m-0">This user will be required to log in using the organization&apos;s SSO policy if enforced.</p>
               </div>
             </div>
 

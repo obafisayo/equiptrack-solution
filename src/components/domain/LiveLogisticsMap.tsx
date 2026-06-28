@@ -1,7 +1,6 @@
 'use client'
 
-import { useState } from 'react'
-import { Truck, Ship, Factory, Navigation, MapPin } from 'lucide-react'
+import { Truck, Ship, Factory, MapPin } from 'lucide-react'
 
 interface Shipment {
   id: string

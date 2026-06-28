@@ -295,7 +295,7 @@ export default function SysadminDashboard() {
               </tr>
             </thead>
             <tbody className="divide-y divide-border-default">
-              {recentAudit.map((event, i) => {
+              {recentAudit.map((event, _i) => {
                 const ttClass = TARGET_TYPE_STYLE[event.targetType] ?? TARGET_TYPE_STYLE.org
                 return (
                   <tr key={event.id} className="hover:bg-neutral-50 transition-colors">

@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import AppShell from '@/components/layout/AppShell'
-import { Settings as SettingsIcon, Globe, Shield, Key, Building2, Bell, CheckCircle2, ChevronRight, Copy, Save } from 'lucide-react'
+import { Shield, Key, Building2, Bell, CheckCircle2, Copy, Save } from 'lucide-react'
 
 export default function OrgSettingsPage() {
   const [activeTab, setActiveTab] = useState<'general' | 'sso' | 'sla' | 'api'>('sso')
