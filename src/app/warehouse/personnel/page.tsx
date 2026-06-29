@@ -10,6 +10,7 @@ import { SectionTitle } from '@/components/domain/OrderGrid'
 import { WORK_ORDERS, PERSONNEL, type WorkOrder, type Personnel } from '@/lib/mock-data'
 import { fmtHours, STAGE_SLA_HOURS } from '@/config/sla'
 import { type Stage } from '@/lib/lifecycle'
+import { Select } from '@/components/ui/Form'
 
 const WAREHOUSE_STAGES: Stage[] = [
   'New Request', 'Warehouse Assigned', 'Processing', 'GI Created', 'Transferred to Dispatch',
@@ -77,17 +78,17 @@ function ReassignModal({ source, targets, orders, onConfirm, onClose }: Reassign
         <div className="px-6 py-4 space-y-4">
           <div>
             <label className="block text-xs font-semibold text-gray-600 mb-1.5">Reassign to</label>
-            <select
+            <Select
               value={targetId}
               onChange={e => setTargetId(e.target.value)}
-              className="w-full h-9 px-3 rounded-md border border-border-default text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"
+              size="sm"
             >
               {targets.map(p => (
                 <option key={p.id} value={p.id}>
                   {p.name} ({p.active} / {p.capacity} active)
                 </option>
               ))}
-            </select>
+            </Select>
           </div>
           <div>
             <label className="block text-xs font-semibold text-gray-600 mb-1.5">

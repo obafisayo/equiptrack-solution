@@ -6,8 +6,9 @@ import {
   ClipboardList, Clock, HelpCircle, Layers,
   Package, Plus, Settings, ShieldCheck, Truck, Users,
   FileWarning, FileText, Eye,
-  CalendarDays, Wrench, ArrowRightLeft, History, CalendarClock,
+  CalendarDays, Wrench, History,
   Inbox, TrendingDown,
+  LayoutDashboard, Building2, ListChecks, CreditCard, ScrollText,
 } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import type { Role } from '@/lib/lifecycle'
@@ -57,20 +58,26 @@ const NAV_ITEMS: Partial<Record<Role, NavItem[]>> = {
     { href: '/logistics/requests', label: 'Vessel Requests',  icon: Inbox        },
   ],
   inventory: [
-    { href: '/inventory',           label: 'Stock Overview',  icon: Package         },
-    { href: '/inventory/alerts',    label: 'Reorder Alerts',  icon: TrendingDown    },
-    { href: '/inventory/movements', label: 'Movements Log',   icon: ArrowRightLeft  },
+    { href: '/inventory',        label: 'Stock Overview', icon: Package    },
+    { href: '/inventory/alerts', label: 'Reorder Alerts', icon: TrendingDown },
   ],
   maintenance: [
-    { href: '/maintenance',         label: 'Work Orders',     icon: Wrench          },
-    { href: '/maintenance/schedule',label: 'Schedule',        icon: CalendarClock   },
-    { href: '/maintenance/history', label: 'History',         icon: History         },
+    { href: '/maintenance',         label: 'Work Orders', icon: Wrench  },
+    { href: '/maintenance/history', label: 'History',     icon: History },
   ],
   safety: [
     { href: '/safety',             label: 'Dashboard',         icon: ShieldCheck  },
     { href: '/safety/inspections', label: 'Inspections',       icon: Eye          },
     { href: '/safety/ptw',         label: 'Permit to Work',    icon: FileText     },
     { href: '/safety/near-miss',   label: 'Near Misses',       icon: FileWarning  },
+  ],
+  sysadmin: [
+    { href: '/sysadmin',                label: 'Platform Overview',  icon: LayoutDashboard },
+    { href: '/sysadmin/organisations',  label: 'Organisations',      icon: Building2       },
+    { href: '/sysadmin/waitlist',       label: 'Waitlist',           icon: ListChecks      },
+    { href: '/sysadmin/users',          label: 'All Users',          icon: Users           },
+    { href: '/sysadmin/billing',        label: 'Revenue & Billing',  icon: CreditCard      },
+    { href: '/sysadmin/audit',          label: 'Audit Log',          icon: ScrollText      },
   ],
 }
 
@@ -192,7 +199,7 @@ export function Sidebar({ role, currentPath, mobileOpen, onMobileClose }: Sideba
           </div>
         </div>
         <Link
-          href="/"
+          href="/login"
           className="hidden lg:block text-center py-1 rounded text-[11px] text-white/[0.38] hover:text-white/65 transition-colors duration-150 no-underline"
         >
           Switch Role

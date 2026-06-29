@@ -10,7 +10,7 @@ import {
 import AppShell from '@/components/layout/AppShell'
 import { StatCard }    from '@/components/domain/StatCard'
 import { Button }      from '@/components/ui/Button'
-import { Input, Textarea } from '@/components/ui/Form'
+import { Input, Textarea, Select } from '@/components/ui/Form'
 import { Dropdown }    from '@/components/ui/Dropdown'
 import { DatePicker }  from '@/components/ui/DatePicker'
 
@@ -291,27 +291,27 @@ export default function SafetyDashboard() {
             <div className="flex items-center gap-1.5 text-xs font-semibold text-neutral-500">
               <Filter size={13}/> Filter:
             </div>
-            <select
+            <Select
               aria-label="Filter by severity"
               value={filterSev}
               onChange={e => setFilterSev(e.target.value)}
-              className="h-8 px-3 text-xs border border-border-default rounded-lg bg-white focus:outline-none focus:ring-1 focus:ring-brand-500"
+              size="sm"
             >
               <option value="all">All Severities</option>
               {SEV_OPTIONS.map(s => <option key={s} value={s}>{SEV_LABELS[s]}</option>)}
-            </select>
-            <select
+            </Select>
+            <Select
               aria-label="Filter by status"
               value={filterStatus}
               onChange={e => setFilterStatus(e.target.value)}
-              className="h-8 px-3 text-xs border border-border-default rounded-lg bg-white focus:outline-none focus:ring-1 focus:ring-brand-500"
+              size="sm"
             >
               <option value="all">All Statuses</option>
               <option value="open">Open</option>
               <option value="under_review">Under Review</option>
               <option value="escalated">Escalated</option>
               <option value="closed">Closed</option>
-            </select>
+            </Select>
             {(filterSev !== 'all' || filterStatus !== 'all') && (
               <button
                 type="button"

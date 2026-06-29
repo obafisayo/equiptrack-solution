@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import AppShell from '@/components/layout/AppShell'
 import { Shield, Key, Building2, Bell, CheckCircle2, Copy, Save } from 'lucide-react'
+import { Input, Select, Textarea } from '@/components/ui/Form'
 
 export default function OrgSettingsPage() {
   const [activeTab, setActiveTab] = useState<'general' | 'sso' | 'sla' | 'api'>('general')
@@ -82,17 +83,17 @@ export default function OrgSettingsPage() {
                       <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                           <label className="block text-xs font-bold text-neutral-700 mb-1.5 uppercase tracking-wide">Tenant ID</label>
-                          <input type="text" defaultValue="a1b2c3d4-e5f6-7g8h-9i0j-k1l2m3n4o5p6" className="w-full px-3 py-2 bg-white border border-border-default rounded-md text-sm font-mono focus:outline-none focus:border-brand-500" />
+                          <Input type="text" defaultValue="a1b2c3d4-e5f6-7g8h-9i0j-k1l2m3n4o5p6" size="sm" />
                         </div>
                         <div>
                           <label className="block text-xs font-bold text-neutral-700 mb-1.5 uppercase tracking-wide">Client ID (Application ID)</label>
-                          <input type="text" defaultValue="x9y8z7w6-v5u4-t3s2-r1q0-p9o8n7m6l5k4" className="w-full px-3 py-2 bg-white border border-border-default rounded-md text-sm font-mono focus:outline-none focus:border-brand-500" />
+                          <Input type="text" defaultValue="x9y8z7w6-v5u4-t3s2-r1q0-p9o8n7m6l5k4" size="sm" />
                         </div>
                       </div>
 
                       <div className="mt-4">
                         <label className="block text-xs font-bold text-neutral-700 mb-1.5 uppercase tracking-wide">Client Secret</label>
-                        <input type="password" defaultValue="********" className="w-full max-w-md px-3 py-2 bg-white border border-border-default rounded-md text-sm font-mono focus:outline-none focus:border-brand-500" />
+                        <Input type="password" defaultValue="********" size="sm" className="max-w-md" />
                       </div>
                     </div>
                   </div>
@@ -124,7 +125,7 @@ export default function OrgSettingsPage() {
               <div className="p-6 space-y-5">
                 <div>
                   <label className="block text-xs font-bold text-neutral-700 mb-1.5 uppercase tracking-wide">Overall Target Cycle Time (Hours)</label>
-                  <input type="number" defaultValue="72" className="w-32 px-3 py-2 bg-white border border-border-default rounded-md text-sm focus:outline-none focus:border-brand-500" />
+                  <Input type="number" defaultValue="72" size="sm" className="w-32" />
                   <p className="text-xs text-neutral-500 mt-1">Total time from Request Submission to Shipped status.</p>
                 </div>
 
@@ -141,7 +142,7 @@ export default function OrgSettingsPage() {
                     <div key={sla.dept} className="bg-neutral-50 border border-border-default rounded-lg p-4 flex justify-between items-center">
                       <span className="text-sm font-semibold text-neutral-700">{sla.dept}</span>
                       <div className="flex items-center gap-2">
-                        <input type="number" defaultValue={sla.hours} className="w-16 px-2 py-1 text-center bg-white border border-border-default rounded text-sm font-mono focus:outline-none focus:border-brand-500" />
+                        <Input type="number" defaultValue={sla.hours} size="sm" className="w-16 text-center" />
                         <span className="text-xs text-neutral-500 font-bold">hrs</span>
                       </div>
                     </div>
@@ -232,25 +233,25 @@ export default function OrgSettingsPage() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-xs font-bold text-neutral-700 mb-1.5 uppercase tracking-wide">Company Name</label>
-                      <input type="text" defaultValue="Equiptrack Nigeria Ltd." title="Company name" className="w-full px-3 py-2 bg-neutral-50 border border-border-default rounded-md text-sm focus:outline-none focus:border-brand-500" />
+                      <Input type="text" defaultValue="Equiptrack Nigeria Ltd." title="Company name" />
                     </div>
                     <div>
                       <label className="block text-xs font-bold text-neutral-700 mb-1.5 uppercase tracking-wide">Industry</label>
-                      <select title="Industry" className="w-full px-3 py-2 bg-neutral-50 border border-border-default rounded-md text-sm focus:outline-none focus:border-brand-500">
+                      <Select title="Industry">
                         <option>Oil &amp; Gas — Upstream</option>
                         <option>Oil &amp; Gas — Midstream</option>
                         <option>Oil &amp; Gas — Downstream</option>
                         <option>Marine &amp; Offshore</option>
                         <option>Logistics &amp; Supply Chain</option>
-                      </select>
+                      </Select>
                     </div>
                     <div>
                       <label className="block text-xs font-bold text-neutral-700 mb-1.5 uppercase tracking-wide">RC Number</label>
-                      <input type="text" defaultValue="RC-1082344" title="RC number" className="w-full px-3 py-2 bg-neutral-50 border border-border-default rounded-md text-sm font-mono focus:outline-none focus:border-brand-500" />
+                      <Input type="text" defaultValue="RC-1082344" title="RC number" />
                     </div>
                     <div>
                       <label className="block text-xs font-bold text-neutral-700 mb-1.5 uppercase tracking-wide">Country of Operation</label>
-                      <input type="text" defaultValue="Nigeria" title="Country" className="w-full px-3 py-2 bg-neutral-50 border border-border-default rounded-md text-sm focus:outline-none focus:border-brand-500" />
+                      <Input type="text" defaultValue="Nigeria" title="Country" />
                     </div>
                   </div>
                 </div>
@@ -263,27 +264,26 @@ export default function OrgSettingsPage() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-xs font-bold text-neutral-700 mb-1.5 uppercase tracking-wide">Primary Contact Name</label>
-                      <input type="text" defaultValue="Chief Adeyemi Johnson" title="Primary contact name" className="w-full px-3 py-2 bg-neutral-50 border border-border-default rounded-md text-sm focus:outline-none focus:border-brand-500" />
+                      <Input type="text" defaultValue="Chief Adeyemi Johnson" title="Primary contact name" />
                     </div>
                     <div>
                       <label className="block text-xs font-bold text-neutral-700 mb-1.5 uppercase tracking-wide">Contact Email</label>
-                      <input type="email" defaultValue="ceo@equiptrack.ng" title="Contact email" className="w-full px-3 py-2 bg-neutral-50 border border-border-default rounded-md text-sm focus:outline-none focus:border-brand-500" />
+                      <Input type="email" defaultValue="ceo@equiptrack.ng" title="Contact email" />
                     </div>
                     <div>
                       <label className="block text-xs font-bold text-neutral-700 mb-1.5 uppercase tracking-wide">Phone Number</label>
-                      <input type="tel" defaultValue="+234 801 234 5678" title="Phone number" className="w-full px-3 py-2 bg-neutral-50 border border-border-default rounded-md text-sm focus:outline-none focus:border-brand-500" />
+                      <Input type="tel" defaultValue="+234 801 234 5678" title="Phone number" />
                     </div>
                     <div>
                       <label className="block text-xs font-bold text-neutral-700 mb-1.5 uppercase tracking-wide">Website</label>
-                      <input type="url" defaultValue="https://equiptrack.ng" title="Website" className="w-full px-3 py-2 bg-neutral-50 border border-border-default rounded-md text-sm focus:outline-none focus:border-brand-500" />
+                      <Input type="url" defaultValue="https://equiptrack.ng" title="Website" />
                     </div>
                     <div className="md:col-span-2">
                       <label className="block text-xs font-bold text-neutral-700 mb-1.5 uppercase tracking-wide">Office Address</label>
-                      <textarea
+                      <Textarea
                         title="Office address"
                         rows={2}
                         defaultValue="Plot 3, Onne Free Trade Zone, Rivers State, Nigeria"
-                        className="w-full px-3 py-2 bg-neutral-50 border border-border-default rounded-md text-sm focus:outline-none focus:border-brand-500 resize-none"
                       />
                     </div>
                   </div>
@@ -297,15 +297,15 @@ export default function OrgSettingsPage() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-xs font-bold text-neutral-700 mb-1.5 uppercase tracking-wide">Primary Yard / Base</label>
-                      <input type="text" defaultValue="Onne Port — Yard A" title="Primary yard" className="w-full px-3 py-2 bg-neutral-50 border border-border-default rounded-md text-sm focus:outline-none focus:border-brand-500" />
+                      <Input type="text" defaultValue="Onne Port — Yard A" title="Primary yard" />
                     </div>
                     <div>
                       <label className="block text-xs font-bold text-neutral-700 mb-1.5 uppercase tracking-wide">Timezone</label>
-                      <select title="Timezone" className="w-full px-3 py-2 bg-neutral-50 border border-border-default rounded-md text-sm focus:outline-none focus:border-brand-500">
+                      <Select title="Timezone">
                         <option>Africa/Lagos (WAT, UTC+1)</option>
                         <option>UTC</option>
                         <option>Europe/London</option>
-                      </select>
+                      </Select>
                     </div>
                   </div>
                 </div>

@@ -2,8 +2,9 @@
 'use client'
 
 import { use, useState } from 'react'
-import { Search, Download, UserX, RotateCcw } from 'lucide-react'
+import { Download, UserX, RotateCcw } from 'lucide-react'
 import { ORGANISATIONS, USERS, INVITATIONS } from '@/lib/mock-platform'
+import { SearchInput } from '@/components/ui/Form'
 
 /* ── Helpers ──────────────────────────────────────────────────────────────── */
 
@@ -134,20 +135,13 @@ export default function TeamPage({ params }: { params: Promise<{ orgSlug: string
       <div className="space-y-5">
         {/* Header row */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <div style={{ position: 'relative', flex: 1, maxWidth: 360 }}>
-            <Search size={14} style={{ position: 'absolute', left: 10, top: '50%', transform: 'translateY(-50%)', color: '#9CA3AF' }} />
-            <input
-              value={search}
-              onChange={e => setSearch(e.target.value)}
-              placeholder="Search name, email, role…"
-              style={{
-                width: '100%', padding: '8px 12px 8px 32px',
-                border: '1px solid #D1D5DB', borderRadius: 7,
-                fontSize: 13, color: '#111827', background: '#fff',
-                outline: 'none', boxSizing: 'border-box' as const,
-              }}
-            />
-          </div>
+          <SearchInput
+            value={search}
+            onChange={setSearch}
+            placeholder="Search name, email, role…"
+            size="sm"
+            className="flex-1 max-w-90"
+          />
           <button
             onClick={handleCSVExport}
             style={{

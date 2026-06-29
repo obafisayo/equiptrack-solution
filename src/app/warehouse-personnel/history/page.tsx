@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { Clock } from 'lucide-react'
 import AppShell from '@/components/layout/AppShell'
+import { SearchInput } from '@/components/ui/Form'
 import { DetailPanel } from '@/components/domain/DetailPanel'
 import { StagePill } from '@/components/domain/Pills'
 import { EmptyState } from '@/components/ui/EmptyState'
@@ -55,17 +56,12 @@ export default function WarehousePersonnelHistoryPage() {
   return (
     <AppShell role="wh_per" currentPath="/warehouse-personnel/history" title="My History">
       {/* Search */}
-      <div className="relative mb-5 max-w-sm">
-        <svg className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" width="14" height="14" viewBox="0 0 14 14" fill="none">
-          <circle cx="6" cy="6" r="4" stroke="currentColor" strokeWidth="1.4" />
-          <path d="M9.5 9.5L12.5 12.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
-        </svg>
-        <input
-          type="text"
-          placeholder="Search delivery number or destinationâ€¦"
+      <div className="mb-5 max-w-sm">
+        <SearchInput
           value={search}
-          onChange={e => setSearch(e.target.value)}
-          className="w-full pl-8 pr-3 h-9 rounded-md border border-border-default text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"
+          onChange={setSearch}
+          placeholder="Search delivery number or destination…"
+          size="sm"
         />
       </div>
 

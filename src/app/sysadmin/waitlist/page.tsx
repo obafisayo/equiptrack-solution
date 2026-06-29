@@ -2,7 +2,8 @@
 'use client'
 
 import { useState } from 'react'
-import { Search, CheckCircle, XCircle, Clock, ChevronDown } from 'lucide-react'
+import { CheckCircle, XCircle, Clock } from 'lucide-react'
+import { SearchInput, Select, Textarea } from '@/components/ui/Form'
 import { WAITLIST } from '@/lib/mock-platform'
 import type { WaitlistEntry } from '@/lib/types'
 
@@ -33,7 +34,7 @@ function ApproveModal({ entry, onConfirm, onCancel }: {
   onCancel: () => void
 }) {
   const [note, setNote] = useState('')
-  const textareaStyle = {
+  const _textareaStyleUnused = {
     width: '100%', padding: '8px 10px', border: '1px solid #D1D5DB',
     borderRadius: 6, fontSize: 13, color: '#111827', resize: 'vertical' as const,
     minHeight: 70, outline: 'none', boxSizing: 'border-box' as const,
@@ -67,11 +68,11 @@ function ApproveModal({ entry, onConfirm, onCancel }: {
         <label style={{ fontSize: 12, fontWeight: 600, color: '#374151', display: 'block', marginBottom: 6 }}>
           Internal note (optional)
         </label>
-        <textarea
+        <Textarea
           value={note}
           onChange={e => setNote(e.target.value)}
           placeholder="e.g. Enterprise deal via partnership team…"
-          style={textareaStyle}
+          rows={3}
         />
         <div style={{ display: 'flex', gap: 10, marginTop: 20 }}>
           <button onClick={onCancel} style={{
@@ -136,22 +137,16 @@ function RejectModal({ entry, onConfirm, onCancel }: {
         <label style={{ fontSize: 12, fontWeight: 600, color: '#374151', display: 'block', marginBottom: 6 }}>
           Rejection reason
         </label>
-        <div style={{ position: 'relative', marginBottom: 20 }}>
-          <select
+        <div style={{ marginBottom: 20 }}>
+          <Select
             aria-label="Rejection reason"
             value={reason}
             onChange={e => setReason(e.target.value)}
-            style={{
-              width: '100%', padding: '8px 28px 8px 10px',
-              border: '1px solid #D1D5DB', borderRadius: 6,
-              fontSize: 13, color: '#111827', background: '#fff',
-              appearance: 'none', cursor: 'pointer', outline: 'none',
-            }}
+            size="sm"
           >
             <option value="">Select a reason…</option>
             {REJECT_REASONS.map(r => <option key={r} value={r}>{r}</option>)}
-          </select>
-          <ChevronDown size={13} style={{ position: 'absolute', right: 9, top: '50%', transform: 'translateY(-50%)', color: '#9CA3AF', pointerEvents: 'none' }} />
+          </Select>
         </div>
         <div style={{ display: 'flex', gap: 10 }}>
           <button onClick={onCancel} style={{
@@ -298,43 +293,31 @@ export default function WaitlistPage() {
         {/* Filter bar */}
         <div style={{ display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
           {/* Search */}
-          <div style={{ position: 'relative', flex: 1, minWidth: 240 }}>
-            <Search size={14} style={{ position: 'absolute', left: 10, top: '50%', transform: 'translateY(-50%)', color: '#9CA3AF' }} />
-            <input
+          <div style={{ flex: 1, minWidth: 240 }}>
+            <SearchInput
               value={search}
-              onChange={e => setSearch(e.target.value)}
+              onChange={setSearch}
               placeholder="Search company, email, industry…"
-              style={{
-                width: '100%', padding: '8px 12px 8px 32px',
-                border: '1px solid #D1D5DB', borderRadius: 7,
-                fontSize: 13, color: '#111827', background: '#fff',
-                outline: 'none', boxSizing: 'border-box' as const,
-              }}
+              size="sm"
             />
           </div>
 
           {/* Status filter */}
-          <div style={{ position: 'relative' }}>
-            <select aria-label="Filter by status" value={statusFilter} onChange={e => setStatusFilter(e.target.value as StatusFilter)} style={selectStyle}>
-              <option value="all">All statuses</option>
-              <option value="pending">Pending</option>
-              <option value="approved">Approved</option>
-              <option value="rejected">Rejected</option>
-              <option value="converted">Converted</option>
-            </select>
-            <ChevronDown size={13} style={{ position: 'absolute', right: 8, top: '50%', transform: 'translateY(-50%)', color: '#9CA3AF', pointerEvents: 'none' }} />
-          </div>
+          <Select aria-label="Filter by status" value={statusFilter} onChange={e => setStatusFilter(e.target.value as StatusFilter)} size="sm">
+            <option value="all">All statuses</option>
+            <option value="pending">Pending</option>
+            <option value="approved">Approved</option>
+            <option value="rejected">Rejected</option>
+            <option value="converted">Converted</option>
+          </Select>
 
           {/* Priority filter */}
-          <div style={{ position: 'relative' }}>
-            <select aria-label="Filter by priority" value={priorityFilter} onChange={e => setPriorityFilter(e.target.value as PriorityFilter)} style={selectStyle}>
-              <option value="all">All priorities</option>
-              <option value="high">High</option>
-              <option value="medium">Medium</option>
-              <option value="low">Low</option>
-            </select>
-            <ChevronDown size={13} style={{ position: 'absolute', right: 8, top: '50%', transform: 'translateY(-50%)', color: '#9CA3AF', pointerEvents: 'none' }} />
-          </div>
+          <Select aria-label="Filter by priority" value={priorityFilter} onChange={e => setPriorityFilter(e.target.value as PriorityFilter)} size="sm">
+            <option value="all">All priorities</option>
+            <option value="high">High</option>
+            <option value="medium">Medium</option>
+            <option value="low">Low</option>
+          </Select>
         </div>
 
         {/* Table */}

@@ -5,6 +5,7 @@ import { use, useState } from 'react'
 import { ChevronRight, ChevronLeft, Mail, Shield, Check, Plus, Trash2 } from 'lucide-react'
 import type { OrgRole, SubscriptionTier } from '@/lib/types'
 import { ORGANISATIONS } from '@/lib/mock-platform'
+import { Input, Select } from '@/components/ui/Form'
 
 /* ── Role definitions ─────────────────────────────────────────────────────── */
 
@@ -216,23 +217,27 @@ function Step2({ rows, onChangeRows, selectedRole, onSelectRole, method, onBack,
       <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 12 }}>
         {rows.map((row, i) => (
           <div key={i} style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-            <input
-              type="email"
-              placeholder="email@company.com"
-              value={row.email}
-              onChange={e => updateRow(i, 'email', e.target.value)}
-              style={{ ...inputStyle, flex: 2 }}
-            />
-            <select
-              aria-label="Assign role"
-              value={row.role}
-              onChange={e => updateRow(i, 'role', e.target.value as OrgRole)}
-              style={{ ...inputStyle, flex: 1, appearance: 'none' as const }}
-            >
-              {availableRoles.map(opt => (
-                <option key={opt.role} value={opt.role}>{opt.label}</option>
-              ))}
-            </select>
+            <div style={{ flex: 2 }}>
+              <Input
+                type="email"
+                placeholder="email@company.com"
+                value={row.email}
+                onChange={e => updateRow(i, 'email', e.target.value)}
+                size="sm"
+              />
+            </div>
+            <div style={{ flex: 1 }}>
+              <Select
+                aria-label="Assign role"
+                value={row.role}
+                onChange={e => updateRow(i, 'role', e.target.value as OrgRole)}
+                size="sm"
+              >
+                {availableRoles.map(opt => (
+                  <option key={opt.role} value={opt.role}>{opt.label}</option>
+                ))}
+              </Select>
+            </div>
             {rows.length > 1 && (
               <button
                 onClick={() => removeRow(i)}

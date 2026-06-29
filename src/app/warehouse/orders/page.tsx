@@ -3,6 +3,7 @@
 import { useState, useMemo } from 'react'
 import { Package, FileText } from 'lucide-react'
 import AppShell from '@/components/layout/AppShell'
+import { SearchInput, Select } from '@/components/ui/Form'
 import { WorkOrderCard } from '@/components/domain/WorkOrderCard'
 import { DetailPanel } from '@/components/domain/DetailPanel'
 import { StagePill, TypeBadge } from '@/components/domain/Pills'
@@ -110,29 +111,24 @@ export default function AllOrdersPage() {
       <div className="bg-white border border-border-default rounded-card shadow-card p-4 mb-5 space-y-3">
         {/* Row 1: Search + View toggle + Sort */}
         <div className="flex flex-wrap gap-3 items-center">
-          <div className="relative flex-1 min-w-[200px]">
-            <svg className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" width="14" height="14" viewBox="0 0 14 14" fill="none">
-              <circle cx="6" cy="6" r="4" stroke="currentColor" strokeWidth="1.4" />
-              <path d="M9.5 9.5L12.5 12.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
-            </svg>
-            <input
-              type="text"
-              placeholder="Search delivery number, destination, assignee…"
-              value={search}
-              onChange={e => setSearch(e.target.value)}
-              className="w-full pl-8 pr-3 h-9 rounded-md border border-border-default text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
-            />
-          </div>
-          <select
+          <SearchInput
+            value={search}
+            onChange={setSearch}
+            placeholder="Search delivery number, destination, assignee…"
+            className="flex-1 min-w-50"
+            size="sm"
+          />
+          <Select
             aria-label="Sort order"
             value={sort}
             onChange={e => setSort(e.target.value as SortOption)}
-            className="h-9 px-3 rounded-md border border-border-default text-sm bg-white focus:outline-none focus:ring-2 focus:ring-brand-500"
+            size="sm"
+            className="w-auto min-w-35"
           >
             <option value="oldest">Oldest First</option>
             <option value="newest">Newest First</option>
             <option value="overdue">Most Overdue</option>
-          </select>
+          </Select>
           <div className="flex border border-border-default rounded-md overflow-hidden">
             <button
               onClick={() => setViewMode('cards')}

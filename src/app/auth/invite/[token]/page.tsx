@@ -4,6 +4,7 @@ import { use, useState } from 'react'
 import Link from 'next/link'
 import { CheckCircle, AlertTriangle, XCircle } from 'lucide-react'
 import { INVITATIONS, ORGANISATIONS } from '@/lib/mock-platform'
+import { Input } from '@/components/ui/Form'
 
 /* ── Helpers ──────────────────────────────────────────────────────────────── */
 
@@ -57,12 +58,6 @@ export default function AcceptInvitePage({ params }: { params: Promise<{ token: 
     e.preventDefault()
     setSubmitting(true)
     setTimeout(() => setAccepted(true), 1000)
-  }
-
-  const inputStyle = {
-    width: '100%', padding: '10px 12px', border: '1px solid #D1D5DB',
-    borderRadius: 7, fontSize: 14, color: '#111827', background: '#fff',
-    outline: 'none', boxSizing: 'border-box' as const,
   }
 
   /* ── Wrapper ── */
@@ -237,26 +232,24 @@ export default function AcceptInvitePage({ params }: { params: Promise<{ token: 
                       <label style={{ fontSize: 12, fontWeight: 600, color: '#374151', display: 'block', marginBottom: 5 }}>
                         Full Name *
                       </label>
-                      <input
+                      <Input
                         required
                         value={name}
                         onChange={e => setName(e.target.value)}
                         placeholder="Your full name"
-                        style={inputStyle}
                       />
                     </div>
                     <div>
                       <label style={{ fontSize: 12, fontWeight: 600, color: '#374151', display: 'block', marginBottom: 5 }}>
                         Password *
                       </label>
-                      <input
+                      <Input
                         required
                         type="password"
                         value={password}
                         onChange={e => setPassword(e.target.value)}
                         placeholder="At least 8 characters"
                         minLength={8}
-                        style={inputStyle}
                       />
                     </div>
                     <button

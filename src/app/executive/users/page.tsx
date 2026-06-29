@@ -1,10 +1,11 @@
 'use client'
 
 import { useState, useMemo } from 'react'
-import { Plus, Search, UserMinus, UserCheck, Users } from 'lucide-react'
+import { Plus, UserMinus, UserCheck, Users } from 'lucide-react'
 import AppShell from '@/components/layout/AppShell'
 import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
+import { Input, Select, SearchInput } from '@/components/ui/Form'
 import { ORG_USERS, type OrgUser } from '@/lib/mock-data'
 
 // ── Role definitions ──────────────────────────────────────────────────────────
@@ -65,37 +66,34 @@ function OnboardModal({ onClose, onSave }: OnboardModalProps) {
         <div className="space-y-4">
           <div>
             <label className="block text-xs font-semibold text-gray-700 mb-1">Full Name</label>
-            <input
+            <Input
               title="Full name"
               value={name}
               onChange={e => setName(e.target.value)}
               placeholder="e.g. Amaka Eze"
-              className="w-full border border-border-default rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"
             />
           </div>
           <div>
             <label className="block text-xs font-semibold text-gray-700 mb-1">Email Address</label>
-            <input
+            <Input
               title="Email address"
               type="email"
               value={email}
               onChange={e => setEmail(e.target.value)}
               placeholder="e.g. amaka@equiptrack.ng"
-              className="w-full border border-border-default rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"
             />
           </div>
           <div>
             <label className="block text-xs font-semibold text-gray-700 mb-1">Assign Role</label>
-            <select
+            <Select
               title="Assign role"
               value={role}
               onChange={e => setRole(e.target.value)}
-              className="w-full border border-border-default rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"
             >
               {ALL_ROLES.map(r => (
                 <option key={r} value={r}>{r}</option>
               ))}
-            </select>
+            </Select>
           </div>
         </div>
 
@@ -137,16 +135,15 @@ function AssignRoleModal({ user, onClose, onSave }: AssignRoleModalProps) {
 
         <div>
           <label className="block text-xs font-semibold text-gray-700 mb-1">New Role</label>
-          <select
+          <Select
             title="New role"
             value={role}
             onChange={e => setRole(e.target.value)}
-            className="w-full border border-border-default rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"
           >
             {ALL_ROLES.map(r => (
               <option key={r} value={r}>{r}</option>
             ))}
-          </select>
+          </Select>
         </div>
 
         <div className="flex gap-3 mt-5">
@@ -309,15 +306,12 @@ export default function UserManagementPage() {
       </div>
 
       {/* Search */}
-      <div className="relative mb-5">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={14} />
-        <input
-          title="Search users"
-          type="text"
-          placeholder="Search by name, email, or role..."
+      <div className="mb-5">
+        <SearchInput
           value={search}
-          onChange={e => setSearch(e.target.value)}
-          className="w-full pl-9 pr-4 py-2 bg-white border border-border-default rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"
+          onChange={setSearch}
+          placeholder="Search by name, email, or role..."
+          size="sm"
         />
       </div>
 

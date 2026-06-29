@@ -4,7 +4,8 @@
 import { useState, useEffect, Suspense } from 'react'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
-import { Search, Plus, X, ChevronDown, Building2, CheckCircle2 } from 'lucide-react'
+import { Plus, X, Building2, CheckCircle2 } from 'lucide-react'
+import { Input, Select, SearchInput } from '@/components/ui/Form'
 import { ORGANISATIONS } from '@/lib/mock-platform'
 import type { OrgStatus, SubscriptionTier } from '@/lib/types'
 
@@ -137,31 +138,27 @@ function OnboardingWizard({ onClose }: OnboardingWizardProps) {
               <div className="space-y-4">
                 <div className="flex flex-col gap-1.5">
                   <label className="text-xs font-semibold text-neutral-700">Organisation Name <span className="text-brand-500">*</span></label>
-                  <input value={form.name} onChange={F('name')} placeholder="e.g. Shell Nigeria Ltd"
-                    className="w-full h-9 px-3 text-sm border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500"/>
+                  <Input value={form.name} onChange={F('name')} placeholder="e.g. Shell Nigeria Ltd" size="sm"/>
                 </div>
                 <div className="grid grid-cols-2 gap-3">
                   <div className="flex flex-col gap-1.5">
                     <label className="text-xs font-semibold text-neutral-700">Industry <span className="text-brand-500">*</span></label>
-                    <select aria-label="Industry" value={form.industry} onChange={F('industry')}
-                      className="h-9 px-3 text-sm border border-neutral-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-brand-500">
+                    <Select aria-label="Industry" value={form.industry} onChange={F('industry')} size="sm">
                       <option value="">Select…</option>
                       {INDUSTRIES.map(i => <option key={i} value={i}>{i}</option>)}
-                    </select>
+                    </Select>
                   </div>
                   <div className="flex flex-col gap-1.5">
                     <label className="text-xs font-semibold text-neutral-700">Country <span className="text-brand-500">*</span></label>
-                    <select aria-label="Country" value={form.country} onChange={F('country')}
-                      className="h-9 px-3 text-sm border border-neutral-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-brand-500">
+                    <Select aria-label="Country" value={form.country} onChange={F('country')} size="sm">
                       <option value="">Select…</option>
                       {COUNTRIES.map(c => <option key={c} value={c}>{c}</option>)}
-                    </select>
+                    </Select>
                   </div>
                 </div>
                 <div className="flex flex-col gap-1.5">
                   <label className="text-xs font-semibold text-neutral-700">Website</label>
-                  <input value={form.website} onChange={F('website')} placeholder="https://…" type="url"
-                    className="w-full h-9 px-3 text-sm border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500"/>
+                  <Input value={form.website} onChange={F('website')} placeholder="https://…" type="url" size="sm"/>
                 </div>
               </div>
             )}
@@ -174,18 +171,15 @@ function OnboardingWizard({ onClose }: OnboardingWizardProps) {
                 </div>
                 <div className="flex flex-col gap-1.5">
                   <label className="text-xs font-semibold text-neutral-700">Full Name <span className="text-brand-500">*</span></label>
-                  <input value={form.adminName} onChange={F('adminName')} placeholder="e.g. Kenneth Omireh"
-                    className="w-full h-9 px-3 text-sm border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500"/>
+                  <Input value={form.adminName} onChange={F('adminName')} placeholder="e.g. Kenneth Omireh" size="sm"/>
                 </div>
                 <div className="flex flex-col gap-1.5">
                   <label className="text-xs font-semibold text-neutral-700">Work Email <span className="text-brand-500">*</span></label>
-                  <input type="email" value={form.adminEmail} onChange={F('adminEmail')} placeholder="admin@company.com"
-                    className="w-full h-9 px-3 text-sm border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500"/>
+                  <Input type="email" value={form.adminEmail} onChange={F('adminEmail')} placeholder="admin@company.com" size="sm"/>
                 </div>
                 <div className="flex flex-col gap-1.5">
                   <label className="text-xs font-semibold text-neutral-700">Phone</label>
-                  <input type="tel" value={form.adminPhone} onChange={F('adminPhone')} placeholder="+234 …"
-                    className="w-full h-9 px-3 text-sm border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500"/>
+                  <Input type="tel" value={form.adminPhone} onChange={F('adminPhone')} placeholder="+234 …" size="sm"/>
                 </div>
               </div>
             )}
@@ -213,18 +207,15 @@ function OnboardingWizard({ onClose }: OnboardingWizardProps) {
                 </div>
                 <div className="flex flex-col gap-1.5">
                   <label className="text-xs font-semibold text-neutral-700">Seat Override <span className="text-neutral-400 font-normal">(optional)</span></label>
-                  <input type="number" min="1" max="999" value={form.seats} onChange={F('seats')}
-                    className="w-28 h-9 px-3 text-sm border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500"/>
+                  <Input type="number" min={1} max={999} value={form.seats} onChange={F('seats')} size="sm" className="w-28"/>
                 </div>
                 <div className="flex flex-col gap-1.5">
                   <label className="text-xs font-semibold text-neutral-700">Billing Contact Name</label>
-                  <input value={form.billingContact} onChange={F('billingContact')} placeholder="Finance manager name"
-                    className="w-full h-9 px-3 text-sm border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500"/>
+                  <Input value={form.billingContact} onChange={F('billingContact')} placeholder="Finance manager name" size="sm"/>
                 </div>
                 <div className="flex flex-col gap-1.5">
                   <label className="text-xs font-semibold text-neutral-700">Billing Email</label>
-                  <input type="email" value={form.billingEmail} onChange={F('billingEmail')} placeholder="billing@company.com"
-                    className="w-full h-9 px-3 text-sm border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500"/>
+                  <Input type="email" value={form.billingEmail} onChange={F('billingEmail')} placeholder="billing@company.com" size="sm"/>
                 </div>
               </div>
             )}
@@ -435,18 +426,12 @@ function OrganisationsPageInner() {
         {/* Header row */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
           {/* Search */}
-          <div style={{ position: 'relative', flex: 1, maxWidth: 360 }}>
-            <Search size={14} style={{ position: 'absolute', left: 10, top: '50%', transform: 'translateY(-50%)', color: '#9CA3AF' }} />
-            <input
+          <div style={{ flex: 1, maxWidth: 360 }}>
+            <SearchInput
               value={search}
-              onChange={e => setSearch(e.target.value)}
+              onChange={setSearch}
               placeholder="Search organisations…"
-              style={{
-                width: '100%', padding: '8px 12px 8px 32px',
-                border: '1px solid #D1D5DB', borderRadius: 7,
-                fontSize: 13, color: '#111827', background: '#fff',
-                outline: 'none', boxSizing: 'border-box',
-              }}
+              size="sm"
             />
           </div>
           <button

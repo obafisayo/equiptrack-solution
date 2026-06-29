@@ -99,28 +99,42 @@ export default function RolesPage({ params }: { params: Promise<{ orgSlug: strin
       {/* Matrix */}
       <div className="bg-white rounded-card border border-border-default overflow-hidden"
         style={{ boxShadow: '0 1px 3px rgba(0,0,0,0.06)' }}>
-        <div className="overflow-x-auto">
-          <table style={{ fontSize: 12, borderCollapse: 'collapse', minWidth: '900px', width: '100%' }}>
+        {/* overflow-x-auto only — vertical scroll comes from the page shell */}
+        <div style={{ overflowX: 'auto' }}>
+          <table style={{ fontSize: 12, borderCollapse: 'collapse', minWidth: 960, width: '100%', tableLayout: 'fixed' }}>
+            <colgroup>
+              <col style={{ width: 200 }} />
+              {ROLES.map(r => <col key={r.role} style={{ width: 90 }} />)}
+            </colgroup>
+
+            {/* ── Sticky header row ── */}
             <thead>
               <tr style={{ background: '#F9FAFB', borderBottom: '2px solid #E2E8F0' }}>
-                {/* Permission label column */}
+                {/* Corner cell — sticky both left and top */}
                 <th style={{
-                  padding: '12px 16px', textAlign: 'left', position: 'sticky', left: 0,
-                  background: '#F9FAFB', zIndex: 10, minWidth: 180,
+                  padding: '12px 16px', textAlign: 'left',
+                  position: 'sticky', left: 0, top: 0, zIndex: 30,
+                  background: '#F9FAFB',
                   fontSize: 11, fontWeight: 700, color: '#6B7280',
                   textTransform: 'uppercase', letterSpacing: '0.05em',
                   borderRight: '1px solid #E2E8F0',
+                  boxShadow: '1px 0 0 #E2E8F0',
                 }}>
                   Permission
                 </th>
                 {ROLES.map(r => (
-                  <th key={r.role} style={{ padding: '10px 8px', textAlign: 'center', minWidth: 90 }}>
-                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
+                  <th key={r.role} style={{
+                    padding: '10px 8px', textAlign: 'center',
+                    position: 'sticky', top: 0, zIndex: 20,
+                    background: '#F9FAFB',
+                  }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3 }}>
                       <span style={{
                         fontSize: 9, fontWeight: 700, padding: '1px 6px', borderRadius: 9999,
                         background: DEPT_COLORS[r.dept] + '18',
                         color: DEPT_COLORS[r.dept],
                         textTransform: 'uppercase', letterSpacing: '0.06em',
+                        whiteSpace: 'nowrap',
                       }}>
                         {r.dept}
                       </span>
@@ -130,35 +144,55 @@ export default function RolesPage({ params }: { params: Promise<{ orgSlug: strin
                 ))}
               </tr>
             </thead>
+
             <tbody>
               {PERM_GROUPS.map((group, gi) => (
                 <>
-                  {/* Group header */}
+                  {/* Group header — first cell is sticky-left, rest are empty filler */}
                   <tr key={`group-${gi}`} style={{ background: '#F1F5F9' }}>
-                    <td
-                      colSpan={ROLES.length + 1}
-                      style={{
-                        padding: '7px 16px',
-                        fontSize: 11, fontWeight: 700, color: '#64748B',
-                        textTransform: 'uppercase', letterSpacing: '0.06em',
-                        borderTop: '1px solid #E2E8F0', borderBottom: '1px solid #E2E8F0',
-                      }}
-                    >
+                    <td style={{
+                      padding: '7px 16px',
+                      position: 'sticky', left: 0, zIndex: 10,
+                      background: '#F1F5F9',
+                      fontSize: 11, fontWeight: 700, color: '#64748B',
+                      textTransform: 'uppercase', letterSpacing: '0.06em',
+                      borderTop: '1px solid #E2E8F0', borderBottom: '1px solid #E2E8F0',
+                      boxShadow: '1px 0 0 #E2E8F0',
+                    }}>
                       {group.label}
                     </td>
+                    {ROLES.map(r => (
+                      <td key={r.role} style={{
+                        borderTop: '1px solid #E2E8F0', borderBottom: '1px solid #E2E8F0',
+                        background: '#F1F5F9',
+                      }} />
+                    ))}
                   </tr>
+
                   {/* Permission rows */}
                   {group.permissions.map((perm) => (
                     <tr
                       key={perm.key}
                       style={{ borderBottom: '1px solid #F3F4F6' }}
-                      onMouseEnter={e => ((e.currentTarget as HTMLElement).style.background = '#F9FAFB')}
-                      onMouseLeave={e => ((e.currentTarget as HTMLElement).style.background = '')}
+                      onMouseEnter={e => {
+                        const row = e.currentTarget as HTMLElement
+                        row.style.background = '#F9FAFB'
+                        const stickyCell = row.querySelector('td[data-sticky]') as HTMLElement | null
+                        if (stickyCell) stickyCell.style.background = '#F9FAFB'
+                      }}
+                      onMouseLeave={e => {
+                        const row = e.currentTarget as HTMLElement
+                        row.style.background = ''
+                        const stickyCell = row.querySelector('td[data-sticky]') as HTMLElement | null
+                        if (stickyCell) stickyCell.style.background = '#fff'
+                      }}
                     >
-                      <td style={{
-                        padding: '10px 16px', position: 'sticky', left: 0,
-                        background: 'inherit', zIndex: 5,
+                      <td data-sticky="true" style={{
+                        padding: '10px 16px',
+                        position: 'sticky', left: 0, zIndex: 5,
+                        background: '#fff',
                         borderRight: '1px solid #E2E8F0',
+                        boxShadow: '1px 0 0 #E2E8F0',
                         fontSize: 12, color: '#374151', fontWeight: 500,
                       }}>
                         {perm.label}

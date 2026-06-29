@@ -10,6 +10,7 @@ import { AssignModal } from '@/components/domain/AssignModal'
 import { SectionTitle } from '@/components/domain/OrderGrid'
 import { StagePill } from '@/components/domain/Pills'
 import { SLABar } from '@/components/domain/SLABar'
+import { Select } from '@/components/ui/Form'
 import { Card } from '@/components/ui/Card'
 import { WORK_ORDERS, type WorkOrder, getPersonnelByDept, sortNewestFirst } from '@/lib/mock-data'
 import { STAGE_REVERSAL, type Stage } from '@/lib/lifecycle'
@@ -279,16 +280,17 @@ export default function WarehouseDashboard() {
                     {f}
                   </button>
                 ))}
-                <select
+                <Select
                   title="Filter by urgency"
                   value={urgencyFilter}
                   onChange={e => setUrgencyFilter(e.target.value as UrgencyLevel | 'All')}
-                  className="ml-2 px-2.5 py-1 rounded-full text-xs font-medium border border-border-default bg-white text-gray-600 cursor-pointer focus:outline-none focus:ring-1 focus:ring-brand-500"
+                  size="sm"
+                  className="ml-2 w-auto min-w-28"
                 >
                   {URGENCY_OPTIONS.map(u => (
                     <option key={u} value={u}>{u === 'All' ? 'All Urgency' : u}</option>
                   ))}
-                </select>
+                </Select>
               </div>
             </div>
             {filteredActive.length === 0 ? (

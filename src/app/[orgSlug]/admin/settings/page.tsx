@@ -5,6 +5,7 @@ import { use, useState } from 'react'
 import { Save, AlertTriangle, Trash2 } from 'lucide-react'
 import { ORGANISATIONS } from '@/lib/mock-platform'
 import { STAGE_SLA_HOURS } from '@/config/sla'
+import { Input, Select } from '@/components/ui/Form'
 
 type Tab = 'general' | 'sla' | 'notifications' | 'danger'
 
@@ -30,40 +31,35 @@ function GeneralTab({ org }: { org: NonNullable<ReturnType<typeof ORGANISATIONS.
   }
 
   const labelStyle = { fontSize: 12, fontWeight: 600 as const, color: '#374151', display: 'block' as const, marginBottom: 5 }
-  const inputStyle = {
-    width: '100%', padding: '9px 12px', border: '1px solid #D1D5DB', borderRadius: 7,
-    fontSize: 13, color: '#111827', background: '#fff', outline: 'none',
-    boxSizing: 'border-box' as const,
-  }
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
         <div>
           <label style={labelStyle}>Organisation Name</label>
-          <input value={name} onChange={e => setName(e.target.value)} style={inputStyle} />
+          <Input value={name} onChange={e => setName(e.target.value)} />
         </div>
         <div>
           <label style={labelStyle}>Industry</label>
-          <input value={industry} onChange={e => setIndustry(e.target.value)} style={inputStyle} />
+          <Input value={industry} onChange={e => setIndustry(e.target.value)} />
         </div>
         <div>
           <label style={labelStyle}>Timezone</label>
-          <select aria-label="Timezone" value={timezone} onChange={e => setTimezone(e.target.value)} style={{ ...inputStyle, cursor: 'pointer' }}>
+          <Select aria-label="Timezone" value={timezone} onChange={e => setTimezone(e.target.value)}>
             {['Africa/Lagos', 'America/New_York', 'America/Chicago', 'America/Denver', 'America/Los_Angeles', 'Europe/London', 'Europe/Paris', 'Asia/Dubai', 'Asia/Singapore'].map(tz => (
               <option key={tz} value={tz}>{tz}</option>
             ))}
-          </select>
+          </Select>
         </div>
         <div>
           <label style={labelStyle}>Country</label>
-          <input value={country} onChange={e => setCountry(e.target.value)} style={inputStyle} />
+          <Input value={country} onChange={e => setCountry(e.target.value)} />
         </div>
       </div>
 
       <div>
         <label style={labelStyle}>Admin Email</label>
-        <input value={org.adminEmail} disabled style={{ ...inputStyle, background: '#F9FAFB', color: '#9CA3AF' }} />
+        <Input value={org.adminEmail} disabled className="font-normal text-gray-400 bg-neutral-100" />
         <p style={{ fontSize: 11, color: '#9CA3AF', margin: '4px 0 0' }}>
           Contact Sysadmin to change the admin email address.
         </p>
@@ -71,7 +67,7 @@ function GeneralTab({ org }: { org: NonNullable<ReturnType<typeof ORGANISATIONS.
 
       <div>
         <label style={labelStyle}>Organisation Slug</label>
-        <input value={org.slug} disabled style={{ ...inputStyle, background: '#F9FAFB', color: '#9CA3AF', fontFamily: 'monospace', fontSize: 12 }} />
+        <Input value={org.slug} disabled className="font-mono text-xs text-gray-400 bg-neutral-100" />
         <p style={{ fontSize: 11, color: '#9CA3AF', margin: '4px 0 0' }}>
           Used in URLs. Cannot be changed after setup.
         </p>
@@ -130,16 +126,14 @@ function SLAConfigTab() {
               <tr key={stage} style={{ borderBottom: '1px solid #F3F4F6' }}>
                 <td style={{ padding: '10px 16px', color: '#374151' }}>{stage}</td>
                 <td style={{ padding: '8px 16px' }}>
-                  <input
+                  <Input
                     type="number"
                     min={1}
                     max={168}
                     value={hours[stage] ?? 4}
                     onChange={e => setHours(h => ({ ...h, [stage]: parseInt(e.target.value) || 1 }))}
-                    style={{
-                      width: 80, padding: '5px 10px', border: '1px solid #D1D5DB', borderRadius: 6,
-                      fontSize: 13, color: '#111827', outline: 'none', textAlign: 'center',
-                    }}
+                    size="sm"
+                    className="w-20 text-center font-mono"
                   />
                   <span style={{ fontSize: 11, color: '#9CA3AF', marginLeft: 6 }}>hrs</span>
                 </td>
@@ -329,15 +323,14 @@ function DangerZoneTab({ orgName }: { orgName: string }) {
               <span style={{ fontSize: 11, color: '#DC2626', fontWeight: 600 }}>This action cannot be undone.</span>
             </div>
 
-            <input
-              value={confirmText}
-              onChange={e => setConfirmText(e.target.value)}
-              placeholder={orgName}
-              style={{
-                width: '100%', padding: '9px 12px', border: '1px solid #D1D5DB', borderRadius: 7,
-                fontSize: 13, outline: 'none', marginBottom: 16, boxSizing: 'border-box',
-              }}
-            />
+            <div className="mb-4">
+              <Input
+                value={confirmText}
+                onChange={e => setConfirmText(e.target.value)}
+                placeholder={orgName}
+                error={confirmText.length > 0 && confirmText !== orgName}
+              />
+            </div>
 
             <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end' }}>
               <button

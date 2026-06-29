@@ -3,13 +3,13 @@
 
 import { useState, useMemo } from 'react'
 import {
-  Plus, Search, Lock, AlertTriangle, CheckCircle, Clock, X,
+  Plus, Lock, AlertTriangle, CheckCircle, Clock, X,
   CheckCircle2, Package,
 } from 'lucide-react'
 import AppShell from '@/components/layout/AppShell'
 import { StatCard } from '@/components/domain/StatCard'
 import { Button } from '@/components/ui/Button'
-import { Input } from '@/components/ui/Form'
+import { Input, SearchInput, Select } from '@/components/ui/Form'
 import { DatePicker } from '@/components/ui/DatePicker'
 import { Dropdown } from '@/components/ui/Dropdown'
 
@@ -216,11 +216,10 @@ export default function ContainerFleetPage() {
 
       {/* Filter bar */}
       <div className="flex flex-wrap items-center gap-2 mb-4">
-        <div className="relative flex-1 min-w-[180px] max-w-xs">
-          <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400 pointer-events-none"/>
-          <input value={search} onChange={e => setSearch(e.target.value)}
+        <div className="flex-1 min-w-[180px] max-w-xs">
+          <SearchInput value={search} onChange={setSearch}
             placeholder="Search serial no. or type…"
-            className="w-full h-9 pl-8 pr-3 text-sm border border-border-default rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-brand-500"/>
+            size="sm"/>
         </div>
 
         {([
@@ -228,10 +227,9 @@ export default function ContainerFleetPage() {
           { val: expiryFilter, set: setExpiryFilter, opts: [['all','All Expiry'],['expired','Expired'],['locked','Locked (1–3d)'],['warning','Warning (4–7d)'],['soon','Expiring Soon'],['ok','Valid (30d+)']] },
           { val: statusFilter, set: setStatusFilter, opts: [['all','All Statuses'],['Available','Available'],['In Transit','In Transit'],['Assigned','Assigned'],['Maintenance','Maintenance'],['Quarantine','Quarantine']] },
         ] as { val: string; set: (v:string)=>void; opts: [string,string][] }[]).map((f,i) => (
-          <select key={i} aria-label={f.opts[0][1]} value={f.val} onChange={e => f.set(e.target.value)}
-            className="h-9 px-3 text-xs border border-border-default rounded-lg bg-white focus:outline-none focus:ring-1 focus:ring-brand-500 cursor-pointer">
+          <Select key={i} aria-label={f.opts[0][1]} value={f.val} onChange={e => f.set(e.target.value)} size="sm">
             {f.opts.map(([v,l]) => <option key={v} value={v}>{l}</option>)}
-          </select>
+          </Select>
         ))}
 
         {hasFilters && (

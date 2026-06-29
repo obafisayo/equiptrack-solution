@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from 'react'
 import { ShieldCheck, Package, CheckCircle2, Archive, ChevronDown, ChevronUp } from 'lucide-react'
+import { Textarea } from '@/components/ui/Form'
 import AppShell from '@/components/layout/AppShell'
 import { StatCard } from '@/components/domain/StatCard'
 import { SectionTitle } from '@/components/domain/OrderGrid'
@@ -160,11 +161,10 @@ function InspectDialog({ order, onApprove, onReject, onClose }: InspectDialogPro
 
         <div className="mb-4">
           <label className="block text-xs font-semibold text-gray-700 mb-1">Inspection Notes (optional)</label>
-          <textarea
+          <Textarea
             value={notes}
             onChange={e => setNotes(e.target.value)}
             rows={3}
-            className="w-full border border-border-default rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 resize-none"
             placeholder="Add notes about the inspection..."
           />
         </div>

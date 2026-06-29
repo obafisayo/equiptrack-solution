@@ -5,7 +5,7 @@ import { Plus, X, CheckCircle2, AlertTriangle } from 'lucide-react'
 import AppShell from '@/components/layout/AppShell'
 import { StatCard } from '@/components/domain/StatCard'
 import { Button } from '@/components/ui/Button'
-import { Input, Textarea } from '@/components/ui/Form'
+import { Input, Textarea, Select } from '@/components/ui/Form'
 import { DatePicker } from '@/components/ui/DatePicker'
 
 type NMStatus = 'open' | 'under_review' | 'closed'
@@ -134,10 +134,9 @@ export default function SafetyNearMissPage() {
                 </div>
                 <div className="flex flex-col gap-1.5">
                   <label className="text-sm font-semibold text-neutral-700">Category</label>
-                  <select aria-label="Near miss category" value={form.category} onChange={e => setForm(f=>({...f,category:e.target.value as NMCategory}))}
-                    className="h-9 px-3 text-sm border border-border-default rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-brand-500">
+                  <Select aria-label="Near miss category" value={form.category} onChange={e => setForm(f=>({...f,category:e.target.value as NMCategory}))} size="sm">
                     {CAT_OPTIONS.map(c => <option key={c} value={c}>{c}</option>)}
-                  </select>
+                  </Select>
                 </div>
                 <div className="flex flex-col gap-1.5">
                   <label className="text-sm font-semibold text-neutral-700">What happened? <span className="text-status-critical">*</span></label>

@@ -4,6 +4,7 @@
 import { use, useState } from 'react'
 import { ShieldCheck, AlertTriangle, CheckCircle, Copy, RefreshCw } from 'lucide-react'
 import { ORGANISATIONS, SSO_CONFIGS } from '@/lib/mock-platform'
+import { Input } from '@/components/ui/Form'
 
 /* ── Page ─────────────────────────────────────────────────────────────────── */
 
@@ -209,11 +210,6 @@ function SSOForm({ form, setForm, onSave, saving, saved }: {
   saving: boolean
   saved: boolean
 }) {
-  const inputStyle = {
-    width: '100%', padding: '8px 10px', border: '1px solid #D1D5DB',
-    borderRadius: 6, fontSize: 13, color: '#111827', background: '#fff',
-    outline: 'none', boxSizing: 'border-box' as const,
-  }
   return (
     <div className="bg-white rounded-card border border-border-default p-5"
       style={{ boxShadow: '0 1px 3px rgba(0,0,0,0.06)' }}>
@@ -224,35 +220,34 @@ function SSOForm({ form, setForm, onSave, saving, saved }: {
             <label style={{ fontSize: 12, fontWeight: 600, color: '#374151', display: 'block', marginBottom: 4 }}>
               Directory (Tenant) ID *
             </label>
-            <input
+            <Input
               required
               value={form.tenantId}
               onChange={e => setForm({ ...form, tenantId: e.target.value })}
               placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
-              style={{ ...inputStyle, fontFamily: 'monospace' }}
+              className="font-mono"
             />
           </div>
           <div>
             <label style={{ fontSize: 12, fontWeight: 600, color: '#374151', display: 'block', marginBottom: 4 }}>
               Application (Client) ID *
             </label>
-            <input
+            <Input
               required
               value={form.clientId}
               onChange={e => setForm({ ...form, clientId: e.target.value })}
               placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
-              style={{ ...inputStyle, fontFamily: 'monospace' }}
+              className="font-mono"
             />
           </div>
           <div>
             <label style={{ fontSize: 12, fontWeight: 600, color: '#374151', display: 'block', marginBottom: 4 }}>
               Allowed Email Domain
             </label>
-            <input
+            <Input
               value={form.domain}
               onChange={e => setForm({ ...form, domain: e.target.value })}
               placeholder="e.g. shell.com"
-              style={inputStyle}
             />
             <p style={{ fontSize: 11, color: '#9CA3AF', margin: '4px 0 0' }}>
               Leave blank to allow all Microsoft accounts.

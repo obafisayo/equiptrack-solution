@@ -4,13 +4,13 @@
 import { useState, useMemo } from 'react'
 import {
   Package, AlertTriangle, CheckCircle, TrendingDown,
-  Search, Plus, X, ArrowDown, ArrowUp, ArrowRightLeft,
+  Plus, X, ArrowDown, ArrowUp, ArrowRightLeft,
   ClipboardList, Filter, CheckCircle2,
 } from 'lucide-react'
 import AppShell from '@/components/layout/AppShell'
 import { StatCard }  from '@/components/domain/StatCard'
 import { Button }    from '@/components/ui/Button'
-import { Input, Textarea } from '@/components/ui/Form'
+import { Input, Textarea, SearchInput } from '@/components/ui/Form'
 import { Dropdown }  from '@/components/ui/Dropdown'
 import { CONTAINERS } from '@/lib/mock-data'
 
@@ -186,13 +186,12 @@ export default function InventoryDashboard() {
 
       {/* Action bar */}
       <div className="flex items-center justify-between gap-3 mb-5">
-        <div className="flex-1 relative max-w-sm">
-          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400"/>
-          <input
+        <div className="flex-1 max-w-sm">
+          <SearchInput
             value={search}
-            onChange={e => setSearch(e.target.value)}
+            onChange={setSearch}
             placeholder="Search by name, ID or category…"
-            className="w-full h-9 pl-8 pr-3 text-sm border border-border-default rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
+            size="sm"
           />
         </div>
         <Button variant="brand" size="sm" icon={<Plus size={13}/>} onClick={() => setAddOpen(true)}>
