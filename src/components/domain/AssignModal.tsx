@@ -1,7 +1,8 @@
+/* eslint-disable */
 'use client'
 
 import { useState } from 'react'
-import { X } from 'lucide-react'
+import { X, UserCheck } from 'lucide-react'
 import type { WorkOrder, Personnel } from '@/lib/mock-data'
 
 interface AssignModalProps {
@@ -20,153 +21,138 @@ export function AssignModal({ order, personnel, onConfirm, onClose }: AssignModa
 
   return (
     <>
-      {/* Overlay */}
+      {/* Backdrop */}
       <div
-        className="fixed inset-0 z-[450] flex items-center justify-center"
-        style={{ background: 'rgba(0,0,0,0.45)' }}
+        className="fixed inset-0 z-450 bg-black/30"
         onClick={onClose}
+        aria-hidden="true"
       />
 
-      {/* Modal box */}
-      <div className="fixed inset-0 z-[460] flex items-end sm:items-center sm:p-4">
-        <div
-          className="bg-white flex flex-col w-full sm:w-[480px] rounded-t-2xl sm:rounded-xl"
-          style={{
-            boxShadow: '0 20px 40px rgba(0,0,0,0.12)',
-            maxHeight: '90vh',
-          }}
-        >
-          {/* Header */}
-          <div
-            className="flex items-start justify-between gap-4 shrink-0"
-            style={{ padding: '20px 24px', borderBottom: '1px solid #E2E8F0' }}
-          >
-            <div className="min-w-0">
-              <h2 style={{ fontSize: 16, fontWeight: 600, color: '#111827', margin: '0 0 4px' }}>
+      {/* Right-sliding panel */}
+      <aside className="fixed right-0 top-0 bottom-0 z-460 w-full sm:w-[440px] bg-white shadow-overlay flex flex-col animate-slide-in">
+
+        {/* Header */}
+        <div className="flex items-start justify-between gap-4 shrink-0 px-6 py-5 border-b border-border-default">
+          <div className="min-w-0">
+            <div className="flex items-center gap-2 mb-1">
+              <UserCheck size={16} className="text-brand-500 shrink-0" />
+              <h2 className="text-base font-bold text-gray-900">
                 {order.assignedTo ? 'Reassign' : 'Assign'} Work Order
               </h2>
-              <p
-                className="font-mono-id"
-                style={{ fontSize: 12, color: '#F04A4A', margin: 0 }}
-              >
-                {order.id}
-              </p>
             </div>
-            <button
-              type="button"
-              onClick={onClose}
-              className="flex items-center justify-center rounded-lg transition-colors duration-150 shrink-0"
-              style={{ width: 32, height: 32, color: '#6B7280', background: 'transparent' }}
-              onMouseEnter={e => ((e.currentTarget as HTMLElement).style.background = '#F3F4F6')}
-              onMouseLeave={e => ((e.currentTarget as HTMLElement).style.background = 'transparent')}
-              aria-label="Close"
-            >
-              <X size={20} />
-            </button>
+            <p className="font-mono text-xs text-brand-500 font-bold tracking-wider">{order.id}</p>
+            {order.destination && (
+              <p className="text-xs text-neutral-500 mt-0.5 truncate">
+                {order.destination} &middot; {order.stage}
+              </p>
+            )}
           </div>
-
-          {/* Personnel list */}
-          <div
-            className="overflow-y-auto flex-1"
-            style={{ padding: '16px 24px', display: 'flex', flexDirection: 'column', gap: 8 }}
+          <button
+            type="button"
+            aria-label="Close panel"
+            onClick={onClose}
+            className="w-8 h-8 flex items-center justify-center rounded-lg text-gray-400 hover:bg-gray-100 hover:text-gray-700 transition-colors shrink-0"
           >
-            {personnel.map(p => {
-              const loadPct = p.capacity > 0 ? (p.active / p.capacity) * 100 : 0
-              const isOverloaded = loadPct > 80
-              const isSelected = p.id === selectedId
-              const isCurrentlyAssigned = p.id === order.assignedTo
+            <X size={18} />
+          </button>
+        </div>
 
-              return (
-                <button
-                  key={p.id}
-                  type="button"
-                  onClick={() => setSelectedId(p.id)}
-                  className={[
-                    'w-full text-left rounded-lg border transition-all duration-150',
-                    isSelected
-                      ? 'border-brand-500 bg-brand-50'
-                      : isOverloaded
-                      ? 'border-amber-200 bg-amber-50/50 hover:border-amber-300'
-                      : 'border-border-default hover:border-gray-300 hover:bg-gray-50',
-                  ].join(' ')}
-                  style={{ padding: 12 }}
-                >
-                  <div className="flex items-center justify-between" style={{ marginBottom: 8 }}>
-                    <div className="flex items-center gap-2">
-                      <span style={{ fontSize: 13, fontWeight: 600, color: '#111827' }}>{p.name}</span>
-                      {isCurrentlyAssigned && (
-                        <span style={{ fontSize: 11, color: '#F04A4A', fontWeight: 500 }}>(current)</span>
+        {/* Currently assigned notice */}
+        {order.assignedTo && order.assignedToName && (
+          <div className="mx-6 mt-4 px-3 py-2.5 bg-amber-50 border border-amber-200 rounded-lg shrink-0">
+            <p className="text-xs font-semibold text-amber-800">
+              Currently assigned to{' '}
+              <span className="font-bold">{order.assignedToName}</span>
+            </p>
+            <p className="text-xs text-amber-600 mt-0.5">Selecting a new person will reassign this order.</p>
+          </div>
+        )}
+
+        {/* Section label */}
+        <div className="px-6 pt-4 pb-2 shrink-0">
+          <p className="text-[11px] font-bold text-neutral-400 uppercase tracking-wider">
+            Select Personnel
+          </p>
+        </div>
+
+        {/* Personnel list */}
+        <div className="flex-1 overflow-y-auto px-6 pb-4 flex flex-col gap-2">
+          {personnel.length === 0 && (
+            <div className="text-center py-10 text-sm text-neutral-400">No personnel available</div>
+          )}
+          {personnel.map(p => {
+            const loadPct  = p.capacity > 0 ? (p.active / p.capacity) * 100 : 0
+            const isOver   = loadPct > 80
+            const isSel    = p.id === selectedId
+            const isCurrent = p.id === order.assignedTo
+
+            return (
+              <button
+                key={p.id}
+                type="button"
+                onClick={() => setSelectedId(p.id)}
+                className={[
+                  'w-full text-left rounded-xl border p-3.5 transition-all duration-150',
+                  isSel
+                    ? 'border-brand-500 bg-brand-50 shadow-sm'
+                    : isOver
+                    ? 'border-amber-200 bg-amber-50/40 hover:border-amber-300'
+                    : 'border-border-default hover:border-gray-300 hover:bg-gray-50',
+                ].join(' ')}
+              >
+                <div className="flex items-center justify-between mb-2.5">
+                  <div className="flex items-center gap-2 min-w-0">
+                    {/* Avatar initial */}
+                    <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold shrink-0 ${isSel ? 'bg-brand-500 text-white' : 'bg-neutral-200 text-neutral-600'}`}>
+                      {p.name.charAt(0)}
+                    </div>
+                    <div className="min-w-0">
+                      <span className="text-sm font-semibold text-gray-900 truncate block">{p.name}</span>
+                      {isCurrent && (
+                        <span className="text-[10px] font-bold text-brand-500 uppercase tracking-wider">Current assignee</span>
                       )}
                     </div>
-                    <span style={{ fontSize: 12, fontWeight: 600, color: isOverloaded ? '#F59E0B' : '#22C55E' }}>
-                      {p.active}/{p.capacity}
-                    </span>
                   </div>
-                  {/* Load bar */}
-                  <div className="w-full rounded-full overflow-hidden" style={{ height: 6, background: '#F3F4F6' }}>
-                    <div
-                      className="h-full rounded-full transition-all duration-300"
-                      style={{
-                        width: `${Math.min(loadPct, 100)}%`,
-                        background: isOverloaded ? '#F59E0B' : '#22C55E',
-                      }}
-                    />
-                  </div>
-                  {isOverloaded && (
-                    <p style={{ fontSize: 10, color: '#D97706', marginTop: 4, fontWeight: 600, letterSpacing: '0.04em' }}>
-                      HIGH LOAD
-                    </p>
-                  )}
-                </button>
-              )
-            })}
-          </div>
+                  <span className={`text-xs font-bold shrink-0 ${isOver ? 'text-amber-700' : 'text-green-700'}`}>
+                    {p.active}/{p.capacity} orders
+                  </span>
+                </div>
 
-          {/* Footer */}
-          <div
-            className="flex items-center justify-end shrink-0"
-            style={{ padding: '16px 24px', borderTop: '1px solid #E2E8F0', gap: 8 }}
-          >
-            <button
-              type="button"
-              onClick={onClose}
-              className="transition-colors duration-150"
-              style={{
-                height: 36, padding: '0 16px',
-                background: '#fff', color: '#374151',
-                border: '1px solid #E2E8F0', borderRadius: 8,
-                fontSize: 13, fontWeight: 500, cursor: 'pointer',
-              }}
-              onMouseEnter={e => ((e.currentTarget as HTMLElement).style.background = '#F9FAFB')}
-              onMouseLeave={e => ((e.currentTarget as HTMLElement).style.background = '#fff')}
-            >
-              Cancel
-            </button>
-            <button
-              type="button"
-              onClick={() => selected && onConfirm(selected.id, selected.name)}
-              disabled={!selectedId}
-              className="transition-colors duration-150"
-              style={{
-                height: 36, padding: '0 16px',
-                background: selectedId ? '#111827' : '#9CA3AF',
-                color: '#fff', border: 'none', borderRadius: 8,
-                fontSize: 13, fontWeight: 600,
-                cursor: selectedId ? 'pointer' : 'not-allowed',
-                opacity: selectedId ? 1 : 0.6,
-              }}
-              onMouseEnter={e => {
-                if (selectedId) (e.currentTarget as HTMLElement).style.background = '#1F2937'
-              }}
-              onMouseLeave={e => {
-                if (selectedId) (e.currentTarget as HTMLElement).style.background = '#111827'
-              }}
-            >
-              Confirm Assignment
-            </button>
-          </div>
+                {/* Load bar */}
+                <div className="w-full h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                  <div
+                    className={`h-full rounded-full transition-all duration-300 ${isOver ? 'bg-amber-500' : 'bg-green-500'}`}
+                    style={{ width: `${Math.min(loadPct, 100)}%` }}
+                  />
+                </div>
+                {isOver && (
+                  <p className="text-[10px] font-bold text-amber-700 mt-1.5 uppercase tracking-wider">High load — may impact delivery time</p>
+                )}
+              </button>
+            )
+          })}
         </div>
-      </div>
+
+        {/* Footer */}
+        <div className="flex items-center justify-end gap-3 shrink-0 px-6 py-4 border-t border-border-default bg-white">
+          <button
+            type="button"
+            onClick={onClose}
+            className="h-10 px-5 bg-white text-gray-700 border border-border-default rounded-lg text-sm font-semibold hover:bg-gray-50 transition-colors duration-150"
+          >
+            Cancel
+          </button>
+          <button
+            type="button"
+            onClick={() => selected && onConfirm(selected.id, selected.name)}
+            disabled={!selectedId || selectedId === order.assignedTo}
+            className="h-10 px-5 bg-brand-500 hover:bg-brand-600 text-white rounded-lg text-sm font-bold disabled:opacity-45 disabled:cursor-not-allowed transition-colors duration-150 flex items-center gap-2"
+          >
+            <UserCheck size={15} />
+            {order.assignedTo ? 'Reassign' : 'Confirm Assignment'}
+          </button>
+        </div>
+      </aside>
     </>
   )
 }

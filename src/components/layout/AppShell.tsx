@@ -17,8 +17,6 @@ interface AppShellProps {
     value: string
     onChange: (v: string) => void
   }
-  actionLabel?: string
-  actionHref?: string
   children: ReactNode
 }
 
@@ -29,8 +27,6 @@ export function AppShell({
   breadcrumb,
   actions,
   search,
-  actionLabel,
-  actionHref,
   children,
 }: AppShellProps) {
   const [mobileOpen, setMobileOpen] = useState(false)
@@ -84,8 +80,6 @@ export function AppShell({
             breadcrumb={breadcrumb}
             actions={actions}
             search={search}
-            actionLabel={actionLabel}
-            actionHref={actionHref}
             role={role}
             onMobileMenuToggle={() => setMobileOpen(v => !v)}
           />

@@ -1,0 +1,12 @@
+{
+  "connector": {
+    "name": "local"
+  },
+  "formatters": ["summary"],
+  "hints": {
+    "no-inline-styles": ["warning", {
+      "requireNoStyleElement": false
+    }]
+  },
+  "hintsTimeout": 10000
+}

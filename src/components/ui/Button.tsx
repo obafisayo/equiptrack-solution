@@ -2,7 +2,7 @@
 
 import { ReactNode, ButtonHTMLAttributes } from 'react'
 
-type Variant = 'primary' | 'brand' | 'secondary' | 'ghost' | 'danger' | 'dark'
+type Variant = 'primary' | 'brand' | 'secondary' | 'ghost' | 'danger' | 'dark' | 'outline' | 'success'
 type Size = 'sm' | 'md' | 'lg'
 
 interface ButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'onClick'> {
@@ -19,12 +19,14 @@ interface ButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'onC
 }
 
 const variantClasses: Record<Variant, string> = {
-  primary:   'bg-[#111827] hover:bg-[#1F2937] active:bg-[#374151] text-white border-transparent',
-  brand:     'bg-brand-500 hover:bg-brand-600 text-white border-transparent',
-  secondary: 'bg-white hover:bg-[#F9FAFB] text-[#374151] border border-[#E2E8F0]',
-  ghost:     'bg-transparent hover:bg-[#F3F4F6] text-[#6B7280] hover:text-[#374151] border-transparent',
-  danger:    'bg-[#EF4444] hover:bg-[#DC2626] text-white border-transparent',
+  primary:   'bg-neutral-900 hover:bg-neutral-800 active:bg-neutral-700 text-white border-transparent',
+  brand:     'bg-brand-500 hover:bg-brand-600 active:bg-brand-700 text-white border-transparent',
+  secondary: 'bg-white hover:bg-neutral-50 text-neutral-700 border border-border-default',
+  ghost:     'bg-transparent hover:bg-neutral-100 text-neutral-500 hover:text-neutral-700 border-transparent',
+  danger:    'bg-red-500 hover:bg-red-600 active:bg-red-700 text-white border-transparent',
   dark:      'bg-sidebar hover:bg-neutral-800 text-white border-transparent',
+  outline:   'bg-transparent hover:bg-brand-50 text-brand-500 border border-brand-500 hover:border-brand-600',
+  success:   'bg-emerald-500 hover:bg-emerald-600 active:bg-emerald-700 text-white border-transparent',
 }
 
 const sizeClasses: Record<Size, string> = {
@@ -66,15 +68,7 @@ export function Button({
       {...rest}
     >
       {loading ? (
-        <span
-          className="animate-spin"
-          style={{
-            width: 14, height: 14, borderRadius: '50%',
-            border: '2px solid currentColor',
-            borderTopColor: 'transparent',
-            display: 'block',
-          }}
-        />
+        <span className="block w-3.5 h-3.5 rounded-full border-2 border-current border-t-transparent animate-spin" />
       ) : (
         <>
           {icon && iconPosition === 'left' && (

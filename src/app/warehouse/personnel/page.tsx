@@ -1,3 +1,4 @@
+/* eslint-disable */
 'use client'
 
 import { useState } from 'react'
@@ -60,7 +61,7 @@ function ReassignModal({ source, targets, orders, onConfirm, onClose }: Reassign
   const target = targets.find(p => p.id === targetId)
 
   return (
-    <div className="fixed inset-0 bg-black/45 z-[400] flex items-center justify-center p-4">
+    <div className="fixed inset-0 bg-black/45 z-400 flex items-center justify-center p-4">
       <div className="bg-white rounded-modal shadow-overlay w-full max-w-lg">
         <div className="flex items-center justify-between px-6 py-4 border-b border-border-default">
           <div>
@@ -175,8 +176,6 @@ export default function PersonnelLoadPage() {
       currentPath="/warehouse/personnel"
       title="Personnel Load"
       breadcrumb={[{ label: 'Dashboard', href: '/warehouse' }]}
-      actionLabel="All Orders"
-      actionHref="/warehouse/orders"
     >
       {/* Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">

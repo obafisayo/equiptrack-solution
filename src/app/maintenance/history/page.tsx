@@ -22,8 +22,6 @@ export default function MaintenanceHistoryPage() {
         { label: 'Maintenance Tasks', href: '/maintenance' },
         { label: 'Repair History' }
       ]}
-      actionLabel="Export Log"
-      actionHref="#"
     >
       <div className="space-y-6">
         <SectionTitle title="Historical Maintenance Log" count={historyData.length} />

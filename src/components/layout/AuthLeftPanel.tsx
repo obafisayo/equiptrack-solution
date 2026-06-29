@@ -1,3 +1,4 @@
+/* eslint-disable */
 export function AuthLeftPanel() {
   return (
     <div

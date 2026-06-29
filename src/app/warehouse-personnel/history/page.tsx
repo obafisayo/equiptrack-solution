@@ -8,7 +8,7 @@ import { StagePill } from '@/components/domain/Pills'
 import { EmptyState } from '@/components/ui/EmptyState'
 import { WORK_ORDERS, type WorkOrder } from '@/lib/mock-data'
 import { fmtHours } from '@/config/sla'
-import { type Stage, STAGE_DEPARTMENT, DEPARTMENT_COLOR } from '@/lib/lifecycle'
+import { type Stage } from '@/lib/lifecycle'
 
 // Orders previously handled by WH1 (Emeka Okonkwo) â€” stages beyond Transferred to Dispatch
 const HISTORY_STAGES: Stage[] = [
@@ -93,9 +93,6 @@ export default function WarehousePersonnelHistoryPage() {
               {filtered.map(order => {
                 const handedOff = getHandedOffStage(order)
                 const myDuration = getMyDuration(order)
-                const dept = STAGE_DEPARTMENT[order.stage as Stage]
-                const deptColor = DEPARTMENT_COLOR[dept]
-
                 return (
                   <tr
                     key={order.id}
@@ -107,25 +104,13 @@ export default function WarehousePersonnelHistoryPage() {
                     <td className="px-4 py-3">
                       <span className="font-mono-id text-brand-500 font-semibold text-xs">{order.id}</span>
                     </td>
-                    <td className="px-4 py-3 text-gray-700 max-w-[160px] truncate">{order.destination}</td>
+                    <td className="px-4 py-3 text-gray-700 max-w-40 truncate">{order.destination}</td>
                     <td className="px-4 py-3">
                       <StagePill stage={handedOff} />
                     </td>
                     <td className="px-4 py-3 font-medium text-gray-700">{fmtHours(myDuration)}</td>
                     <td className="px-4 py-3">
-                      <span
-                        className="inline-flex items-center gap-1.5 text-xs font-medium px-2 py-0.5 rounded-full"
-                        style={{
-                          background: `${deptColor}18`,
-                          color: deptColor,
-                        }}
-                      >
-                        <span
-                          className="w-1.5 h-1.5 rounded-full"
-                          style={{ background: deptColor }}
-                        />
-                        {order.stage}
-                      </span>
+                      <StagePill stage={order.stage as Stage} />
                     </td>
                     <td className="px-4 py-3 text-gray-500 text-xs">{formatDate(order.createdAt)}</td>
                   </tr>

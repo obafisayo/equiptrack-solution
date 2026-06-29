@@ -40,7 +40,7 @@ export function Card({
       className={[base, borderClass, glowClass, hoverClass, selectedBg, className].join(' ')}
     >
       {slaBreached && (
-        <div className="absolute top-0 left-0 right-0 h-[3px] bg-status-critical rounded-t-card" />
+        <div className="absolute top-0 left-0 right-0 h-0.75 bg-status-critical rounded-t-card" />
       )}
       {children}
     </div>

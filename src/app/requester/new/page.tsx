@@ -1,38 +1,90 @@
+/* eslint-disable */
 'use client'
 
 import { useState } from 'react'
+import { Plus, Trash2, ArrowRight, Package } from 'lucide-react'
+import Link from 'next/link'
 import AppShell from '@/components/layout/AppShell'
+import { Input, Textarea } from '@/components/ui/Form'
+import { DatePicker } from '@/components/ui/DatePicker'
+import { Dropdown, type DropdownOption } from '@/components/ui/Dropdown'
+import { Button } from '@/components/ui/Button'
 import { URGENCY_CONFIG } from '@/config/sla'
 import type { UrgencyLevel } from '@/config/sla'
-import Link from 'next/link'
 
-const DESTINATIONS = [
-  'Bonny Terminal',
-  'Escravos Terminal',
-  'Forcados Terminal',
-  'Bonga FPSO',
-  'Agbami FPSO',
-  'Erha FPSO',
-  'Egina FPSO',
-  'Akpo FPSO',
-  'Usan FPSO',
-  'Okwori FPSO',
-  'Pennington Terminal',
-  'Brass Terminal',
-  'Ima Field',
-  'Abo FPSO',
-  'Other (specify)',
+// ── Option lists ──────────────────────────────────────────────────────────────
+
+const DESTINATION_OPTIONS: DropdownOption[] = [
+  { value: 'Bonny Terminal',         label: 'Bonny Terminal',          hint: 'Rivers State' },
+  { value: 'Escravos Terminal',      label: 'Escravos Terminal',       hint: 'Delta State' },
+  { value: 'Forcados Terminal',      label: 'Forcados Terminal',       hint: 'Delta State' },
+  { value: 'Bonga FPSO',            label: 'Bonga FPSO',              hint: 'Offshore OML 118' },
+  { value: 'Agbami FPSO',           label: 'Agbami FPSO',             hint: 'Offshore OML 127/128' },
+  { value: 'Erha FPSO',             label: 'Erha FPSO',               hint: 'Offshore OML 133' },
+  { value: 'Egina FPSO',            label: 'Egina FPSO',              hint: 'Offshore OML 130' },
+  { value: 'Akpo FPSO',             label: 'Akpo FPSO',               hint: 'Offshore OML 130' },
+  { value: 'Usan FPSO',             label: 'Usan FPSO',               hint: 'Offshore OML 138' },
+  { value: 'Okwori FPSO',           label: 'Okwori FPSO',             hint: 'Offshore OML 119' },
+  { value: 'Pennington Terminal',    label: 'Pennington Terminal',     hint: 'Delta State' },
+  { value: 'Brass Terminal',        label: 'Brass Terminal',           hint: 'Bayelsa State' },
+  { value: 'Ima Field',             label: 'Ima Field',                hint: 'Onshore' },
+  { value: 'Abo FPSO',              label: 'Abo FPSO',                 hint: 'OML 125' },
+  { value: 'Other',                 label: 'Other (specify below)' },
 ]
 
 const REQUEST_TYPES = [
-  { value: 'SAP',       label: 'SAP Request',              hint: 'Standard stock item from SAP system' },
-  { value: 'TR',        label: 'Temporary Requisition',    hint: 'Requires Base Coordinator email approval first' },
-  { value: 'NON_STOCK', label: 'Non-Stock Item',           hint: 'Goes directly to Dispatch' },
+  { value: 'SAP',       label: 'SAP Request',           hint: 'Standard stock item from SAP system' },
+  { value: 'TR',        label: 'Temporary Requisition', hint: 'Requires Base Coordinator email approval first' },
+  { value: 'NON_STOCK', label: 'Non-Stock Item',        hint: 'Goes directly to Dispatch — no warehouse staging' },
 ]
 
-const UNITS = ['Pieces', 'Sets', 'Boxes', 'Bags', 'Drums', 'Litres', 'Kg', 'Metres', 'Pairs', 'Units']
+const CARGO_TYPES: DropdownOption[] = [
+  { value: 'drilling',    label: 'Drilling Equipment',       hint: 'Drill bits, BHA, drilling tools' },
+  { value: 'production',  label: 'Production Equipment',     hint: 'Wellhead, flowlines, valves, separators' },
+  { value: 'safety',      label: 'Safety & PPE',             hint: 'PPE, fire suppression, life safety' },
+  { value: 'chemical',    label: 'Chemicals & Fluids',       hint: 'Drilling fluids, treatment chemicals' },
+  { value: 'electrical',  label: 'Electrical & Instruments', hint: 'Sensors, panels, instrumentation' },
+  { value: 'mechanical',  label: 'Mechanical Parts',         hint: 'Pumps, compressors, rotating equipment' },
+  { value: 'consumable',  label: 'Consumables',              hint: 'Gaskets, bolts, general consumables' },
+  { value: 'general',     label: 'General Cargo',            hint: 'Miscellaneous / other' },
+]
 
-interface LineItem { description: string; qty: string; unit: string }
+const WELL_FIELD_OPTIONS: DropdownOption[] = [
+  { value: 'bonga_n1',       label: 'Bonga North-1' },
+  { value: 'bonga_sw',       label: 'Bonga South-West' },
+  { value: 'agbami_w12',     label: 'Agbami Well-12' },
+  { value: 'erha_n_phase3',  label: 'Erha North Phase 3' },
+  { value: 'egina_sp',       label: 'Egina South Phase' },
+  { value: 'akpo_exp',       label: 'Akpo Expansion' },
+  { value: 'ima_oml34',      label: 'Ima OML-34' },
+  { value: 'escravos_gas',   label: 'Escravos Gas-to-Liquids' },
+  { value: 'forcados_maint', label: 'Forcados Maintenance' },
+  { value: 'general_ops',    label: 'General Operations' },
+]
+
+const UNIT_OPTIONS: DropdownOption[] = [
+  { value: 'Pieces',  label: 'Pieces' },
+  { value: 'Sets',    label: 'Sets' },
+  { value: 'Boxes',   label: 'Boxes' },
+  { value: 'Bags',    label: 'Bags' },
+  { value: 'Drums',   label: 'Drums' },
+  { value: 'Litres',  label: 'Litres' },
+  { value: 'Kg',      label: 'Kg' },
+  { value: 'Metres',  label: 'Metres' },
+  { value: 'Pairs',   label: 'Pairs' },
+  { value: 'Units',   label: 'Units' },
+  { value: 'Joints',  label: 'Joints' },
+  { value: 'Spools',  label: 'Spools' },
+]
+
+const URGENCY_STYLE: Record<UrgencyLevel, { active: string; dot: string; text: string }> = {
+  Low:    { active: 'border-green-500 bg-green-50',   dot: 'bg-green-500',  text: 'text-green-700' },
+  Medium: { active: 'border-amber-500 bg-amber-50',   dot: 'bg-amber-500',  text: 'text-amber-700' },
+  High:   { active: 'border-orange-500 bg-orange-50', dot: 'bg-orange-500', text: 'text-orange-700' },
+  Urgent: { active: 'border-red-500 bg-red-50',       dot: 'bg-red-500',    text: 'text-red-700' },
+}
+
+// ── Helpers ───────────────────────────────────────────────────────────────────
 
 function getExpectedDate(urgency: UrgencyLevel | ''): string {
   if (!urgency) return ''
@@ -44,23 +96,52 @@ function getExpectedDate(urgency: UrgencyLevel | ''): string {
 }
 
 function generateDeliveryNumber(): string {
-  const num = Math.floor(1000 + Math.random() * 9000)
-  return `DEL-${new Date().getFullYear()}-${num}`
+  return `DEL-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`
 }
 
+function today() {
+  return new Date().toISOString().split('T')[0]
+}
+
+// ── Types ─────────────────────────────────────────────────────────────────────
+
+interface LineItem {
+  description: string
+  qty:         string
+  unit:        string
+}
+
+// ── Page ─────────────────────────────────────────────────────────────────────
+
 export default function NewRequestPage() {
-  const [requestType, setRequestType]     = useState<string>('')
-  const [destination, setDestination]     = useState<string>('')
-  const [customDest, setCustomDest]       = useState<string>('')
-  const [urgency, setUrgency]             = useState<UrgencyLevel | ''>('')
-  const [items, setItems]                 = useState<LineItem[]>([{ description: '', qty: '', unit: 'Pieces' }])
-  const [notes, setNotes]                 = useState<string>('')
-  const [returnDate, setReturnDate]       = useState<string>('')
-  const [errors, setErrors]               = useState<Record<string, string>>({})
-  const [submitted, setSubmitted]         = useState<boolean>(false)
-  const [deliveryNumber, setDeliveryNumber] = useState<string>('')
+  // Core fields
+  const [requestType,   setRequestType]   = useState('')
+  const [destination,   setDestination]   = useState('')
+  const [customDest,    setCustomDest]    = useState('')
+  const [urgency,       setUrgency]       = useState<UrgencyLevel | ''>('')
+  const [requiredDate,  setRequiredDate]  = useState('')
+  const [returnDate,    setReturnDate]    = useState('')
+
+  // Enrichment fields
+  const [cargoType,     setCargoType]     = useState('')
+  const [wellField,     setWellField]     = useState('')
+  const [costCode,      setCostCode]      = useState('')
+  const [contactPhone,  setContactPhone]  = useState('')
+
+  // Line items
+  const [items, setItems] = useState<LineItem[]>([{ description: '', qty: '', unit: 'Pieces' }])
+
+  // Notes / justification
+  const [notes, setNotes] = useState('')
+
+  // Form state
+  const [errors,    setErrors]    = useState<Record<string, string>>({})
+  const [submitted, setSubmitted] = useState(false)
+  const [deliveryNumber, setDeliveryNumber] = useState('')
 
   const isTR = requestType === 'TR'
+
+  // ── Item helpers ────────────────────────────────────────────────────────────
 
   function addItem() {
     setItems(prev => [...prev, { description: '', qty: '', unit: 'Pieces' }])
@@ -71,20 +152,26 @@ export default function NewRequestPage() {
     setItems(prev => prev.filter((_, idx) => idx !== i))
   }
 
-  function updateItem(i: number, field: keyof LineItem, value: string) {
-    setItems(prev => prev.map((item, idx) => idx === i ? { ...item, [field]: value } : item))
+  function updateItem(i: number, field: keyof LineItem, val: string) {
+    setItems(prev => prev.map((item, idx) => idx === i ? { ...item, [field]: val } : item))
+    setErrors(e => ({ ...e, [`item_desc_${i}`]: '', [`item_qty_${i}`]: '' }))
   }
+
+  // ── Validation ──────────────────────────────────────────────────────────────
 
   function validate(): boolean {
     const errs: Record<string, string> = {}
-    if (!requestType)   errs.requestType   = 'Request type is required'
-    if (!destination)   errs.destination   = 'Destination is required'
-    if (destination === 'Other (specify)' && !customDest.trim()) errs.customDest = 'Please specify the destination'
-    if (!urgency)       errs.urgency       = 'Urgency level is required'
-    if (!returnDate)    errs.returnDate    = 'Expected return date is required'
+    if (!requestType)                                              errs.requestType   = 'Select a request type'
+    if (!destination)                                              errs.destination   = 'Destination is required'
+    if (destination === 'Other' && !customDest.trim())             errs.customDest    = 'Please specify the destination'
+    if (!urgency)                                                  errs.urgency       = 'Urgency level is required'
+    if (!cargoType)                                                errs.cargoType     = 'Cargo type is required'
+    if (!requiredDate)                                             errs.requiredDate  = 'Required on-site date is required'
+    if (!returnDate)                                               errs.returnDate    = 'Expected return date is required'
+    if (isTR && !notes.trim())                                     errs.notes         = 'Justification is required for Temporary Requisitions'
     items.forEach((item, i) => {
-      if (!item.description.trim()) errs[`item_desc_${i}`] = 'Description required'
-      if (!item.qty || isNaN(Number(item.qty)) || Number(item.qty) <= 0) errs[`item_qty_${i}`] = 'Valid qty required'
+      if (!item.description.trim())                                errs[`item_desc_${i}`] = 'Description required'
+      if (!item.qty || isNaN(Number(item.qty)) || Number(item.qty) <= 0) errs[`item_qty_${i}`] = 'Valid quantity required'
     })
     setErrors(errs)
     return Object.keys(errs).length === 0
@@ -93,10 +180,11 @@ export default function NewRequestPage() {
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     if (!validate()) return
-    const dn = generateDeliveryNumber()
-    setDeliveryNumber(dn)
+    setDeliveryNumber(generateDeliveryNumber())
     setSubmitted(true)
   }
+
+  // ── Success screen ──────────────────────────────────────────────────────────
 
   if (submitted) {
     return (
@@ -105,18 +193,16 @@ export default function NewRequestPage() {
         currentPath="/requester/new"
         title="Request Submitted"
         breadcrumb={[{ label: 'My Requests', href: '/requester' }, { label: 'Request Submitted' }]}
-        actionLabel="New Request"
-        actionHref="/requester/new"
       >
         <div className="max-w-xl mx-auto mt-10">
           <div className="bg-white rounded-card shadow-card border border-border-default p-8 text-center">
-            <div className="w-14 h-14 rounded-full bg-status-success-bg flex items-center justify-center mx-auto mb-5">
+            <div className="w-14 h-14 rounded-full bg-green-50 flex items-center justify-center mx-auto mb-5">
               <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="#10B981" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round">
                 <polyline points="20 6 9 17 4 12"/>
               </svg>
             </div>
             <h2 className="text-xl font-bold text-gray-900 mb-2">Request Submitted</h2>
-            <p className="text-sm text-gray-500 mb-6">Your request has been received and entered into the system.</p>
+            <p className="text-sm text-gray-500 mb-6">Your request has been entered into the system and is awaiting processing.</p>
 
             <div className="bg-page-bg rounded-lg px-5 py-4 mb-6 text-left">
               <div className="text-xs text-gray-500 mb-1">Delivery Number</div>
@@ -124,27 +210,24 @@ export default function NewRequestPage() {
             </div>
 
             {isTR && (
-              <div className="bg-status-info-bg border border-status-info/20 rounded-lg px-4 py-3 mb-5 text-left">
-                <p className="text-xs font-semibold text-status-info mb-1">Pending Base Coordinator Approval</p>
-                <p className="text-xs text-gray-600">Your Temporary Requisition has been emailed to the Base Coordinator for approval. You will be notified once reviewed.</p>
+              <div className="bg-blue-50 border border-blue-100 rounded-lg px-4 py-3 mb-5 text-left">
+                <p className="text-xs font-semibold text-blue-700 mb-1">Pending Base Coordinator Approval</p>
+                <p className="text-xs text-gray-600">Your TR has been emailed to the Base Coordinator. You will be notified once reviewed.</p>
               </div>
             )}
 
-            <p className="text-xs text-gray-500 mb-6">
-              {isTR
-                ? 'Once approved, your request will move to the warehouse team for processing.'
-                : 'Your request has been added to the warehouse queue. You can track its progress from your dashboard.'}
-            </p>
-
             <div className="flex gap-3 justify-center">
-              <Link
-                href="/requester"
-                className="px-5 py-2.5 bg-brand-500 hover:bg-brand-600 text-white text-sm font-semibold rounded-button transition-colors"
-              >
+              <Link href="/requester" className="px-5 py-2.5 bg-brand-500 hover:bg-brand-600 text-white text-sm font-semibold rounded-button transition-colors">
                 View My Requests
               </Link>
               <button
-                onClick={() => { setSubmitted(false); setRequestType(''); setDestination(''); setUrgency(''); setItems([{ description: '', qty: '', unit: 'Pieces' }]); setNotes(''); setReturnDate('') }}
+                type="button"
+                onClick={() => {
+                  setSubmitted(false); setRequestType(''); setDestination(''); setCustomDest('')
+                  setUrgency(''); setRequiredDate(''); setReturnDate(''); setCargoType('')
+                  setWellField(''); setCostCode(''); setContactPhone('')
+                  setItems([{ description: '', qty: '', unit: 'Pieces' }]); setNotes('')
+                }}
                 className="px-5 py-2.5 border border-border-default text-gray-700 text-sm font-medium rounded-button hover:bg-neutral-50 transition-colors"
               >
                 New Request
@@ -156,237 +239,350 @@ export default function NewRequestPage() {
     )
   }
 
+  // ── Form ────────────────────────────────────────────────────────────────────
+
   return (
     <AppShell
       role="requester"
       currentPath="/requester/new"
       title="Create Request"
       breadcrumb={[{ label: 'My Requests', href: '/requester' }, { label: 'New Request' }]}
-      actionLabel="Back to Requests"
-      actionHref="/requester"
     >
-      <form onSubmit={handleSubmit} className="max-w-2xl mx-auto">
-        <div className="bg-white rounded-card shadow-card border border-border-default p-6 space-y-6">
+      <form onSubmit={handleSubmit} className="max-w-2xl mx-auto space-y-4">
 
-          {/* Request Type */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Request Type <span className="text-status-critical">*</span>
-            </label>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              {REQUEST_TYPES.map(rt => (
-                <button
-                  key={rt.value}
-                  type="button"
-                  onClick={() => { setRequestType(rt.value); setErrors(e => ({ ...e, requestType: '' })) }}
-                  className={`text-left p-3.5 rounded-lg border-2 transition-all duration-150 ${
-                    requestType === rt.value
-                      ? 'border-brand-500 bg-brand-50'
-                      : 'border-border-default hover:border-gray-300'
-                  }`}
-                >
-                  <div className={`text-sm font-semibold mb-0.5 ${requestType === rt.value ? 'text-brand-600' : 'text-gray-800'}`}>
-                    {rt.label}
-                  </div>
-                  <div className="text-xs text-gray-500">{rt.hint}</div>
-                </button>
-              ))}
-            </div>
-            {errors.requestType && <p className="mt-1.5 text-xs text-status-critical">{errors.requestType}</p>}
+        {/* ── SECTION 1: Request Type ── */}
+        <div className="bg-white rounded-card shadow-card border border-border-default p-6">
+          <SectionHeader step={1} title="Request Type" required />
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            {REQUEST_TYPES.map(rt => (
+              <button
+                key={rt.value}
+                type="button"
+                onClick={() => { setRequestType(rt.value); setErrors(e => ({ ...e, requestType: '' })) }}
+                className={[
+                  'text-left p-4 rounded-xl border-2 transition-all duration-150',
+                  requestType === rt.value
+                    ? 'border-brand-500 bg-brand-50 shadow-sm'
+                    : 'border-border-default hover:border-gray-300 hover:bg-neutral-50',
+                ].join(' ')}
+              >
+                <div className={`text-sm font-bold mb-1 ${requestType === rt.value ? 'text-brand-600' : 'text-gray-800'}`}>
+                  {rt.label}
+                </div>
+                <div className="text-xs text-gray-500 leading-relaxed">{rt.hint}</div>
+              </button>
+            ))}
           </div>
+          {errors.requestType && <FieldError msg={errors.requestType} />}
 
-          {/* TR Notice */}
           {isTR && (
-            <div className="flex gap-3 bg-status-info-bg border border-status-info/20 rounded-lg px-4 py-3">
-              <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#3B82F6" strokeWidth={2} strokeLinecap="round" className="flex-shrink-0 mt-0.5">
+            <div className="mt-4 flex gap-3 bg-blue-50 border border-blue-100 rounded-xl px-4 py-3">
+              <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#3B82F6" strokeWidth={2} strokeLinecap="round" className="shrink-0 mt-0.5">
                 <circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/>
               </svg>
-              <p className="text-xs text-status-info font-medium leading-relaxed">
-                Temporary Requisition requires Base Coordinator email approval before processing. Provide full justification in the notes field.
+              <p className="text-xs text-blue-700 font-medium leading-relaxed">
+                Temporary Requisitions require Base Coordinator email approval before processing. Full written justification is mandatory in the notes field below.
               </p>
             </div>
           )}
+        </div>
 
-          {/* Destination */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">
-              Destination <span className="text-status-critical">*</span>
-            </label>
-            <select
-              value={destination}
-              onChange={e => { setDestination(e.target.value); setErrors(err => ({ ...err, destination: '' })) }}
-              className={`w-full px-3 py-2.5 text-sm bg-white border rounded-button focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition ${
-                errors.destination ? 'border-status-critical' : 'border-border-default'
-              }`}
-            >
-              <option value="">Select destination…</option>
-              {DESTINATIONS.map(d => <option key={d} value={d}>{d}</option>)}
-            </select>
-            {errors.destination && <p className="mt-1 text-xs text-status-critical">{errors.destination}</p>}
-            {destination === 'Other (specify)' && (
-              <input
-                type="text"
-                placeholder="Specify destination"
-                value={customDest}
-                onChange={e => { setCustomDest(e.target.value); setErrors(err => ({ ...err, customDest: '' })) }}
-                className={`mt-2 w-full px-3 py-2.5 text-sm bg-white border rounded-button focus:outline-none focus:ring-2 focus:ring-brand-500 transition ${
-                  errors.customDest ? 'border-status-critical' : 'border-border-default'
-                }`}
+        {/* ── SECTION 2: Logistics Details ── */}
+        <div className="bg-white rounded-card shadow-card border border-border-default p-6 space-y-5">
+          <SectionHeader step={2} title="Logistics Details" required />
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            {/* Destination */}
+            <div className="flex flex-col gap-1.5">
+              <Label text="Destination" required />
+              <Dropdown
+                options={DESTINATION_OPTIONS}
+                value={destination}
+                onChange={v => { setDestination(v); setErrors(e => ({ ...e, destination: '' })) }}
+                placeholder="Select destination…"
+                error={!!errors.destination}
+                searchable
               />
-            )}
-            {errors.customDest && <p className="mt-1 text-xs text-status-critical">{errors.customDest}</p>}
+              {errors.destination && <FieldError msg={errors.destination} />}
+              {destination === 'Other' && (
+                <Input
+                  placeholder="Specify destination"
+                  value={customDest}
+                  onChange={e => { setCustomDest(e.target.value); setErrors(err => ({ ...err, customDest: '' })) }}
+                  error={!!errors.customDest}
+                  className="mt-1"
+                />
+              )}
+              {errors.customDest && <FieldError msg={errors.customDest} />}
+            </div>
+
+            {/* Cargo Type */}
+            <div className="flex flex-col gap-1.5">
+              <Label text="Cargo Type" required />
+              <Dropdown
+                options={CARGO_TYPES}
+                value={cargoType}
+                onChange={v => { setCargoType(v); setErrors(e => ({ ...e, cargoType: '' })) }}
+                placeholder="Select cargo type…"
+                error={!!errors.cargoType}
+              />
+              {errors.cargoType && <FieldError msg={errors.cargoType} />}
+            </div>
+
+            {/* Well / Field */}
+            <div className="flex flex-col gap-1.5">
+              <Label text="Well / Field Name" />
+              <Dropdown
+                options={WELL_FIELD_OPTIONS}
+                value={wellField}
+                onChange={setWellField}
+                placeholder="Select well or field…"
+                searchable
+              />
+            </div>
+
+            {/* Cost Code */}
+            <div className="flex flex-col gap-1.5">
+              <Label text="Cost Centre / Cost Code" />
+              <Input
+                placeholder="e.g. CC-4821-OPS"
+                value={costCode}
+                onChange={e => setCostCode(e.target.value)}
+              />
+            </div>
           </div>
 
-          {/* Urgency */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">
-              Urgency Level <span className="text-status-critical">*</span>
-            </label>
+          {/* Contact phone */}
+          <div className="flex flex-col gap-1.5">
+            <Label text="Requestor Contact Phone" />
+            <Input
+              type="tel"
+              placeholder="+234 800 000 0000"
+              value={contactPhone}
+              onChange={e => setContactPhone(e.target.value)}
+              className="sm:w-64"
+            />
+          </div>
+        </div>
+
+        {/* ── SECTION 3: Urgency & Dates ── */}
+        <div className="bg-white rounded-card shadow-card border border-border-default p-6 space-y-5">
+          <SectionHeader step={3} title="Urgency & Schedule" required />
+
+          {/* Urgency buttons */}
+          <div className="flex flex-col gap-1.5">
+            <Label text="Urgency Level" required />
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
               {(['Low','Medium','High','Urgent'] as UrgencyLevel[]).map(lvl => {
                 const cfg = URGENCY_CONFIG[lvl]
+                const sty = URGENCY_STYLE[lvl]
+                const sel = urgency === lvl
                 return (
                   <button
                     key={lvl}
                     type="button"
                     onClick={() => { setUrgency(lvl); setErrors(e => ({ ...e, urgency: '' })) }}
-                    className={`flex flex-col items-center p-3 rounded-lg border-2 transition-all duration-150 ${
-                      urgency === lvl ? 'border-current' : 'border-border-default hover:border-gray-300'
-                    }`}
-                    style={urgency === lvl ? { borderColor: cfg.color, background: cfg.bg } : {}}
+                    className={[
+                      'flex flex-col items-center p-3.5 rounded-xl border-2 transition-all duration-150',
+                      sel ? sty.active : 'border-border-default hover:border-gray-300 hover:bg-neutral-50',
+                    ].join(' ')}
                   >
-                    <div className="w-3 h-3 rounded-full mb-1.5" style={{ background: cfg.color }} />
-                    <span className="text-xs font-semibold" style={{ color: urgency === lvl ? cfg.color : '#374151' }}>{lvl}</span>
-                    <span className="text-xs text-gray-500 mt-0.5">{cfg.label}</span>
+                    <div className={`w-3 h-3 rounded-full mb-2 ${sty.dot}`} />
+                    <span className={`text-xs font-bold ${sel ? sty.text : 'text-gray-700'}`}>{lvl}</span>
+                    <span className="text-[11px] text-gray-500 mt-0.5 text-center leading-tight">{cfg.label}</span>
                   </button>
                 )
               })}
             </div>
             {urgency && (
-              <div className="mt-2 flex items-center gap-2 text-xs text-gray-600">
+              <div className="flex items-center gap-2 text-xs text-gray-600 mt-1">
                 <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} strokeLinecap="round">
                   <circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/>
                 </svg>
-                Expected delivery: <span className="font-semibold text-gray-800">{getExpectedDate(urgency)}</span>
+                Expected SLA: <span className="font-semibold text-gray-800">{getExpectedDate(urgency)}</span>
               </div>
             )}
-            {errors.urgency && <p className="mt-1 text-xs text-status-critical">{errors.urgency}</p>}
+            {errors.urgency && <FieldError msg={errors.urgency} />}
           </div>
 
-          {/* Expected Return Date */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">
-              Expected Return Date <span className="text-status-critical">*</span>
-            </label>
-            <input
-              type="date"
-              value={returnDate}
-              min={new Date().toISOString().split('T')[0]}
-              onChange={e => { setReturnDate(e.target.value); setErrors(err => ({ ...err, returnDate: '' })) }}
-              className={`w-full sm:w-64 px-3 py-2.5 text-sm bg-white border rounded-button focus:outline-none focus:ring-2 focus:ring-brand-500 transition ${
-                errors.returnDate ? 'border-status-critical' : 'border-border-default'
-              }`}
-            />
-            {errors.returnDate && <p className="mt-1 text-xs text-status-critical">{errors.returnDate}</p>}
-          </div>
-
-          {/* Items */}
-          <div>
-            <div className="flex items-center justify-between mb-2">
-              <label className="text-sm font-medium text-gray-700">
-                Equipment Items <span className="text-status-critical">*</span>
-              </label>
-              <button
-                type="button"
-                onClick={addItem}
-                className="text-xs font-semibold text-brand-500 hover:text-brand-600 flex items-center gap-1"
-              >
-                <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round"><path d="M12 5v14M5 12h14"/></svg>
-                Add Item
-              </button>
+          {/* Date fields */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div className="flex flex-col gap-1.5">
+              <Label text="Required On-Site Date" required />
+              <DatePicker
+                value={requiredDate}
+                onChange={v => { setRequiredDate(v); setErrors(e => ({ ...e, requiredDate: '' })) }}
+                min={today()}
+                placeholder="When is it needed offshore?"
+                error={!!errors.requiredDate}
+              />
+              {errors.requiredDate && <FieldError msg={errors.requiredDate} />}
             </div>
 
-            <div className="space-y-2">
-              {items.map((item, i) => (
-                <div key={i} className="flex gap-2 items-start">
-                  <div className="flex-1">
-                    <input
-                      type="text"
-                      placeholder="Equipment description"
-                      value={item.description}
-                      onChange={e => { updateItem(i, 'description', e.target.value); setErrors(err => ({ ...err, [`item_desc_${i}`]: '' })) }}
-                      className={`w-full px-3 py-2 text-sm border rounded-button focus:outline-none focus:ring-2 focus:ring-brand-500 transition ${
-                        errors[`item_desc_${i}`] ? 'border-status-critical' : 'border-border-default'
-                      }`}
-                    />
-                    {errors[`item_desc_${i}`] && <p className="mt-0.5 text-xs text-status-critical">{errors[`item_desc_${i}`]}</p>}
-                  </div>
-                  <div className="w-20">
-                    <input
-                      type="number"
-                      min="1"
-                      placeholder="Qty"
-                      value={item.qty}
-                      onChange={e => { updateItem(i, 'qty', e.target.value); setErrors(err => ({ ...err, [`item_qty_${i}`]: '' })) }}
-                      className={`w-full px-3 py-2 text-sm border rounded-button focus:outline-none focus:ring-2 focus:ring-brand-500 transition text-center ${
-                        errors[`item_qty_${i}`] ? 'border-status-critical' : 'border-border-default'
-                      }`}
-                    />
-                  </div>
-                  <div className="w-28">
-                    <select
-                      value={item.unit}
-                      onChange={e => updateItem(i, 'unit', e.target.value)}
-                      className="w-full px-2 py-2 text-sm border border-border-default rounded-button focus:outline-none focus:ring-2 focus:ring-brand-500 bg-white"
-                    >
-                      {UNITS.map(u => <option key={u} value={u}>{u}</option>)}
-                    </select>
-                  </div>
-                  {items.length > 1 && (
-                    <button
-                      type="button"
-                      onClick={() => removeItem(i)}
-                      className="mt-2 text-gray-400 hover:text-status-critical transition-colors"
-                    >
-                      <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} strokeLinecap="round">
-                        <path d="M18 6 6 18M6 6l12 12"/>
-                      </svg>
-                    </button>
-                  )}
-                </div>
-              ))}
+            <div className="flex flex-col gap-1.5">
+              <Label text="Expected Return Date" required />
+              <DatePicker
+                value={returnDate}
+                onChange={v => { setReturnDate(v); setErrors(e => ({ ...e, returnDate: '' })) }}
+                min={requiredDate || today()}
+                placeholder="When will it return?"
+                error={!!errors.returnDate}
+              />
+              {errors.returnDate && <FieldError msg={errors.returnDate} />}
             </div>
-          </div>
-
-          {/* Notes */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">Notes (Optional)</label>
-            <textarea
-              rows={3}
-              placeholder={isTR ? 'Provide justification for the temporary requisition…' : 'Any additional notes or special instructions…'}
-              value={notes}
-              onChange={e => setNotes(e.target.value)}
-              className="w-full px-3 py-2.5 text-sm border border-border-default rounded-button focus:outline-none focus:ring-2 focus:ring-brand-500 transition resize-none"
-            />
           </div>
         </div>
 
-        {/* Footer Actions */}
-        <div className="flex justify-between items-center mt-4">
+        {/* ── SECTION 4: Equipment Items ── */}
+        <div className="bg-white rounded-card shadow-card border border-border-default p-6 space-y-4">
+          <div className="flex items-center justify-between">
+            <SectionHeader step={4} title="Equipment Items" required noMb />
+            <button
+              type="button"
+              onClick={addItem}
+              className="flex items-center gap-1.5 text-xs font-bold text-brand-500 hover:text-brand-600 transition-colors"
+            >
+              <Plus size={14} />
+              Add Item
+            </button>
+          </div>
+
+          {/* Column headers */}
+          <div className="hidden sm:grid sm:grid-cols-[1fr_88px_120px_32px] gap-2 text-[11px] font-bold text-neutral-400 uppercase tracking-wider px-1">
+            <span>Description</span>
+            <span>Qty</span>
+            <span>Unit</span>
+            <span />
+          </div>
+
+          <div className="space-y-2.5">
+            {items.map((item, i) => (
+              <div key={i} className="grid grid-cols-1 sm:grid-cols-[1fr_88px_120px_32px] gap-2 items-start">
+                {/* Description */}
+                <div>
+                  <Input
+                    placeholder={`Item ${i + 1} — equipment description`}
+                    value={item.description}
+                    onChange={e => updateItem(i, 'description', e.target.value)}
+                    error={!!errors[`item_desc_${i}`]}
+                  />
+                  {errors[`item_desc_${i}`] && <FieldError msg={errors[`item_desc_${i}`]} />}
+                </div>
+
+                {/* Qty */}
+                <div>
+                  <Input
+                    type="number"
+                    min="1"
+                    placeholder="Qty"
+                    value={item.qty}
+                    onChange={e => updateItem(i, 'qty', e.target.value)}
+                    error={!!errors[`item_qty_${i}`]}
+                    className="text-center"
+                  />
+                  {errors[`item_qty_${i}`] && <FieldError msg={errors[`item_qty_${i}`]} />}
+                </div>
+
+                {/* Unit */}
+                <Dropdown
+                  options={UNIT_OPTIONS}
+                  value={item.unit}
+                  onChange={v => updateItem(i, 'unit', v)}
+                />
+
+                {/* Remove */}
+                <button
+                  type="button"
+                  onClick={() => removeItem(i)}
+                  disabled={items.length === 1}
+                  aria-label="Remove item"
+                  className="flex items-center justify-center w-8 h-12 text-neutral-300 hover:text-status-critical disabled:opacity-0 transition-colors"
+                >
+                  <Trash2 size={15} />
+                </button>
+              </div>
+            ))}
+          </div>
+
+          <div className="pt-1 border-t border-neutral-100 flex items-center justify-between text-xs text-neutral-400">
+            <span>{items.length} line item{items.length !== 1 ? 's' : ''}</span>
+            <button
+              type="button"
+              onClick={addItem}
+              className="flex items-center gap-1 font-semibold text-brand-500 hover:text-brand-600 transition-colors"
+            >
+              <Plus size={12} />
+              Add another item
+            </button>
+          </div>
+        </div>
+
+        {/* ── SECTION 5: Notes ── */}
+        <div className="bg-white rounded-card shadow-card border border-border-default p-6 space-y-3">
+          <SectionHeader step={5} title={isTR ? 'Justification (Required for TR)' : 'Additional Notes'} required={isTR} noMb />
+          <Textarea
+            rows={4}
+            placeholder={
+              isTR
+                ? 'Provide full written justification for the temporary requisition — describe why this equipment is needed, the operational impact if not fulfilled, and reference any relevant work orders or well programmes…'
+                : 'Any special handling instructions, packaging requirements, or operational context…'
+            }
+            value={notes}
+            onChange={e => { setNotes(e.target.value); setErrors(e2 => ({ ...e2, notes: '' })) }}
+            error={!!errors.notes}
+          />
+          {errors.notes && <FieldError msg={errors.notes} />}
+        </div>
+
+        {/* ── Footer ── */}
+        <div className="flex items-center justify-between py-2">
           <Link href="/requester" className="text-sm text-gray-500 hover:text-gray-700 font-medium">
             Cancel
           </Link>
-          <button
+          <Button
             type="submit"
-            className="px-6 py-2.5 bg-brand-500 hover:bg-brand-600 text-white text-sm font-semibold rounded-button transition-colors duration-150 flex items-center gap-2"
+            variant="brand"
+            size="lg"
+            icon={<ArrowRight size={15} />}
+            iconPosition="right"
           >
             Submit Request
-            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round">
-              <path d="M5 12h14M12 5l7 7-7 7"/>
-            </svg>
-          </button>
+          </Button>
         </div>
+
       </form>
     </AppShell>
   )
+}
+
+// ── Small UI helpers ──────────────────────────────────────────────────────────
+
+function SectionHeader({ step, title, required, noMb }: { step: number; title: string; required?: boolean; noMb?: boolean }) {
+  return (
+    <div className={noMb ? '' : 'mb-4'}>
+      <div className="flex items-center gap-2">
+        <span className="w-5 h-5 rounded-full bg-brand-500 text-white text-[10px] font-bold flex items-center justify-center shrink-0">
+          {step}
+        </span>
+        <h2 className="text-sm font-bold text-neutral-900">
+          {title}
+          {required && <span className="text-status-critical ml-0.5">*</span>}
+        </h2>
+      </div>
+    </div>
+  )
+}
+
+function Label({ text, required }: { text: string; required?: boolean }) {
+  return (
+    <label className="text-sm font-medium text-gray-700">
+      {text}
+      {required && <span className="text-status-critical ml-0.5">*</span>}
+    </label>
+  )
+}
+
+function FieldError({ msg }: { msg: string }) {
+  return <p className="text-xs text-status-critical mt-0.5">{msg}</p>
 }

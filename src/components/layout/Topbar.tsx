@@ -30,8 +30,6 @@ interface TopbarProps {
     value: string
     onChange: (v: string) => void
   }
-  actionLabel?: string
-  actionHref?: string
   role: Role
   onMobileMenuToggle: () => void
 }
@@ -41,8 +39,6 @@ export function Topbar({
   breadcrumb,
   actions,
   search,
-  actionLabel,
-  actionHref,
   role,
   onMobileMenuToggle,
 }: TopbarProps) {
@@ -102,15 +98,6 @@ export function Topbar({
         )}
 
         {actions}
-
-        {actionLabel && actionHref && (
-          <Link
-            href={actionHref}
-            className="hidden sm:flex items-center justify-center bg-brand-500 hover:bg-brand-600 text-white text-sm font-semibold px-4 h-9 rounded-[7px] transition-colors"
-          >
-            {actionLabel}
-          </Link>
-        )}
 
         <div className="flex items-center gap-3 border-l border-border-default pl-3 sm:pl-5 ml-1">
           <button className="relative p-1.5 text-neutral-500 hover:bg-neutral-100 rounded-full transition-colors focus:outline-none">

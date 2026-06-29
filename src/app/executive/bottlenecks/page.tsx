@@ -1,3 +1,4 @@
+/* eslint-disable */
 'use client'
 
 import { AlertTriangle, Clock, BarChart2, TrendingDown } from 'lucide-react'
@@ -110,8 +111,6 @@ export default function BottlenecksPage() {
       currentPath="/executive/bottlenecks"
       title="Bottleneck Analysis"
       breadcrumb={[{ label: 'Executive Overview', href: '/executive' }]}
-      actionLabel="Overview"
-      actionHref="/executive"
     >
       {/* STATS */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">

@@ -1,6 +1,5 @@
 import type { LucideIcon } from 'lucide-react'
 
-/* Backwards-compatible trend format (used by executive/page.tsx) */
 interface TrendInfo {
   direction: 'up' | 'down' | 'neutral'
   value: string
@@ -10,44 +9,56 @@ interface TrendInfo {
 interface StatCardProps {
   label: string
   value: string | number
-  /** Lucide icon component — mandatory for every StatCard */
   icon: LucideIcon
-  /** Accent color for the icon bg/stroke. Defaults to brand red. */
   color?: string
-  /** Trend display. Accepts a formatted string ('+4.6%') or the legacy TrendInfo object. */
   trend?: TrendInfo | string
-  /** Determines pill color when `trend` is a plain string. Auto-detected from +/- prefix if omitted. */
   trendPositive?: boolean
-  /** Optional small subtext below the value */
   sub?: string
-  /** Show skeleton loading state */
   loading?: boolean
 }
 
-const PILL = {
-  positive: { bg: '#F0FDF4', color: '#16A34A' },
-  negative: { bg: '#FEF2F2', color: '#DC2626' },
-  neutral:  { bg: '#F1F5F9', color: '#64748B' },
-} as const
+type TrendVariant = 'positive' | 'negative' | 'neutral'
+
+// Map the known runtime `color` prop values to Tailwind class pairs (bg + text).
+// The icon square uses a ~10% tint of the accent color — these map to /10 opacity variants.
+const ICON_CLASS: Record<string, string> = {
+  '#F04A4A': 'bg-red-500/10   text-red-500',
+  '#E02828': 'bg-red-600/10   text-red-600',
+  '#22C55E': 'bg-green-500/10 text-green-500',
+  '#10B981': 'bg-emerald-500/10 text-emerald-500',
+  '#F59E0B': 'bg-amber-500/10 text-amber-500',
+  '#F97316': 'bg-orange-500/10 text-orange-500',
+  '#EF4444': 'bg-red-500/10   text-red-500',
+  '#3B82F6': 'bg-blue-500/10  text-blue-500',
+  '#8B5CF6': 'bg-violet-500/10 text-violet-500',
+  '#6366F1': 'bg-indigo-500/10 text-indigo-500',
+  '#14B8A6': 'bg-teal-500/10  text-teal-500',
+  '#94A3B8': 'bg-slate-400/10 text-slate-400',
+}
+
+const TREND_CLASS: Record<TrendVariant, string> = {
+  positive: 'bg-green-50 text-green-700',
+  negative: 'bg-red-50   text-red-700',
+  neutral:  'bg-gray-100 text-gray-500',
+}
 
 function resolveTrend(
   trend: TrendInfo | string | undefined,
   trendPositive?: boolean,
-): { text: string; arrow: '↑' | '↓' | '→'; style: { bg: string; color: string } } | null {
+): { text: string; arrow: '↑' | '↓' | '→'; variant: TrendVariant } | null {
   if (!trend) return null
 
   if (typeof trend === 'string') {
-    const positive  = trendPositive ?? trend.startsWith('+')
     const isNeutral = !trend.startsWith('+') && !trend.startsWith('-')
+    const positive  = trendPositive ?? trend.startsWith('+')
     const arrow: '↑' | '↓' | '→' = isNeutral ? '→' : positive ? '↑' : '↓'
-    const style = isNeutral ? PILL.neutral : positive ? PILL.positive : PILL.negative
-    return { text: trend, arrow, style }
+    const variant: TrendVariant = isNeutral ? 'neutral' : positive ? 'positive' : 'negative'
+    return { text: trend, arrow, variant }
   }
 
-  /* Legacy TrendInfo format */
   const arrow: '↑' | '↓' | '→' = trend.direction === 'up' ? '↑' : trend.direction === 'down' ? '↓' : '→'
-  const style = trend.direction === 'neutral' ? PILL.neutral : trend.positive ? PILL.positive : PILL.negative
-  return { text: trend.value, arrow, style }
+  const variant: TrendVariant = trend.direction === 'neutral' ? 'neutral' : trend.positive ? 'positive' : 'negative'
+  return { text: trend.value, arrow, variant }
 }
 
 export function StatCard({
@@ -56,8 +67,7 @@ export function StatCard({
 }: StatCardProps) {
   if (loading) {
     return (
-      <div className="bg-white rounded-card border border-border-default p-5 animate-pulse"
-        style={{ boxShadow: '0 1px 3px rgba(0,0,0,0.08)' }}>
+      <div className="bg-white rounded-card border border-border-default p-5 shadow-card animate-pulse">
         <div className="h-3 bg-gray-200 rounded w-2/3 mb-4" />
         <div className="h-8 bg-gray-200 rounded w-1/2" />
       </div>
@@ -67,42 +77,25 @@ export function StatCard({
   const resolved = resolveTrend(trend, trendPositive)
 
   return (
-    <div
-      className="bg-white rounded-card border border-border-default p-5"
-      style={{ boxShadow: '0 1px 3px rgba(0,0,0,0.08)' }}
-    >
+    <div className="bg-white rounded-card border border-border-default p-5 shadow-card">
       <div className="flex items-start justify-between gap-3">
 
-        {/* Left: label → value → trend pill */}
+        {/* Left: label → value → trend */}
         <div className="min-w-0 flex-1">
-          <p style={{ fontSize: 12, fontWeight: 500, color: '#6B7280', margin: '0 0 4px' }}>
-            {label}
-          </p>
-          <p style={{ fontSize: 28, fontWeight: 700, color: '#111827', lineHeight: 1, fontVariantNumeric: 'tabular-nums', margin: 0 }}>
-            {value}
-          </p>
-          {sub && (
-            <p style={{ fontSize: 11, color: '#9CA3AF', margin: '3px 0 0' }}>{sub}</p>
-          )}
+          <p className="text-xs font-medium text-gray-500 mb-1">{label}</p>
+          <p className="text-[28px] font-bold text-gray-900 leading-none tabular-nums">{value}</p>
+          {sub && <p className="text-[11px] text-gray-400 mt-1">{sub}</p>}
           {resolved && (
-            <div style={{ marginTop: 8 }}>
-              <span style={{
-                display: 'inline-flex', alignItems: 'center', gap: 3,
-                background: resolved.style.bg, color: resolved.style.color,
-                borderRadius: 9999, padding: '2px 8px',
-                fontSize: 10, fontWeight: 600, whiteSpace: 'nowrap',
-              }}>
+            <div className="mt-2">
+              <span className={`inline-flex items-center gap-0.5 rounded-full px-2 py-0.5 text-[10px] font-semibold whitespace-nowrap ${TREND_CLASS[resolved.variant]}`}>
                 {resolved.arrow} {resolved.text}
               </span>
             </div>
           )}
         </div>
 
-        {/* Right: 32×32 colored icon square */}
-        <div
-          className="flex-shrink-0 rounded-lg flex items-center justify-center"
-          style={{ width: 32, height: 32, background: color + '18', color }}
-        >
+        {/* Right: icon in colored rounded square */}
+        <div className={`shrink-0 rounded-lg flex items-center justify-center w-8 h-8 ${ICON_CLASS[color] ?? 'bg-gray-100 text-gray-500'}`}>
           <Icon size={16} strokeWidth={1.8} />
         </div>
       </div>

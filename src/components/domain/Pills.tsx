@@ -1,68 +1,83 @@
-import { STAGE_COLOR, type Stage } from '@/lib/lifecycle'
-import { URGENCY_CONFIG, getSlaStatus, fmtHours, type UrgencyLevel } from '@/config/sla'
+import { STAGE_DEPARTMENT, type Stage } from '@/lib/lifecycle'
+import { getSlaStatus, fmtHours, type UrgencyLevel } from '@/config/sla'
+
+// ── Department → Tailwind badge class strings ─────────────────────────────────
+const DEPT_PILL: Record<string, { pill: string; dot: string }> = {
+  pending:   { pill: 'bg-slate-400/15 text-slate-600  border border-slate-400/30', dot: 'bg-slate-400' },
+  warehouse: { pill: 'bg-blue-500/15  text-blue-700   border border-blue-500/30',  dot: 'bg-blue-500' },
+  dispatch:  { pill: 'bg-violet-500/15 text-violet-700 border border-violet-500/30', dot: 'bg-violet-500' },
+  qaqc:      { pill: 'bg-amber-500/15 text-amber-700  border border-amber-500/30', dot: 'bg-amber-500' },
+  final:     { pill: 'bg-emerald-500/15 text-emerald-700 border border-emerald-500/30', dot: 'bg-emerald-500' },
+}
 
 export function StagePill({ stage }: { stage: Stage }) {
-  const color = STAGE_COLOR[stage] ?? '#94A3B8'
+  const dept = STAGE_DEPARTMENT[stage] ?? 'pending'
+  const cls  = DEPT_PILL[dept] ?? DEPT_PILL.pending
   return (
-    <span
-      className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold whitespace-nowrap"
-      style={{ background: color + '18', color, border: `1px solid ${color}30` }}
-    >
-      <span className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: color }} />
+    <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold whitespace-nowrap ${cls.pill}`}>
+      <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${cls.dot}`} />
       {stage}
     </span>
   )
 }
 
+// ── Urgency → Tailwind badge class strings ────────────────────────────────────
+const URGENCY_PILL: Record<UrgencyLevel, { pill: string; dot: string; label: string }> = {
+  Low:    { pill: 'bg-green-500/15  text-green-700  border border-green-500/30',  dot: 'bg-green-500',  label: '7 days' },
+  Medium: { pill: 'bg-amber-500/15  text-amber-700  border border-amber-500/30',  dot: 'bg-amber-500',  label: '5 days' },
+  High:   { pill: 'bg-orange-500/15 text-orange-700 border border-orange-500/30', dot: 'bg-orange-500', label: '3 days' },
+  Urgent: { pill: 'bg-red-500/15    text-red-700    border border-red-500/30',    dot: 'bg-red-500',    label: 'Next boat' },
+}
+
 export function UrgencyPill({ level }: { level: UrgencyLevel }) {
-  const cfg = URGENCY_CONFIG[level]
+  const cls = URGENCY_PILL[level] ?? URGENCY_PILL.Low
   return (
-    <span
-      className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold whitespace-nowrap"
-      style={{ background: cfg.bg, color: cfg.color, border: `1px solid ${cfg.borderColor}` }}
-    >
-      <span className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: cfg.color }} />
-      {level} · {cfg.label}
+    <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold whitespace-nowrap ${cls.pill}`}>
+      <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${cls.dot}`} />
+      {level} · {cls.label}
     </span>
   )
 }
 
-const TYPE_MAP: Record<string, { bg: string; color: string }> = {
-  SAP:       { bg: '#EFF6FF', color: '#1D4ED8' },
-  TR:        { bg: '#F5F3FF', color: '#6D28D9' },
-  VENDOR:    { bg: '#FFF7ED', color: '#C2410C' },
-  NON_STOCK: { bg: '#F0FDF4', color: '#166534' },
+// ── Request type → Tailwind badge class strings ───────────────────────────────
+const TYPE_CLASS: Record<string, string> = {
+  SAP:       'bg-blue-50   text-blue-800',
+  TR:        'bg-violet-50 text-violet-800',
+  VENDOR:    'bg-orange-50 text-orange-800',
+  NON_STOCK: 'bg-green-50  text-green-800',
 }
 
 export function TypeBadge({ type }: { type: 'SAP' | 'TR' | 'VENDOR' | 'NON_STOCK' }) {
-  const s = TYPE_MAP[type] ?? TYPE_MAP.SAP
+  const cls   = TYPE_CLASS[type] ?? TYPE_CLASS.SAP
   const label = type === 'NON_STOCK' ? 'Non-Stock' : type
   return (
-    <span
-      className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold whitespace-nowrap"
-      style={{ background: s.bg, color: s.color }}
-    >
+    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold whitespace-nowrap ${cls}`}>
       {label}
     </span>
   )
 }
 
-export function SLAChip({
-  elapsedHours,
-  slaHours,
-}: {
-  elapsedHours: number
-  slaHours: number | undefined
-}) {
-  const status = getSlaStatus(elapsedHours, slaHours)
+// ── SLA chip ──────────────────────────────────────────────────────────────────
+const SLA_CHIP_CLASS = {
+  breached: 'bg-red-50   text-red-700',
+  warning:  'bg-amber-50 text-amber-700',
+  ontrack:  'bg-green-50 text-green-700',
+}
+const SLA_SVG_COLOR = {
+  breached: '#B91C1C',
+  warning:  '#B45309',
+  ontrack:  '#15803D',
+}
+
+export function SLAChip({ elapsedHours, slaHours }: { elapsedHours: number; slaHours: number | undefined }) {
+  const status  = getSlaStatus(elapsedHours, slaHours)
+  const variant = status.breached ? 'breached' : status.warning ? 'warning' : 'ontrack'
+  const svgCol  = SLA_SVG_COLOR[variant]
   return (
-    <span
-      className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold whitespace-nowrap"
-      style={{ background: status.bg, color: status.color }}
-    >
+    <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold whitespace-nowrap ${SLA_CHIP_CLASS[variant]}`}>
       <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
-        <circle cx="5" cy="5" r="3.5" stroke={status.color} strokeWidth="1.2" />
-        <path d="M5 2.8V5L6.3 6.3" stroke={status.color} strokeWidth="1.2" strokeLinecap="round" />
+        <circle cx="5" cy="5" r="3.5" stroke={svgCol} strokeWidth="1.2" />
+        <path d="M5 2.8V5L6.3 6.3" stroke={svgCol} strokeWidth="1.2" strokeLinecap="round" />
       </svg>
       {fmtHours(elapsedHours)}{slaHours ? ` / ${fmtHours(slaHours)}` : ''}
     </span>

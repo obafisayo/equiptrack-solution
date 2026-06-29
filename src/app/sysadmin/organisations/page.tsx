@@ -1,8 +1,10 @@
+/* eslint-disable */
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import Link from 'next/link'
-import { Search, Plus, X, ChevronDown, Building2 } from 'lucide-react'
+import { useSearchParams } from 'next/navigation'
+import { Search, Plus, X, ChevronDown, Building2, CheckCircle2 } from 'lucide-react'
 import { ORGANISATIONS } from '@/lib/mock-platform'
 import type { OrgStatus, SubscriptionTier } from '@/lib/types'
 
@@ -30,204 +32,268 @@ const SUB_STATUS_STYLE: Record<string, { bg: string; color: string; label: strin
   suspended:{ bg: '#FEF2F2', color: '#DC2626', label: 'Suspended' },
 }
 
-/* ── Add Org panel ────────────────────────────────────────────────────────── */
+/* ── Onboarding Wizard ────────────────────────────────────────────────────── */
 
-const INDUSTRIES = [
-  'Oil & Gas', 'Mining', 'Construction', 'Logistics', 'Manufacturing', 'Other',
-]
+const INDUSTRIES = ['Oil & Gas', 'Mining', 'Construction', 'Logistics', 'Manufacturing', 'Other']
+const COUNTRIES  = ['Nigeria', 'Ghana', 'Kenya', 'South Africa', 'Angola', 'Egypt', 'Other']
 
-const COUNTRIES = [
-  'Nigeria', 'Ghana', 'Kenya', 'South Africa', 'Angola', 'Egypt', 'Other',
-]
-
-interface AddOrgPanelProps {
-  onClose: () => void
+const TIER_DETAILS = {
+  starter:      { label:'Starter',      price:'$120/mo', seats:'Up to 15 seats',  color:'#6B7280', desc:'For small teams just getting started' },
+  professional: { label:'Professional', price:'$480/mo', seats:'Up to 50 seats',  color:'#2563EB', desc:'For mid-sized operations with full module access' },
+  enterprise:   { label:'Enterprise',   price:'$1,800/mo', seats:'Unlimited seats', color:'#F04A4A', desc:'For large operations with custom SLAs and priority support' },
 }
 
-function AddOrgPanel({ onClose }: AddOrgPanelProps) {
-  const [form, setForm] = useState({
-    name: '', industry: '', country: '', tier: 'starter' as SubscriptionTier,
-    seats: '10', adminEmail: '',
-  })
-  const [submitted, setSubmitted] = useState(false)
+const STEPS = ['Organisation', 'Admin Account', 'Subscription', 'Review']
 
-  function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    setSubmitted(true)
-    setTimeout(onClose, 1500)
+interface WizardForm {
+  name: string; industry: string; country: string; website: string
+  adminName: string; adminEmail: string; adminPhone: string
+  tier: SubscriptionTier; seats: string; billingContact: string; billingEmail: string
+}
+
+const EMPTY_FORM: WizardForm = {
+  name:'', industry:'', country:'', website:'',
+  adminName:'', adminEmail:'', adminPhone:'',
+  tier:'starter', seats:'10', billingContact:'', billingEmail:'',
+}
+
+interface OnboardingWizardProps { onClose: () => void }
+
+function OnboardingWizard({ onClose }: OnboardingWizardProps) {
+  const [step, setStep] = useState(0)
+  const [form, setForm] = useState<WizardForm>(EMPTY_FORM)
+  const [done, setDone] = useState(false)
+  const F = <K extends keyof WizardForm>(k: K) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) =>
+    setForm(f => ({ ...f, [k]: e.target.value }))
+
+  function canNext() {
+    if (step === 0) return form.name.trim() !== '' && form.industry !== '' && form.country !== ''
+    if (step === 1) return form.adminName.trim() !== '' && form.adminEmail.includes('@')
+    if (step === 2) return true
+    return true
   }
 
-  const labelStyle = { fontSize: 12, fontWeight: 600, color: '#374151', marginBottom: 4, display: 'block' }
-  const inputStyle = {
-    width: '100%', padding: '8px 12px', border: '1px solid #D1D5DB',
-    borderRadius: 6, fontSize: 13, color: '#111827', background: '#fff',
-    outline: 'none', boxSizing: 'border-box' as const,
+  function submit() {
+    setDone(true)
+    setTimeout(onClose, 2000)
   }
+
+  const td = TIER_DETAILS[form.tier]
 
   return (
-    <div
-      style={{
-        position: 'fixed', top: 0, right: 0, bottom: 0, width: 440,
-        background: '#fff', boxShadow: '-4px 0 24px rgba(0,0,0,0.12)',
-        zIndex: 100, display: 'flex', flexDirection: 'column',
-      }}
-    >
-      {/* Header */}
-      <div style={{
-        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        padding: '0 20px', height: 64, borderBottom: '1px solid #E2E8F0', flexShrink: 0,
-      }}>
-        <div>
-          <p style={{ fontSize: 15, fontWeight: 700, color: '#111827', margin: 0 }}>Add Organisation</p>
-          <p style={{ fontSize: 12, color: '#6B7280', margin: '2px 0 0' }}>Provision a new tenant</p>
-        </div>
-        <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#6B7280', padding: 4 }}>
-          <X size={18} />
-        </button>
-      </div>
+    <>
+      <div className="fixed inset-0 z-40 bg-black/25" onClick={onClose}/>
+      <aside className="fixed right-0 top-0 bottom-0 z-50 w-full sm:w-[500px] bg-white shadow-overlay flex flex-col animate-slide-in">
 
-      {/* Form */}
-      {submitted ? (
-        <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 12 }}>
-          <div style={{
-            width: 48, height: 48, borderRadius: '50%', background: '#F0FDF4',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-          }}>
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#16A34A" strokeWidth="2.5">
-              <polyline points="20 6 9 17 4 12" />
-            </svg>
+        {/* Header */}
+        <div className="flex items-center justify-between gap-3 px-6 py-5 border-b border-border-default shrink-0">
+          <div>
+            <p className="text-base font-bold text-neutral-900">Onboard Organisation</p>
+            <p className="text-xs text-neutral-500 mt-0.5">Provision a new tenant in {4 - step} step{step < 3 ? 's' : ''}</p>
           </div>
-          <p style={{ fontSize: 14, fontWeight: 600, color: '#111827', margin: 0 }}>Organisation created</p>
-          <p style={{ fontSize: 12, color: '#6B7280', margin: 0 }}>An invitation has been sent to the admin.</p>
-        </div>
-      ) : (
-        <form onSubmit={handleSubmit} style={{ flex: 1, overflow: 'auto', padding: '20px 20px 0' }}>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-            <div>
-              <label style={labelStyle}>Organisation Name *</label>
-              <input
-                required
-                value={form.name}
-                onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
-                placeholder="e.g. Shell Nigeria Ltd"
-                style={inputStyle}
-              />
-            </div>
-            <div>
-              <label style={labelStyle}>Admin Email *</label>
-              <input
-                required
-                type="email"
-                value={form.adminEmail}
-                onChange={e => setForm(f => ({ ...f, adminEmail: e.target.value }))}
-                placeholder="admin@company.com"
-                style={inputStyle}
-              />
-            </div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
-              <div>
-                <label style={labelStyle}>Industry</label>
-                <div style={{ position: 'relative' }}>
-                  <select
-                    value={form.industry}
-                    onChange={e => setForm(f => ({ ...f, industry: e.target.value }))}
-                    style={{ ...inputStyle, appearance: 'none', paddingRight: 28, cursor: 'pointer' }}
-                  >
-                    <option value="">Select…</option>
-                    {INDUSTRIES.map(i => <option key={i} value={i}>{i}</option>)}
-                  </select>
-                  <ChevronDown size={13} style={{ position: 'absolute', right: 9, top: '50%', transform: 'translateY(-50%)', color: '#9CA3AF', pointerEvents: 'none' }} />
-                </div>
-              </div>
-              <div>
-                <label style={labelStyle}>Country</label>
-                <div style={{ position: 'relative' }}>
-                  <select
-                    value={form.country}
-                    onChange={e => setForm(f => ({ ...f, country: e.target.value }))}
-                    style={{ ...inputStyle, appearance: 'none', paddingRight: 28, cursor: 'pointer' }}
-                  >
-                    <option value="">Select…</option>
-                    {COUNTRIES.map(c => <option key={c} value={c}>{c}</option>)}
-                  </select>
-                  <ChevronDown size={13} style={{ position: 'absolute', right: 9, top: '50%', transform: 'translateY(-50%)', color: '#9CA3AF', pointerEvents: 'none' }} />
-                </div>
-              </div>
-            </div>
-            <div>
-              <label style={labelStyle}>Subscription Tier</label>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8 }}>
-                {(['starter', 'professional', 'enterprise'] as SubscriptionTier[]).map(tier => {
-                  const ts = TIER_STYLE[tier]
-                  const selected = form.tier === tier
-                  return (
-                    <button
-                      key={tier}
-                      type="button"
-                      onClick={() => setForm(f => ({ ...f, tier }))}
-                      style={{
-                        padding: '8px 6px', border: `2px solid ${selected ? ts.color : '#E2E8F0'}`,
-                        borderRadius: 6, background: selected ? ts.bg : '#fff',
-                        cursor: 'pointer', textAlign: 'center',
-                        fontSize: 12, fontWeight: selected ? 700 : 500,
-                        color: selected ? ts.color : '#6B7280',
-                      }}
-                    >
-                      {ts.label}
-                    </button>
-                  )
-                })}
-              </div>
-            </div>
-            <div>
-              <label style={labelStyle}>Seat Limit</label>
-              <input
-                type="number"
-                min="1"
-                max="500"
-                value={form.seats}
-                onChange={e => setForm(f => ({ ...f, seats: e.target.value }))}
-                style={{ ...inputStyle, width: 120 }}
-              />
-            </div>
-          </div>
-        </form>
-      )}
-
-      {/* Footer */}
-      {!submitted && (
-        <div style={{
-          display: 'flex', gap: 10, padding: '16px 20px',
-          borderTop: '1px solid #E2E8F0', flexShrink: 0,
-        }}>
-          <button
-            type="button"
-            onClick={onClose}
-            style={{
-              flex: 1, padding: '9px 0', border: '1px solid #D1D5DB',
-              borderRadius: 6, background: '#fff', fontSize: 13, fontWeight: 600,
-              color: '#374151', cursor: 'pointer',
-            }}
-          >
-            Cancel
-          </button>
-          <button
-            type="submit"
-            form="add-org-form"
-            onClick={(e) => {
-              e.preventDefault()
-              handleSubmit(e as unknown as React.FormEvent)
-            }}
-            style={{
-              flex: 2, padding: '9px 0', border: 'none',
-              borderRadius: 6, background: '#F04A4A', fontSize: 13, fontWeight: 600,
-              color: '#fff', cursor: 'pointer',
-            }}
-          >
-            Create Organisation
+          <button type="button" aria-label="Close" onClick={onClose}
+            className="w-8 h-8 flex items-center justify-center rounded-lg text-neutral-400 hover:bg-neutral-100 transition-colors">
+            <X size={17}/>
           </button>
         </div>
-      )}
+
+        {/* Step indicator */}
+        {!done && (
+          <div className="flex items-center gap-0 px-6 py-3 border-b border-border-default bg-neutral-50 shrink-0">
+            {STEPS.map((s, i) => (
+              <div key={s} className="flex items-center gap-0 flex-1">
+                <div className="flex flex-col items-center">
+                  <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-bold transition-colors ${
+                    i < step ? 'bg-brand-500 text-white' : i === step ? 'bg-brand-500 text-white' : 'bg-neutral-200 text-neutral-400'
+                  }`}>
+                    {i < step ? <CheckCircle2 size={13}/> : i + 1}
+                  </div>
+                  <span className={`text-[10px] font-semibold mt-1 whitespace-nowrap ${i === step ? 'text-brand-500' : 'text-neutral-400'}`}>{s}</span>
+                </div>
+                {i < STEPS.length - 1 && (
+                  <div className={`flex-1 h-0.5 mb-4 mx-1 ${i < step ? 'bg-brand-500' : 'bg-neutral-200'}`}/>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Body */}
+        {done ? (
+          <div className="flex-1 flex flex-col items-center justify-center gap-4 p-8 text-center">
+            <div className="w-16 h-16 rounded-full bg-green-50 flex items-center justify-center">
+              <CheckCircle2 size={32} className="text-green-500"/>
+            </div>
+            <div>
+              <p className="text-base font-bold text-neutral-900">Organisation provisioned</p>
+              <p className="text-sm text-neutral-500 mt-1">An invitation has been sent to {form.adminEmail}. They can complete setup on first login.</p>
+            </div>
+          </div>
+        ) : (
+          <div className="flex-1 overflow-y-auto p-6">
+
+            {/* Step 0: Organisation details */}
+            {step === 0 && (
+              <div className="space-y-4">
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-semibold text-neutral-700">Organisation Name <span className="text-brand-500">*</span></label>
+                  <input value={form.name} onChange={F('name')} placeholder="e.g. Shell Nigeria Ltd"
+                    className="w-full h-9 px-3 text-sm border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500"/>
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-xs font-semibold text-neutral-700">Industry <span className="text-brand-500">*</span></label>
+                    <select aria-label="Industry" value={form.industry} onChange={F('industry')}
+                      className="h-9 px-3 text-sm border border-neutral-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-brand-500">
+                      <option value="">Select…</option>
+                      {INDUSTRIES.map(i => <option key={i} value={i}>{i}</option>)}
+                    </select>
+                  </div>
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-xs font-semibold text-neutral-700">Country <span className="text-brand-500">*</span></label>
+                    <select aria-label="Country" value={form.country} onChange={F('country')}
+                      className="h-9 px-3 text-sm border border-neutral-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-brand-500">
+                      <option value="">Select…</option>
+                      {COUNTRIES.map(c => <option key={c} value={c}>{c}</option>)}
+                    </select>
+                  </div>
+                </div>
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-semibold text-neutral-700">Website</label>
+                  <input value={form.website} onChange={F('website')} placeholder="https://…" type="url"
+                    className="w-full h-9 px-3 text-sm border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500"/>
+                </div>
+              </div>
+            )}
+
+            {/* Step 1: Admin account */}
+            {step === 1 && (
+              <div className="space-y-4">
+                <div className="bg-blue-50 border border-blue-200 rounded-xl px-4 py-3 text-xs text-blue-800">
+                  This person will receive a setup email and become the first admin for <strong>{form.name || 'this organisation'}</strong>.
+                </div>
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-semibold text-neutral-700">Full Name <span className="text-brand-500">*</span></label>
+                  <input value={form.adminName} onChange={F('adminName')} placeholder="e.g. Kenneth Omireh"
+                    className="w-full h-9 px-3 text-sm border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500"/>
+                </div>
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-semibold text-neutral-700">Work Email <span className="text-brand-500">*</span></label>
+                  <input type="email" value={form.adminEmail} onChange={F('adminEmail')} placeholder="admin@company.com"
+                    className="w-full h-9 px-3 text-sm border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500"/>
+                </div>
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-semibold text-neutral-700">Phone</label>
+                  <input type="tel" value={form.adminPhone} onChange={F('adminPhone')} placeholder="+234 …"
+                    className="w-full h-9 px-3 text-sm border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500"/>
+                </div>
+              </div>
+            )}
+
+            {/* Step 2: Subscription */}
+            {step === 2 && (
+              <div className="space-y-4">
+                <div>
+                  <p className="text-xs font-semibold text-neutral-700 mb-2">Subscription Tier</p>
+                  <div className="space-y-2">
+                    {(Object.entries(TIER_DETAILS) as [SubscriptionTier, typeof TIER_DETAILS[SubscriptionTier]][]).map(([key, t]) => (
+                      <button key={key} type="button" onClick={() => setForm(f => ({...f, tier:key}))}
+                        className={`w-full text-left p-3 rounded-xl border-2 transition-colors ${form.tier===key ? 'border-brand-500 bg-brand-50' : 'border-neutral-200 hover:border-neutral-300'}`}>
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <span className="text-sm font-bold text-neutral-900">{t.label}</span>
+                            <span className="text-[10px] text-neutral-500 ml-2">{t.seats}</span>
+                          </div>
+                          <span className="text-sm font-bold" style={{color:t.color}}>{t.price}</span>
+                        </div>
+                        <p className="text-[11px] text-neutral-500 mt-0.5">{t.desc}</p>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-semibold text-neutral-700">Seat Override <span className="text-neutral-400 font-normal">(optional)</span></label>
+                  <input type="number" min="1" max="999" value={form.seats} onChange={F('seats')}
+                    className="w-28 h-9 px-3 text-sm border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500"/>
+                </div>
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-semibold text-neutral-700">Billing Contact Name</label>
+                  <input value={form.billingContact} onChange={F('billingContact')} placeholder="Finance manager name"
+                    className="w-full h-9 px-3 text-sm border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500"/>
+                </div>
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-semibold text-neutral-700">Billing Email</label>
+                  <input type="email" value={form.billingEmail} onChange={F('billingEmail')} placeholder="billing@company.com"
+                    className="w-full h-9 px-3 text-sm border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500"/>
+                </div>
+              </div>
+            )}
+
+            {/* Step 3: Review */}
+            {step === 3 && (
+              <div className="space-y-4">
+                <div className="bg-neutral-50 rounded-xl border border-border-default p-4 space-y-3">
+                  <ReviewRow label="Organisation" value={form.name}/>
+                  <ReviewRow label="Industry" value={form.industry}/>
+                  <ReviewRow label="Country" value={form.country}/>
+                  {form.website && <ReviewRow label="Website" value={form.website}/>}
+                </div>
+                <div className="bg-neutral-50 rounded-xl border border-border-default p-4 space-y-3">
+                  <ReviewRow label="Admin Name" value={form.adminName}/>
+                  <ReviewRow label="Admin Email" value={form.adminEmail}/>
+                  {form.adminPhone && <ReviewRow label="Phone" value={form.adminPhone}/>}
+                </div>
+                <div className="bg-neutral-50 rounded-xl border border-border-default p-4 space-y-3">
+                  <ReviewRow label="Tier" value={TIER_DETAILS[form.tier].label}/>
+                  <ReviewRow label="Price" value={TIER_DETAILS[form.tier].price}/>
+                  <ReviewRow label="Seats" value={form.seats}/>
+                  {form.billingEmail && <ReviewRow label="Billing Email" value={form.billingEmail}/>}
+                </div>
+                <p className="text-[11px] text-neutral-400 text-center">
+                  A setup email will be sent to {form.adminEmail}. The subscription starts on first login.
+                </p>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Footer */}
+        {!done && (
+          <div className="flex items-center justify-between gap-3 px-6 py-4 border-t border-border-default shrink-0">
+            {step > 0 ? (
+              <button type="button" onClick={() => setStep(s => s - 1)}
+                className="flex-1 h-9 text-sm font-semibold text-neutral-700 border border-neutral-300 rounded-lg hover:bg-neutral-50 transition-colors">
+                Back
+              </button>
+            ) : (
+              <button type="button" onClick={onClose}
+                className="flex-1 h-9 text-sm font-semibold text-neutral-700 border border-neutral-300 rounded-lg hover:bg-neutral-50 transition-colors">
+                Cancel
+              </button>
+            )}
+            {step < 3 ? (
+              <button type="button" disabled={!canNext()} onClick={() => setStep(s => s + 1)}
+                className="flex-[2] h-9 text-sm font-semibold bg-brand-500 hover:bg-brand-600 disabled:opacity-40 disabled:cursor-not-allowed text-white rounded-lg transition-colors">
+                Continue
+              </button>
+            ) : (
+              <button type="button" onClick={submit}
+                className="flex-[2] h-9 text-sm font-semibold bg-brand-500 hover:bg-brand-600 text-white rounded-lg transition-colors">
+                Launch Organisation
+              </button>
+            )}
+          </div>
+        )}
+      </aside>
+    </>
+  )
+}
+
+function ReviewRow({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="flex items-center justify-between">
+      <span className="text-xs text-neutral-500">{label}</span>
+      <span className="text-xs font-semibold text-neutral-900">{value}</span>
     </div>
   )
 }
@@ -305,12 +371,17 @@ function ConfirmModal({ orgName, action, onConfirm, onCancel }: ConfirmModalProp
 
 type FilterTab = 'all' | OrgStatus | 'trialing'
 
-export default function OrganisationsPage() {
+function OrganisationsPageInner() {
+  const searchParams = useSearchParams()
   const [search, setSearch] = useState('')
   const [activeTab, setActiveTab] = useState<FilterTab>('all')
   const [showPanel, setShowPanel] = useState(false)
   const [confirmFor, setConfirmFor] = useState<{ id: string; action: 'suspend' | 'activate' } | null>(null)
   const [suspendedIds, setSuspendedIds] = useState<Set<string>>(new Set())
+
+  useEffect(() => {
+    if (searchParams.get('action') === 'onboard') setShowPanel(true)
+  }, [searchParams])
 
   const tabs: { key: FilterTab; label: string; count: number }[] = [
     { key: 'all',        label: 'All',        count: ORGANISATIONS.length },
@@ -343,14 +414,8 @@ export default function OrganisationsPage() {
 
   return (
     <>
-      {/* Add panel overlay */}
-      {showPanel && (
-        <div
-          style={{ position: 'fixed', inset: 0, zIndex: 90, background: 'rgba(0,0,0,0.25)' }}
-          onClick={() => setShowPanel(false)}
-        />
-      )}
-      {showPanel && <AddOrgPanel onClose={() => setShowPanel(false)} />}
+      {/* Onboarding wizard */}
+      {showPanel && <OnboardingWizard onClose={() => setShowPanel(false)} />}
 
       {/* Confirm modal */}
       {confirmFor && (() => {
@@ -431,7 +496,7 @@ export default function OrganisationsPage() {
         </div>
 
         {/* Table */}
-        <div className="bg-white rounded-[8px] border border-[#E2E8F0] overflow-hidden"
+        <div className="bg-white rounded-card border border-border-default overflow-hidden"
           style={{ boxShadow: '0 1px 3px rgba(0,0,0,0.08)' }}>
           <div className="overflow-x-auto">
             <table className="w-full" style={{ fontSize: 13 }}>
@@ -549,5 +614,13 @@ export default function OrganisationsPage() {
         </div>
       </div>
     </>
+  )
+}
+
+export default function OrganisationsPage() {
+  return (
+    <Suspense fallback={<div className="p-8 text-neutral-400 text-sm">Loading…</div>}>
+      <OrganisationsPageInner />
+    </Suspense>
   )
 }

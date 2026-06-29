@@ -1,202 +1,181 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@import "leaflet/dist/leaflet.css";
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+/* ── Custom design tokens ────────────────────────────────────────────────────── */
 
-/* ── Design Tokens ─────────────────────────────────────────────────────────── */
-:root {
-  /* Colors */
-  --color-bg-base:          #F5F5F5;
-  --color-bg-surface:       #FFFFFF;
-  --color-bg-form-field:    #F5F7FA;
-  --color-bg-sidebar:       #131722;
-  --color-border:           #E2E8F0;
-  --color-border-strong:    #CBD5E1;
-  --color-text-primary:     #111827;
-  --color-text-secondary:   #6B7280;
-  --color-text-disabled:    #9CA3AF;
-  --color-text-placeholder: #9CA3AF;
-  --color-accent:           #F04A4A;
-  --color-accent-hover:     #E02828;
-  --color-accent-subtle:    #FFF1F1;
+@theme {
+  /* Fonts */
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
 
-  /* Status */
-  --color-success:          #22C55E;
-  --color-success-subtle:   #F0FDF4;
-  --color-warning:          #F59E0B;
-  --color-warning-subtle:   #FFFBEB;
-  --color-danger:           #EF4444;
-  --color-danger-subtle:    #FEF2F2;
-  --color-info:             #3B82F6;
-  --color-info-subtle:      #EFF6FF;
+  /* Brand palette (primary red) */
+  --color-brand-50:  #FFF5F5;
+  --color-brand-100: #FEE2E2;
+  --color-brand-200: #FECACA;
+  --color-brand-300: #FCA5A5;
+  --color-brand-400: #F87171;
+  --color-brand-500: #F04A4A;
+  --color-brand-600: #E02828;
+  --color-brand-700: #C41A1A;
 
-  /* Layout */
-  --sidebar-width:     200px;
-  --topbar-height:     64px;
-  --panel-width:       480px;
+  /* Sidebar */
+  --color-sidebar: #131722;
 
-  /* Radius */
-  --radius-card:       8px;
-  --radius-button:     6px;
-  --radius-badge:      9999px;
-  --radius-input:      8px;
-  --radius-modal:      12px;
+  /* Page / surface */
+  --color-page-bg:  #F5F5F5;
+  --color-surface:  #FFFFFF;
+
+  /* Borders */
+  --color-border-default: #E2E8F0;
+  --color-border-subtle:  #F3F4F6;
+  --color-border-strong:  #CBD5E1;
+  --color-border-brand-100: #FEE2E2;
+  --color-border-brand-200: #FECACA;
+  --color-border-brand-300: #FCA5A5;
+  --color-border-brand-500: #F04A4A;
+
+  /* Status – SLA / urgency / alerts */
+  --color-status-critical:    #EF4444;
+  --color-status-critical-bg: #FEF2F2;
+  --color-status-medium:      #F59E0B;
+  --color-status-medium-bg:   #FFFBEB;
+  --color-status-success:     #10B981;
+  --color-status-success-bg:  #ECFDF5;
+  --color-status-info:        #3B82F6;
+  --color-status-info-bg:     #EFF6FF;
+
+  /* Shadows */
+  --shadow-card:    0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-overlay: 0 8px 32px rgba(0,0,0,0.14);
+
+  /* Border radius */
+  --radius-button: 8px;
+  --radius-card:   8px;
+  --radius-modal:  12px;
+  --radius-badge:  999px;
+
+  /* Animations */
+  --animate-slide-in: slide-in 250ms ease forwards;
+  --animate-fade-in:  fade-in  150ms ease forwards;
 }
 
-/* ── Shimmer animation ─────────────────────────────────────────────────────── */
-@keyframes shimmer {
-  from { background-position: -200% 0; }
-  to   { background-position:  200% 0; }
+/* ── Keyframes ───────────────────────────────────────────────────────────────── */
+
+@keyframes slide-in {
+  from { transform: translateX(100%); }
+  to   { transform: translateX(0); }
 }
 
-/* ── Base reset ────────────────────────────────────────────────────────────── */
-@layer base {
-  *, *::before, *::after { box-sizing: border-box; }
-  html, body { height: 100%; }
-  body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-    background-color: #F5F5F5;
-    color: #111827;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-  ::-webkit-scrollbar { width: 6px; height: 6px; }
-  ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 9px; }
-  ::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
-
-  :focus-visible {
-    outline: 2px solid #F04A4A;
-    outline-offset: 2px;
-  }
-  :focus:not(:focus-visible) {
-    outline: none;
-  }
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
-/* ── Utilities ─────────────────────────────────────────────────────────────── */
+/* ── Custom utilities not expressible via @theme alone ───────────────────────── */
+
 @layer utilities {
+  /* Topbar height */
+  .h-topbar { height: 64px; }
+
+  /* JetBrains Mono for delivery IDs / work-order codes */
   .font-mono-id {
-    font-family: 'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    letter-spacing: 0.01em;
   }
 
-  .tabular-nums {
-    font-variant-numeric: tabular-nums;
-  }
+  /* text-decoration: none for Link components (Tailwind v4 drops the old alias) */
+  .no-underline { text-decoration: none; }
 
-  .badge-nowrap {
-    white-space: nowrap;
-  }
-
-  .page-enter {
-    animation: fade-in 200ms ease forwards;
+  /* Role selector card grid — auto-fill at 276px minimum */
+  .role-card-grid {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fill, minmax(276px, 1fr));
   }
 }
 
-/* ── Auth page light-form inputs ───────────────────────────────────────────── */
-@layer components {
-  .et-input {
-    width: 100%;
-    height: 48px;
-    padding: 0 16px;
-    background: #F5F7FA;
-    border: 1px solid #E5E7EB;
-    border-radius: 8px;
-    font-size: 14px;
-    color: #111827;
-    font-family: inherit;
-    outline: none;
-    transition: border-color 0.15s ease, box-shadow 0.15s ease;
-  }
+/* ── Skeleton shimmer ─────────────────────────────────────────────────────────── */
 
-  .et-input:focus {
-    border-color: #F04A4A;
-    box-shadow: 0 0 0 3px rgba(240, 74, 74, 0.12);
+@layer base {
+  body {
+    background-color: var(--color-page-bg);
+    color: #1E1E1E;
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
   }
+}
 
-  .et-input::placeholder {
-    color: #9CA3AF;
-  }
+/* ── Login form utility classes ───────────────────────────────────────────── */
+/* Used in /login/[role]/page.tsx — plain CSS so no Tailwind token lookups needed */
 
-  .et-input-error {
-    border-color: #EF4444 !important;
-    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.10) !important;
-  }
+.et-input {
+  height: 48px;
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid #E5E7EB;
+  background-color: #F5F7FA;
+  padding: 0 16px;
+  font-size: 14px;
+  color: #111827;
+  font-family: inherit;
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+  appearance: none;
+}
+.et-input::placeholder { color: #9CA3AF; }
+.et-input:hover:not(:disabled) { border-color: #CBD5E1; }
+.et-input:focus {
+  outline: none;
+  border-color: #F04A4A;
+  box-shadow: 0 0 0 3px rgba(240, 74, 74, 0.14);
+}
+.et-input:disabled { opacity: 0.45; cursor: not-allowed; }
 
-  .et-checkbox {
-    width: 16px;
-    height: 16px;
-    border-radius: 4px;
-    border: 1.5px solid #D1D5DB;
-    accent-color: #F04A4A;
-    cursor: pointer;
-    flex-shrink: 0;
-  }
+.et-btn-dark {
+  height: 46px;
+  width: 100%;
+  border-radius: 8px;
+  background-color: #111827;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: inherit;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: background-color 150ms ease;
+  letter-spacing: 0.01em;
+}
+.et-btn-dark:hover:not(:disabled) { background-color: #1F2937; }
+.et-btn-dark:active:not(:disabled) { background-color: #374151; }
+.et-btn-dark:disabled { opacity: 0.5; cursor: not-allowed; }
 
-  .et-btn-dark {
-    width: 100%;
-    height: 48px;
-    background: #111827;
-    color: #FFFFFF;
-    border: none;
-    border-radius: 8px;
-    font-family: inherit;
-    font-size: 15px;
-    font-weight: 600;
-    letter-spacing: 0.01em;
-    cursor: pointer;
-    transition: background 0.15s ease;
-  }
-
-  .et-btn-dark:hover:not(:disabled) {
-    background: #1F2937;
-  }
-
-  .et-btn-dark:active:not(:disabled) {
-    background: #374151;
-  }
-
-  .et-btn-dark:disabled {
-    opacity: 0.55;
-    cursor: not-allowed;
-  }
-
-  .et-btn-brand {
-    width: 100%;
-    height: 48px;
-    background: #F04A4A;
-    color: #FFFFFF;
-    border: none;
-    border-radius: 8px;
-    font-family: inherit;
-    font-size: 15px;
-    font-weight: 600;
-    letter-spacing: 0.01em;
-    cursor: pointer;
-    transition: background 0.15s ease, box-shadow 0.15s ease;
-  }
-
-  .et-btn-brand:hover:not(:disabled) {
-    background: #E02828;
-    box-shadow: 0 4px 16px rgba(240, 74, 74, 0.30);
-  }
-
-  .et-btn-brand:disabled {
-    opacity: 0.55;
-    cursor: not-allowed;
-  }
-
-  .et-input:focus-visible {
-    outline: none;
-  }
+.et-checkbox {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  border: 1.5px solid #D1D5DB;
+  cursor: pointer;
+  accent-color: #F04A4A;
+  flex-shrink: 0;
 }
 
 /* ── Skeleton shimmer ──────────────────────────────────────────────────────── */
-@layer components {
-  .skeleton-shimmer {
-    background: linear-gradient(90deg, #F3F4F6 25%, #E9ECEF 50%, #F3F4F6 75%);
-    background-size: 200% 100%;
-    animation: shimmer 1.4s ease infinite;
-  }
+
+.skeleton-shimmer {
+  background: linear-gradient(
+    90deg,
+    #F0F0F0 25%,
+    #E8E8E8 37%,
+    #F0F0F0 63%
+  );
+  background-size: 400px 100%;
+  animation: shimmer 1.4s ease infinite;
+}
+
+@keyframes shimmer {
+  from { background-position: -400px 0; }
+  to   { background-position: 400px 0; }
 }

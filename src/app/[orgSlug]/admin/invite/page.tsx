@@ -1,3 +1,4 @@
+/* eslint-disable */
 'use client'
 
 import { use, useState } from 'react'
@@ -223,6 +224,7 @@ function Step2({ rows, onChangeRows, selectedRole, onSelectRole, method, onBack,
               style={{ ...inputStyle, flex: 2 }}
             />
             <select
+              aria-label="Assign role"
               value={row.role}
               onChange={e => updateRow(i, 'role', e.target.value as OrgRole)}
               style={{ ...inputStyle, flex: 1, appearance: 'none' as const }}

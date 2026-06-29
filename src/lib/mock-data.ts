@@ -63,7 +63,12 @@ export interface Container {
   size: '20ft' | '40ft'
   status: 'available' | 'in-use' | 'inspection' | 'maintenance'
   yard: string
-  workOrderId?: string
+  lengthFt: number
+  widthFt: number
+  heightFt: number
+  weightKg: number
+  workOrderIds: string[]
+  destination?: string
   lastInspected?: string
   notes?: string
 }
@@ -86,16 +91,16 @@ export const PERSONNEL: Personnel[] = [
 // ─── Containers ───────────────────────────────────────────────────────────────
 
 export const CONTAINERS: Container[] = [
-  { id: 'CNT-001', size: '20ft', status: 'available',   yard: 'Yard A', lastInspected: '2024-06-20' },
-  { id: 'CNT-002', size: '40ft', status: 'in-use',      yard: 'Yard B', workOrderId: 'DEL-24-1301', lastInspected: '2024-06-18' },
-  { id: 'CNT-003', size: '20ft', status: 'available',   yard: 'Yard A', lastInspected: '2024-06-22' },
-  { id: 'CNT-004', size: '40ft', status: 'inspection',  yard: 'Workshop', lastInspected: '2024-06-10' },
-  { id: 'CNT-005', size: '20ft', status: 'available',   yard: 'Yard C', lastInspected: '2024-06-21' },
-  { id: 'CNT-006', size: '40ft', status: 'available',   yard: 'Yard C', lastInspected: '2024-06-19' },
-  { id: 'CNT-007', size: '20ft', status: 'in-use',      yard: 'Yard B', workOrderId: 'DEL-24-1288', lastInspected: '2024-06-17' },
-  { id: 'CNT-008', size: '40ft', status: 'maintenance', yard: 'Workshop', lastInspected: '2024-06-05' },
-  { id: 'CNT-009', size: '20ft', status: 'available',   yard: 'Yard A', lastInspected: '2024-06-23' },
-  { id: 'CNT-010', size: '40ft', status: 'in-use',      yard: 'Yard D', workOrderId: 'DEL-24-1275', lastInspected: '2024-06-15' },
+  { id: 'CNT-001', size: '20ft', status: 'available',   yard: 'Yard A',   lengthFt: 20, widthFt: 8, heightFt: 8.6, weightKg: 2200, workOrderIds: [],                   lastInspected: '2026-06-20' },
+  { id: 'CNT-002', size: '40ft', status: 'in-use',      yard: 'Yard B',   lengthFt: 40, widthFt: 8, heightFt: 8.6, weightKg: 3800, workOrderIds: ['DEL-24-1301'],      destination: 'Bonga FPSO',        lastInspected: '2026-06-18' },
+  { id: 'CNT-003', size: '20ft', status: 'available',   yard: 'Yard A',   lengthFt: 20, widthFt: 8, heightFt: 8.6, weightKg: 2200, workOrderIds: [],                   lastInspected: '2026-06-22' },
+  { id: 'CNT-004', size: '40ft', status: 'inspection',  yard: 'Workshop', lengthFt: 40, widthFt: 8, heightFt: 8.6, weightKg: 3750, workOrderIds: [],                   lastInspected: '2026-06-10', notes: 'Awaiting structural sign-off' },
+  { id: 'CNT-005', size: '20ft', status: 'available',   yard: 'Yard C',   lengthFt: 20, widthFt: 8, heightFt: 8.6, weightKg: 2180, workOrderIds: [],                   lastInspected: '2026-06-21' },
+  { id: 'CNT-006', size: '40ft', status: 'available',   yard: 'Yard C',   lengthFt: 40, widthFt: 8, heightFt: 8.6, weightKg: 3820, workOrderIds: [],                   lastInspected: '2026-06-19' },
+  { id: 'CNT-007', size: '20ft', status: 'in-use',      yard: 'Yard B',   lengthFt: 20, widthFt: 8, heightFt: 8.6, weightKg: 2250, workOrderIds: ['DEL-24-1288'],      destination: 'Escravos Terminal', lastInspected: '2026-06-17' },
+  { id: 'CNT-008', size: '40ft', status: 'maintenance', yard: 'Workshop', lengthFt: 40, widthFt: 8, heightFt: 8.6, weightKg: 3800, workOrderIds: [],                   lastInspected: '2026-06-05', notes: 'Floor panel replacement in progress' },
+  { id: 'CNT-009', size: '20ft', status: 'available',   yard: 'Yard A',   lengthFt: 20, widthFt: 8, heightFt: 8.6, weightKg: 2200, workOrderIds: [],                   lastInspected: '2026-06-23' },
+  { id: 'CNT-010', size: '40ft', status: 'in-use',      yard: 'Yard D',   lengthFt: 40, widthFt: 8, heightFt: 8.6, weightKg: 3900, workOrderIds: ['DEL-24-1275'],      destination: 'Agbami FPSO',       lastInspected: '2026-06-15' },
 ]
 
 // ─── Work Orders ──────────────────────────────────────────────────────────────
@@ -801,3 +806,115 @@ export function getSlaBreachedOrders(): WorkOrder[] {
     return slaH != null && o.elapsedHours > slaH
   })
 }
+
+export function sortNewestFirst(orders: WorkOrder[]): WorkOrder[] {
+  return [...orders].sort(
+    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+  )
+}
+
+// ─── Vessel ───────────────────────────────────────────────────────────────────
+
+export type VesselStatus = 'available' | 'loading' | 'full' | 'in-transit' | 'arrived'
+
+export interface Vessel {
+  id: string
+  name: string
+  status: VesselStatus
+  port: string
+  destination: string
+  departure: string
+  allocatedUnits: number
+  capacityUnits: number
+}
+
+export const VESSELS: Vessel[] = [
+  {
+    id: 'VSL-001', name: 'MV SEPLAT PRIDE',
+    status: 'loading', port: 'Warri Port', destination: 'Bonga FPSO',
+    departure: '28 Jun 08:00', allocatedUnits: 306, capacityUnits: 479,
+  },
+  {
+    id: 'VSL-002', name: 'MV DELTA EAGLE',
+    status: 'available', port: 'Warri Port', destination: 'Agbami FPSO',
+    departure: '30 Jun 06:00', allocatedUnits: 120, capacityUnits: 350,
+  },
+  {
+    id: 'VSL-003', name: 'MV NIGER CROWN',
+    status: 'available', port: 'Port Harcourt', destination: 'Forcados Terminal',
+    departure: '03 Jul 09:00', allocatedUnits: 0, capacityUnits: 420,
+  },
+  {
+    id: 'VSL-004', name: 'MV OGUN STAR',
+    status: 'available', port: 'Warri Port', destination: 'Escravos Terminal',
+    departure: '07 Jul 07:00', allocatedUnits: 88, capacityUnits: 310,
+  },
+  {
+    id: 'VSL-005', name: 'MV ESCRAVOS STAR',
+    status: 'in-transit', port: 'Warri Port', destination: 'Escravos Terminal',
+    departure: '22 Jun 07:00', allocatedUnits: 479, capacityUnits: 479,
+  },
+]
+
+// ─── Truck ────────────────────────────────────────────────────────────────────
+
+export interface Truck {
+  id: string
+  plateNumber: string
+  driver: string
+  status: 'available' | 'in-use' | 'maintenance'
+  yard: string
+  destination?: string
+  workOrderIds: string[]
+  notes?: string
+}
+
+export const TRUCKS: Truck[] = [
+  {
+    id: 'TRK-001', plateNumber: 'LSD-445-XY', driver: 'Emeka Trucks Ltd',
+    status: 'in-use', yard: 'Gate A', destination: 'Bonga FPSO',
+    workOrderIds: ['WO-0042', 'WO-0058'],
+  },
+  {
+    id: 'TRK-002', plateNumber: 'ABJ-221-QZ', driver: 'Delta Transport Co.',
+    status: 'available', yard: 'Gate B',
+    workOrderIds: [],
+  },
+  {
+    id: 'TRK-003', plateNumber: 'PHC-887-KA', driver: 'Riverside Haulage',
+    status: 'available', yard: 'Gate A',
+    workOrderIds: [],
+    notes: 'Available from 14:00',
+  },
+  {
+    id: 'TRK-004', plateNumber: 'EKP-334-LB', driver: 'Chukwu Logistics',
+    status: 'maintenance', yard: 'Workshop',
+    workOrderIds: [],
+    notes: 'Gearbox replacement — returns 01 Jul',
+  },
+]
+
+// ─── OrgUser ──────────────────────────────────────────────────────────────────
+
+export interface OrgUser {
+  id: string
+  name: string
+  email: string
+  role: string
+  dept: string
+  status: 'active' | 'invited' | 'suspended'
+  joinedAt: string
+}
+
+export const ORG_USERS: OrgUser[] = [
+  { id: 'U001', name: 'Yinka Adeyemi',    email: 'yinka.adeyemi@seplat.com',    role: 'Warehouse Supervisor', dept: 'warehouse', status: 'active',    joinedAt: '12 Jan 2026' },
+  { id: 'U002', name: 'Emeka Okonkwo',    email: 'emeka.okonkwo@seplat.com',    role: 'Warehouse Personnel',  dept: 'warehouse', status: 'active',    joinedAt: '15 Jan 2026' },
+  { id: 'U003', name: 'Chika Obi',        email: 'chika.obi@seplat.com',        role: 'Dispatch Supervisor',  dept: 'dispatch',  status: 'active',    joinedAt: '18 Jan 2026' },
+  { id: 'U004', name: 'Biodun Adekunle',  email: 'biodun.adekunle@seplat.com',  role: 'Dispatch Personnel',   dept: 'dispatch',  status: 'active',    joinedAt: '20 Jan 2026' },
+  { id: 'U005', name: 'Femi Emmanuel',    email: 'femi.emmanuel@seplat.com',    role: 'QAQC Officer',         dept: 'qaqc',      status: 'active',    joinedAt: '22 Jan 2026' },
+  { id: 'U006', name: 'Danjuma Yusuf',    email: 'danjuma.yusuf@seplat.com',    role: 'Logistics Coordinator',dept: 'logistics', status: 'active',    joinedAt: '25 Jan 2026' },
+  { id: 'U007', name: 'Kenneth Nwosu',    email: 'kenneth.nwosu@seplat.com',    role: 'Requester',            dept: 'operations',status: 'active',    joinedAt: '01 Feb 2026' },
+  { id: 'U008', name: 'Grace Okonkwo',    email: 'grace.okonkwo@seplat.com',    role: 'Warehouse Personnel',  dept: 'warehouse', status: 'invited',   joinedAt: '10 Mar 2026' },
+  { id: 'U009', name: 'Akin Babatunde',   email: 'akin.babatunde@seplat.com',   role: 'Requester',            dept: 'maintenance',status: 'invited',  joinedAt: '15 Mar 2026' },
+  { id: 'U010', name: 'Ngozi Eze',        email: 'ngozi.eze@seplat.com',        role: 'Warehouse Supervisor', dept: 'warehouse', status: 'suspended', joinedAt: '05 Dec 2025' },
+]

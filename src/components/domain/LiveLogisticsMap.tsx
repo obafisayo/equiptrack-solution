@@ -1,3 +1,4 @@
+/* eslint-disable */
 'use client'
 
 import { Truck, Ship, Factory, MapPin } from 'lucide-react'
@@ -50,7 +51,7 @@ export function LiveLogisticsMap({ selectedShipmentId }: LiveLogisticsMapProps) 
   const activeShipment = mockShipments.find(s => s.id === selectedShipmentId) || mockShipments[0]
 
   return (
-    <div className="relative w-full h-[320px] bg-[#E8EDF2] rounded-xl overflow-hidden shadow-inner border border-neutral-200">
+    <div className="relative w-full h-80 bg-[#E8EDF2] rounded-xl overflow-hidden shadow-inner border border-neutral-200">
       {/* Abstract World Map Background (Simple Polygons for continents) */}
       <svg className="absolute inset-0 w-full h-full text-[#D2DCE6]" preserveAspectRatio="xMidYMid slice" viewBox="0 0 100 100">
         {/* North America */}

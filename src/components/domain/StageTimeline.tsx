@@ -1,34 +1,39 @@
-import { LIFECYCLE, STAGE_COLOR, STAGE_DEPARTMENT, DEPARTMENT_COLOR, type Stage } from '@/lib/lifecycle'
+import { LIFECYCLE, STAGE_DEPARTMENT, type Stage } from '@/lib/lifecycle'
 import { fmtHours } from '@/config/sla'
 import type { StageHistoryEntry } from '@/lib/mock-data'
 
-interface StageStripProps {
-  currentStage: Stage
-  compact?: boolean
+const DEPT_TIMELINE: Record<string, {
+  bg: string; text: string; dot: string; line: string; shadow: string
+}> = {
+  pending:   { bg: 'bg-slate-400',   text: 'text-slate-400',   dot: 'bg-slate-400',   line: 'bg-slate-400/30',   shadow: 'shadow-[0_0_0_2px_rgba(148,163,184,0.25)]' },
+  warehouse: { bg: 'bg-blue-500',    text: 'text-blue-500',    dot: 'bg-blue-500',    line: 'bg-blue-500/30',    shadow: 'shadow-[0_0_0_2px_rgba(59,130,246,0.25)]' },
+  dispatch:  { bg: 'bg-violet-500',  text: 'text-violet-500',  dot: 'bg-violet-500',  line: 'bg-violet-500/30',  shadow: 'shadow-[0_0_0_2px_rgba(139,92,246,0.25)]' },
+  qaqc:      { bg: 'bg-amber-500',   text: 'text-amber-500',   dot: 'bg-amber-500',   line: 'bg-amber-500/30',   shadow: 'shadow-[0_0_0_2px_rgba(245,158,11,0.25)]' },
+  final:     { bg: 'bg-emerald-500', text: 'text-emerald-500', dot: 'bg-emerald-500', line: 'bg-emerald-500/30', shadow: 'shadow-[0_0_0_2px_rgba(16,185,129,0.25)]' },
 }
+
+interface StageStripProps { currentStage: Stage }
 
 export function StageStrip({ currentStage }: StageStripProps) {
   const currentIdx = LIFECYCLE.indexOf(currentStage)
 
   return (
-    <div style={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+    <div className="flex gap-0.5 items-center">
       {LIFECYCLE.map((stage, i) => {
-        const dept = STAGE_DEPARTMENT[stage]
-        const color = DEPARTMENT_COLOR[dept]
-        const isPast = i < currentIdx
+        const dept      = STAGE_DEPARTMENT[stage] ?? 'pending'
+        const cls       = DEPT_TIMELINE[dept] ?? DEPT_TIMELINE.pending
+        const isPast    = i < currentIdx
         const isCurrent = i === currentIdx
-
         return (
           <div
             key={stage}
             title={stage}
-            style={{
-              flex: 1,
-              height: isCurrent ? 4 : 3,
-              borderRadius: 1.5,
-              background: color,
-              opacity: isCurrent || isPast ? 1 : 0.35,
-            }}
+            className={[
+              'flex-1 rounded-sm',
+              cls.bg,
+              isCurrent ? 'h-1' : 'h-0.75',
+              isCurrent || isPast ? 'opacity-100' : 'opacity-35',
+            ].join(' ')}
           />
         )
       })}
@@ -45,35 +50,26 @@ export function StageHistory({ history }: StageHistoryProps) {
   return (
     <div className="space-y-0">
       {history.map((entry, i) => {
-        const color = STAGE_COLOR[entry.stage] ?? '#94A3B8'
+        const dept   = STAGE_DEPARTMENT[entry.stage as Stage] ?? 'pending'
+        const cls    = DEPT_TIMELINE[dept] ?? DEPT_TIMELINE.pending
         const isLast = i === history.length - 1
 
         return (
           <div key={i} className="flex gap-3">
-            {/* Timeline line */}
             <div className="flex flex-col items-center">
-              <div
-                className="w-2.5 h-2.5 rounded-full mt-1 shrink-0 border-2 border-white"
-                style={{ background: color, boxShadow: `0 0 0 2px ${color}40` }}
-              />
-              {!isLast && <div className="w-px flex-1 mt-1" style={{ background: color + '30', minHeight: '20px' }} />}
+              <div className={`w-2.5 h-2.5 rounded-full mt-1 shrink-0 border-2 border-white ${cls.dot} ${cls.shadow}`} />
+              {!isLast && <div className={`w-px flex-1 mt-1 min-h-5 ${cls.line}`} />}
             </div>
 
-            {/* Content */}
             <div className={`flex-1 ${isLast ? 'pb-0' : 'pb-4'}`}>
               <div className="flex items-start justify-between gap-2">
                 <div>
                   <p className="text-xs font-semibold text-gray-800">{entry.stage}</p>
-                  <p className="text-xs text-gray-500 mt-0.5">
-                    {entry.personName ?? 'Unassigned'}
-                  </p>
+                  <p className="text-xs text-gray-500 mt-0.5">{entry.personName ?? 'Unassigned'}</p>
                 </div>
                 <div className="text-right shrink-0">
                   {entry.durationHours != null ? (
-                    <span
-                      className="text-xs font-semibold"
-                      style={{ color }}
-                    >
+                    <span className={`text-xs font-semibold ${cls.text}`}>
                       {fmtHours(entry.durationHours)}
                     </span>
                   ) : (

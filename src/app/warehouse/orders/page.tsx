@@ -1,13 +1,14 @@
 'use client'
 
 import { useState, useMemo } from 'react'
-import { Package } from 'lucide-react'
+import { Package, FileText } from 'lucide-react'
 import AppShell from '@/components/layout/AppShell'
 import { WorkOrderCard } from '@/components/domain/WorkOrderCard'
 import { DetailPanel } from '@/components/domain/DetailPanel'
 import { StagePill, TypeBadge } from '@/components/domain/Pills'
 import { SectionTitle } from '@/components/domain/OrderGrid'
 import { EmptyState } from '@/components/ui/EmptyState'
+import { TRDocumentModal, type TRDocumentData } from '@/components/domain/TRDocument'
 import { WORK_ORDERS, type WorkOrder } from '@/lib/mock-data'
 import { STAGE_DEPARTMENT, type Stage } from '@/lib/lifecycle'
 import { STAGE_SLA_HOURS, fmtHours, type UrgencyLevel } from '@/config/sla'
@@ -31,6 +32,24 @@ function getSlaOverage(order: WorkOrder): number {
   return Math.max(0, order.elapsedHours - sla)
 }
 
+function makeTRData(order: WorkOrder): TRDocumentData {
+  return {
+    trNumber: order.waybillNumber ?? order.id.replace('DEL-',''),
+    destination: order.destination,
+    requestedBy: order.requestedByName ?? 'Kenneth Nwosu',
+    department: 'Vendor',
+    date: new Date().toLocaleString('en-GB', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' }).replace(',',''),
+    approvedBy: 'Kenneth Omireh',
+    approverTitle: 'Approved by the Onne Base Logistics Coordinator',
+    company: 'TotalEnergies',
+    items: order.items.map(it => ({
+      quantity: it.qty,
+      description: it.description,
+      prWoNumber: order.id,
+    })),
+  }
+}
+
 export default function AllOrdersPage() {
   const [orders] = useState<WorkOrder[]>(WORK_ORDERS)
   const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null)
@@ -40,6 +59,7 @@ export default function AllOrdersPage() {
   const [search, setSearch] = useState('')
   const [sort, setSort] = useState<SortOption>('oldest')
   const [viewMode, setViewMode] = useState<ViewMode>('cards')
+  const [trPreview, setTrPreview] = useState<TRDocumentData | null>(null)
 
   const filtered = useMemo(() => {
     let list = [...orders]
@@ -85,8 +105,6 @@ export default function AllOrdersPage() {
       currentPath="/warehouse/orders"
       title="All Work Orders"
       breadcrumb={[{ label: 'Dashboard', href: '/warehouse' }]}
-      actionLabel="Personnel Load"
-      actionHref="/warehouse/personnel"
     >
       {/* Filter bar */}
       <div className="bg-white border border-border-default rounded-card shadow-card p-4 mb-5 space-y-3">
@@ -106,6 +124,7 @@ export default function AllOrdersPage() {
             />
           </div>
           <select
+            aria-label="Sort order"
             value={sort}
             onChange={e => setSort(e.target.value as SortOption)}
             className="h-9 px-3 rounded-md border border-border-default text-sm bg-white focus:outline-none focus:ring-2 focus:ring-brand-500"
@@ -222,20 +241,13 @@ export default function AllOrdersPage() {
       {/* Table view */}
       {viewMode === 'table' && (
         <div className="bg-white rounded-card border border-border-default shadow-card overflow-x-auto">
-          <table className="w-full" style={{ fontSize: 13 }}>
+          <table className="w-full text-sm">
             <thead>
-              <tr style={{ background: '#F9FAFB', borderBottom: '1px solid #E2E8F0' }}>
-                {['Delivery No.', 'Destination', 'Type', 'Stage', 'Assigned To', 'Elapsed', 'SLA Status'].map(h => (
+              <tr className="bg-gray-50 border-b border-border-default">
+                {['Delivery No.', 'Destination', 'Type', 'Stage', 'Assigned To', 'Elapsed', 'SLA Status', ''].map(h => (
                   <th
                     key={h}
-                    className="text-left whitespace-nowrap"
-                    style={{
-                      padding: '10px 16px',
-                      fontSize: 11, fontWeight: 600,
-                      color: '#6B7280',
-                      textTransform: 'uppercase',
-                      letterSpacing: '0.05em',
-                    }}
+                    className="text-left whitespace-nowrap px-4 py-2.5 text-[11px] font-semibold text-gray-500 uppercase tracking-wider"
                   >
                     {h}
                   </th>
@@ -251,29 +263,19 @@ export default function AllOrdersPage() {
                   <tr
                     key={order.id}
                     onClick={() => setSelectedOrderId(order.id)}
-                    className="cursor-pointer transition-colors duration-150"
-                    style={{
-                      borderBottom: '1px solid #F3F4F6',
-                      background: selectedOrderId === order.id ? '#FFF5F5' : undefined,
-                    }}
-                    onMouseEnter={e => {
-                      if (selectedOrderId !== order.id)
-                        (e.currentTarget as HTMLElement).style.background = '#F9FAFB'
-                    }}
-                    onMouseLeave={e => {
-                      if (selectedOrderId !== order.id)
-                        (e.currentTarget as HTMLElement).style.background = ''
-                    }}
+                    className={`cursor-pointer border-b border-gray-100 transition-colors duration-150 ${
+                      selectedOrderId === order.id ? 'bg-red-50/50' : 'hover:bg-gray-50'
+                    }`}
                   >
-                    <td style={{ padding: '12px 16px' }}>
-                      <span className="font-mono-id font-semibold" style={{ fontSize: 12, color: '#F04A4A' }}>{order.id}</span>
+                    <td className="px-4 py-3 whitespace-nowrap">
+                      <span className="font-mono text-xs font-semibold text-brand-500">{order.id}</span>
                     </td>
-                    <td className="max-w-[160px] truncate" style={{ padding: '12px 16px', color: '#374151' }}>{order.destination}</td>
-                    <td style={{ padding: '12px 16px' }}><TypeBadge type={order.requestType} /></td>
-                    <td style={{ padding: '12px 16px' }}><StagePill stage={order.stage as Stage} /></td>
-                    <td style={{ padding: '12px 16px', color: '#374151' }}>{order.assignedToName ?? <span style={{ color: '#9CA3AF', fontStyle: 'italic' }}>Unassigned</span>}</td>
-                    <td style={{ padding: '12px 16px', fontWeight: 500, color: '#374151' }}>{fmtHours(order.elapsedHours)}</td>
-                    <td style={{ padding: '12px 16px' }}>
+                    <td className="px-4 py-3 max-w-45 truncate text-gray-700">{order.destination}</td>
+                    <td className="px-4 py-3 whitespace-nowrap"><TypeBadge type={order.requestType} /></td>
+                    <td className="px-4 py-3 whitespace-nowrap"><StagePill stage={order.stage as Stage} /></td>
+                    <td className="px-4 py-3 whitespace-nowrap text-gray-700">{order.assignedToName ?? <span className="text-gray-400 italic">Unassigned</span>}</td>
+                    <td className="px-4 py-3 whitespace-nowrap font-medium text-gray-700">{fmtHours(order.elapsedHours)}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">
                       {!sla ? (
                         <span className="text-gray-400 text-xs">—</span>
                       ) : breached ? (
@@ -288,6 +290,15 @@ export default function AllOrdersPage() {
                         <span className="inline-flex items-center gap-1 text-xs font-semibold text-status-low bg-status-low-bg px-2 py-0.5 rounded-full">
                           ON TRACK {fmtHours(order.elapsedHours)} / {fmtHours(sla)}
                         </span>
+                      )}
+                    </td>
+                    {/* TR document button */}
+                    <td className="px-4 py-3 whitespace-nowrap" onClick={e => e.stopPropagation()}>
+                      {order.requestType === 'TR' && (
+                        <button type="button" onClick={() => setTrPreview(makeTRData(order))}
+                          className="inline-flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-800 border border-blue-200 hover:border-blue-400 px-2 py-0.5 rounded transition-colors">
+                          <FileText size={11}/> TR Doc
+                        </button>
                       )}
                     </td>
                   </tr>
@@ -308,6 +319,11 @@ export default function AllOrdersPage() {
           onClose={() => setSelectedOrderId(null)}
           role="wh_sup"
         />
+      )}
+
+      {/* TR Document modal */}
+      {trPreview && (
+        <TRDocumentModal data={trPreview} onClose={() => setTrPreview(null)}/>
       )}
     </AppShell>
   )

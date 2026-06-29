@@ -39,12 +39,12 @@ export function Input({ error, className = '', ...props }: InputProps) {
   return (
     <input
       className={[
-        'h-12 w-full rounded-[8px] border bg-[#F5F7FA] px-4 text-sm text-gray-900',
+        'h-12 w-full rounded-card border bg-neutral-50 px-4 text-sm text-gray-900',
         'placeholder:text-gray-400 transition-colors duration-150',
         'focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-0 focus:border-brand-500',
         error
           ? 'border-status-critical focus:ring-status-critical'
-          : 'border-[#E5E7EB] hover:border-border-strong',
+          : 'border-neutral-200 hover:border-border-strong',
         props.disabled ? 'opacity-45 cursor-not-allowed' : '',
         className,
       ].join(' ')}
@@ -65,12 +65,12 @@ export function Select({ error, className = '', children, ...props }: SelectComp
     <div className="relative">
       <select
         className={[
-          'h-12 w-full rounded-[8px] border bg-[#F5F7FA] px-4 pr-9 text-sm text-gray-900',
+          'h-12 w-full rounded-card border bg-neutral-50 px-4 pr-9 text-sm text-gray-900',
           'transition-colors duration-150 cursor-pointer appearance-none',
           'focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500',
           error
             ? 'border-status-critical'
-            : 'border-[#E5E7EB] hover:border-border-strong',
+            : 'border-neutral-200 hover:border-border-strong',
           props.disabled ? 'opacity-45 cursor-not-allowed' : '',
           className,
         ].join(' ')}
@@ -97,12 +97,12 @@ export function Textarea({ error, className = '', ...props }: TextareaProps) {
   return (
     <textarea
       className={[
-        'w-full rounded-[8px] border bg-[#F5F7FA] px-4 py-3 text-sm text-gray-900',
+        'w-full rounded-card border bg-neutral-50 px-4 py-3 text-sm text-gray-900',
         'placeholder:text-gray-400 transition-colors duration-150 resize-y min-h-[96px]',
         'focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500',
         error
           ? 'border-status-critical'
-          : 'border-[#E5E7EB] hover:border-border-strong',
+          : 'border-neutral-200 hover:border-border-strong',
         props.disabled ? 'opacity-45 cursor-not-allowed' : '',
         className,
       ].join(' ')}

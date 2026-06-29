@@ -65,8 +65,6 @@ export default function RequesterPage() {
       title="My Requests"
       breadcrumb={[{ label: 'Home', href: '/' }, { label: 'My Requests' }]}
       search={{ placeholder: 'Search by delivery no. or destination…', value: search, onChange: setSearch }}
-      actionLabel="New Request"
-      actionHref="/requester/new"
     >
       {/* Stats Row */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">

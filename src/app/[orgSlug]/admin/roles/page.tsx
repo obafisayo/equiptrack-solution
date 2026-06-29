@@ -88,7 +88,7 @@ export default function RolesPage({ params }: { params: Promise<{ orgSlug: strin
   return (
     <div className="space-y-4">
       {/* Legend */}
-      <div className="bg-white rounded-[8px] border border-[#E2E8F0] p-4"
+      <div className="bg-white rounded-card border border-border-default p-4"
         style={{ boxShadow: '0 1px 3px rgba(0,0,0,0.06)' }}>
         <p style={{ fontSize: 13, color: '#374151', margin: 0 }}>
           This matrix shows the default permissions for each role. Permissions are read-only —
@@ -97,7 +97,7 @@ export default function RolesPage({ params }: { params: Promise<{ orgSlug: strin
       </div>
 
       {/* Matrix */}
-      <div className="bg-white rounded-[8px] border border-[#E2E8F0] overflow-hidden"
+      <div className="bg-white rounded-card border border-border-default overflow-hidden"
         style={{ boxShadow: '0 1px 3px rgba(0,0,0,0.06)' }}>
         <div className="overflow-x-auto">
           <table style={{ fontSize: 12, borderCollapse: 'collapse', minWidth: '900px', width: '100%' }}>

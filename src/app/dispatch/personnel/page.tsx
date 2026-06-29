@@ -15,7 +15,7 @@ const DISPATCH_ACTIVE_STAGES: Stage[] = ['Dispatch Assigned', 'Preload QAQC', 'C
 
 function LoadBar({ active, cap }: { active: number; cap: number }) {
   const pct = Math.min((active / cap) * 100, 100)
-  const color = pct >= 90 ? '#EF4444' : pct >= 70 ? '#F59E0B' : '#22C55E'
+  const barClass = pct >= 90 ? 'bg-red-500' : pct >= 70 ? 'bg-amber-500' : 'bg-green-500'
   return (
     <div className="mt-3">
       <div className="flex justify-between text-xs text-gray-500 mb-1.5">
@@ -23,7 +23,7 @@ function LoadBar({ active, cap }: { active: number; cap: number }) {
         <span>Cap: {cap}</span>
       </div>
       <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
-        <div className="h-full rounded-full transition-all duration-300" style={{ width: `${pct}%`, background: color }} />
+        <div className={`h-full rounded-full transition-all duration-300 ${barClass}`} style={{ width: `${pct}%` }} />
       </div>
     </div>
   )
@@ -65,8 +65,6 @@ export default function DispatchPersonnelPage() {
       currentPath="/dispatch/personnel"
       title="Personnel Load"
       breadcrumb={[{ label: 'Dispatch Dashboard', href: '/dispatch' }]}
-      actionLabel="Dispatch Queue"
-      actionHref="/dispatch"
     >
       {/* STATS */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
@@ -95,8 +93,7 @@ export default function DispatchPersonnelPage() {
                 >
                   <div className="flex items-center gap-3">
                     <div
-                      className="w-10 h-10 rounded-full flex items-center justify-center text-white text-sm font-bold flex-shrink-0"
-                      style={{ background: isOverloaded ? '#F97316' : '#8B5CF6' }}
+                      className={`w-10 h-10 rounded-full flex items-center justify-center text-white text-sm font-bold shrink-0 ${isOverloaded ? 'bg-orange-500' : 'bg-violet-500'}`}
                     >
                       {p.name.split(' ').map((n: string) => n[0]).join('').slice(0, 2)}
                     </div>

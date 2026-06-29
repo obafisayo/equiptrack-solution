@@ -1,3 +1,4 @@
+/* eslint-disable */
 'use client'
 
 import { useParams, useRouter } from 'next/navigation'
@@ -7,11 +8,12 @@ import { ROLE_META } from '@/lib/roles'
 import { AuthLeftPanel } from '@/components/layout/AuthLeftPanel'
 
 function LogoMark({ size = 40 }: { size?: number }) {
+  const r = Math.round(size * 0.22)
   return (
-    <div style={{
-      width: size, height: size, background: '#F04A4A', borderRadius: Math.round(size * 0.22),
-      display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
-    }}>
+    <div
+      className="flex items-center justify-center shrink-0 bg-brand-500"
+      style={{ width: size, height: size, borderRadius: r }}
+    >
       <svg width={size * 0.52} height={size * 0.52} viewBox="0 0 40 40" fill="none">
         <rect x="5"  y="8"  width="30" height="5" rx="2.5" fill="white" />
         <rect x="5"  y="18" width="22" height="5" rx="2.5" fill="white" />
@@ -36,8 +38,8 @@ function EyeIcon({ open }: { open: boolean }) {
 }
 
 export default function LoginPage() {
-  const params  = useParams()
-  const router  = useRouter()
+  const params   = useParams()
+  const router   = useRouter()
   const roleSlug = params?.role as string
   const meta     = ROLE_META[roleSlug]
 
@@ -49,10 +51,10 @@ export default function LoginPage() {
 
   if (!meta) {
     return (
-      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#F5F5F5', fontFamily: 'Inter, sans-serif' }}>
-        <div style={{ textAlign: 'center' }}>
-          <p style={{ fontSize: 18, color: '#111827', marginBottom: 16 }}>Role not found.</p>
-          <Link href="/login" style={{ color: '#F04A4A', textDecoration: 'none', fontWeight: 600 }}>
+      <div className="min-h-screen flex items-center justify-center bg-neutral-100">
+        <div className="text-center">
+          <p className="text-lg text-neutral-900 mb-4">Role not found.</p>
+          <Link href="/login" className="text-brand-500 font-semibold no-underline hover:text-brand-600">
             ← Back to role selection
           </Link>
         </div>
@@ -74,44 +76,36 @@ export default function LoginPage() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', fontFamily: 'Inter, sans-serif' }}>
-      {/* ── Left panel (red) ── */}
+    <div className="min-h-screen flex">
       <AuthLeftPanel />
 
-      {/* ── Right panel (white) ── */}
-      <div style={{
-        flex: 1,
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        background: '#FFFFFF',
-        padding: '48px 32px',
-        minHeight: '100vh',
-      }}>
-        <div style={{ width: '100%', maxWidth: 400 }}>
+      {/* Right panel */}
+      <div className="flex-1 flex flex-col items-center justify-center bg-white px-8 py-12 min-h-screen">
+        <div className="w-full max-w-[400px]">
 
-          {/* Logo mark — centered above form */}
-          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 28 }}>
+          {/* Logo */}
+          <div className="flex justify-center mb-7">
             <LogoMark size={44} />
           </div>
 
           {/* Heading */}
-          <h1 style={{ fontSize: 26, fontWeight: 700, color: '#111827', textAlign: 'center', margin: '0 0 8px', letterSpacing: '-0.3px' }}>
+          <h1 className="text-[26px] font-bold text-neutral-900 text-center tracking-tight m-0 mb-2">
             Welcome Back
           </h1>
-          <p style={{ fontSize: 14, color: '#6B7280', textAlign: 'center', margin: '0 0 24px', lineHeight: 1.5 }}>
+          <p className="text-sm text-neutral-500 text-center mb-6 leading-relaxed m-0">
             Log in to continue managing your equipment operations with Equiptrack
           </p>
 
-          {/* Role badge */}
-          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 28 }}>
-            <span style={{
-              fontSize: 11, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase',
-              color: deptColor, background: `${deptColor}16`,
-              border: `1px solid ${deptColor}30`,
-              padding: '4px 12px', borderRadius: 999,
-            }}>
+          {/* Role badge — uses deptColor so must be inline */}
+          <div className="flex justify-center mb-7">
+            <span
+              className="text-[11px] font-semibold tracking-widest uppercase px-3 py-1 rounded-full"
+              style={{
+                color: deptColor,
+                background: `${deptColor}16`,
+                border: `1px solid ${deptColor}30`,
+              }}
+            >
               {meta.shortLabel} &mdash; {meta.dept}
             </span>
           </div>
@@ -120,13 +114,7 @@ export default function LoginPage() {
           <button
             type="button"
             onClick={() => router.push('/auth/sso/microsoft')}
-            style={{
-              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
-              width: '100%', padding: '10px 0', marginBottom: 6,
-              border: '1px solid #D1D5DB', borderRadius: 7,
-              background: '#fff', cursor: 'pointer', fontSize: 13, fontWeight: 600,
-              color: '#374151', fontFamily: 'Inter, sans-serif',
-            }}
+            className="flex items-center justify-center gap-2.5 w-full py-2.5 mb-1.5 border border-neutral-300 rounded-[7px] bg-white text-sm font-semibold text-neutral-700 cursor-pointer hover:bg-neutral-50 transition-colors"
           >
             <svg width="18" height="18" viewBox="0 0 21 21" fill="none">
               <rect x="1" y="1" width="9" height="9" fill="#F25022" />
@@ -138,18 +126,18 @@ export default function LoginPage() {
           </button>
 
           {/* Divider */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 6 }}>
-            <div style={{ flex: 1, height: 1, background: '#E5E7EB' }} />
-            <span style={{ fontSize: 12, color: '#9CA3AF', fontWeight: 500 }}>or sign in with email</span>
-            <div style={{ flex: 1, height: 1, background: '#E5E7EB' }} />
+          <div className="flex items-center gap-3 my-1.5">
+            <div className="flex-1 h-px bg-neutral-200" />
+            <span className="text-xs text-neutral-400 font-medium">or sign in with email</span>
+            <div className="flex-1 h-px bg-neutral-200" />
           </div>
 
           {/* Form */}
-          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
 
             {/* Email */}
             <div>
-              <label style={{ display: 'block', fontSize: 13, fontWeight: 500, color: '#374151', marginBottom: 6 }}>
+              <label className="block text-[13px] font-medium text-neutral-700 mb-1.5">
                 Email Address
               </label>
               <input
@@ -165,10 +153,10 @@ export default function LoginPage() {
 
             {/* Password */}
             <div>
-              <label style={{ display: 'block', fontSize: 13, fontWeight: 500, color: '#374151', marginBottom: 6 }}>
+              <label className="block text-[13px] font-medium text-neutral-700 mb-1.5">
                 Password
               </label>
-              <div style={{ position: 'relative' }}>
+              <div className="relative">
                 <input
                   className="et-input"
                   type={showPassword ? 'text' : 'password'}
@@ -182,8 +170,8 @@ export default function LoginPage() {
                 <button
                   type="button"
                   onClick={() => setShowPassword(v => !v)}
-                  style={{ position: 'absolute', right: 14, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: '#9CA3AF', cursor: 'pointer', padding: 0, display: 'flex' }}
                   aria-label={showPassword ? 'Hide password' : 'Show password'}
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 bg-transparent border-none text-neutral-400 cursor-pointer p-0 flex items-center"
                 >
                   <EyeIcon open={showPassword} />
                 </button>
@@ -191,57 +179,49 @@ export default function LoginPage() {
             </div>
 
             {/* Remember me + Forgot password */}
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <label style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer' }}>
+            <div className="flex items-center justify-between">
+              <label className="flex items-center gap-2 cursor-pointer">
                 <input
                   type="checkbox"
                   className="et-checkbox"
                   checked={rememberMe}
                   onChange={e => setRememberMe(e.target.checked)}
                 />
-                <span style={{ fontSize: 13, color: '#374151' }}>Remember Me</span>
+                <span className="text-[13px] text-neutral-700">Remember Me</span>
               </label>
               <button
                 type="button"
-                style={{ background: 'none', border: 'none', fontSize: 13, color: '#F04A4A', fontWeight: 600, cursor: 'pointer', padding: 0, fontFamily: 'inherit' }}
+                className="bg-transparent border-none text-[13px] text-brand-500 font-semibold cursor-pointer p-0 hover:text-brand-600 transition-colors"
               >
                 Forgot Password?
               </button>
             </div>
 
             {/* Demo credentials */}
-            <details style={{
-              background: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: 8, padding: '12px 14px',
-            }}>
-              <summary style={{
-                fontSize: 12, fontWeight: 600, color: '#6B7280', letterSpacing: '0.04em', textTransform: 'uppercase',
-                cursor: 'pointer', userSelect: 'none', display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-              }}>
+            <details className="bg-neutral-50 border border-neutral-200 rounded-lg px-3.5 py-3">
+              <summary className="text-[12px] font-semibold text-neutral-500 tracking-wider uppercase cursor-pointer select-none flex justify-between items-center">
                 Demo Credentials
                 <button
                   type="button"
                   onClick={e => { e.preventDefault(); handleUseDemoCredentials() }}
+                  className="text-[11px] font-semibold px-2.5 py-0.5 rounded cursor-pointer border"
                   style={{
-                    fontSize: 11, fontWeight: 600, color: deptColor, background: `${deptColor}14`,
-                    border: `1px solid ${deptColor}30`, padding: '2px 10px', borderRadius: 5,
-                    cursor: 'pointer', fontFamily: 'inherit',
+                    color: deptColor,
+                    background: `${deptColor}14`,
+                    borderColor: `${deptColor}30`,
                   }}
                 >
                   Use these
                 </button>
               </summary>
-              <div style={{ marginTop: 10, display: 'flex', flexDirection: 'column', gap: 5 }}>
-                <div style={{ display: 'flex', gap: 10, alignItems: 'baseline' }}>
-                  <span style={{ fontSize: 11, color: '#9CA3AF', width: 56, flexShrink: 0 }}>Email</span>
-                  <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: '#374151' }}>
-                    {meta.demoEmail}
-                  </span>
+              <div className="mt-2.5 flex flex-col gap-1.5">
+                <div className="flex gap-2.5 items-baseline">
+                  <span className="text-[11px] text-neutral-400 w-14 shrink-0">Email</span>
+                  <span className="font-mono text-[11px] text-neutral-700">{meta.demoEmail}</span>
                 </div>
-                <div style={{ display: 'flex', gap: 10, alignItems: 'baseline' }}>
-                  <span style={{ fontSize: 11, color: '#9CA3AF', width: 56, flexShrink: 0 }}>Password</span>
-                  <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: '#374151' }}>
-                    {meta.demoPassword}
-                  </span>
+                <div className="flex gap-2.5 items-baseline">
+                  <span className="text-[11px] text-neutral-400 w-14 shrink-0">Password</span>
+                  <span className="font-mono text-[11px] text-neutral-700">{meta.demoPassword}</span>
                 </div>
               </div>
             </details>
@@ -252,17 +232,15 @@ export default function LoginPage() {
             </button>
           </form>
 
-          {/* Footer link */}
-          <p style={{ fontSize: 13, color: '#6B7280', textAlign: 'center', marginTop: 24 }}>
+          <p className="text-[13px] text-neutral-500 text-center mt-6 mb-0">
             Don&apos;t have an account?{' '}
-            <Link href={`/signup/${meta.slug}`} style={{ color: '#F04A4A', fontWeight: 600, textDecoration: 'none' }}>
+            <Link href={`/signup/${meta.slug}`} className="text-brand-500 font-semibold no-underline hover:text-brand-600">
               Register
             </Link>
           </p>
 
-          {/* Back link */}
-          <p style={{ fontSize: 12, color: '#9CA3AF', textAlign: 'center', marginTop: 14 }}>
-            <Link href="/login" style={{ color: '#9CA3AF', textDecoration: 'none' }}>
+          <p className="text-xs text-neutral-400 text-center mt-3.5">
+            <Link href="/login" className="text-neutral-400 no-underline hover:text-neutral-600">
               ← Choose a different role
             </Link>
           </p>

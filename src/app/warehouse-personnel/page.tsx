@@ -9,26 +9,25 @@ import { DetailPanel } from '@/components/domain/DetailPanel'
 import { SectionTitle } from '@/components/domain/OrderGrid'
 import { StagePill } from '@/components/domain/Pills'
 import { SLABar } from '@/components/domain/SLABar'
-import { WORK_ORDERS, type WorkOrder } from '@/lib/mock-data'
+import { WORK_ORDERS, type WorkOrder, sortNewestFirst } from '@/lib/mock-data'
 import { STAGE_SLA_HOURS, fmtHours, type UrgencyLevel } from '@/config/sla'
 import { type Stage } from '@/lib/lifecycle'
 
-// Emeka Okonkwo = WH1
 const MY_ID = 'WH1'
 
 type TaskFilter = 'All' | 'Warehouse Assigned' | 'Processing' | 'GI Created' | 'Near SLA'
 
-const URGENCY_COLOR: Record<UrgencyLevel, { color: string; bg: string }> = {
-  Low:    { color: '#22C55E', bg: '#F0FDF4' },
-  Medium: { color: '#F59E0B', bg: '#FFFBEB' },
-  High:   { color: '#F97316', bg: '#FFF7ED' },
-  Urgent: { color: '#EF4444', bg: '#FEF2F2' },
+const URGENCY_COLOR: Record<UrgencyLevel, { badge: string }> = {
+  Low:    { badge: 'bg-green-50  text-green-700' },
+  Medium: { badge: 'bg-amber-50  text-amber-700' },
+  High:   { badge: 'bg-orange-50 text-orange-700' },
+  Urgent: { badge: 'bg-red-50    text-red-700' },
 }
 
 interface ToastProps { message: string }
 function Toast({ message }: ToastProps) {
   return (
-    <div className="fixed bottom-6 right-6 z-[500] bg-neutral-900 text-white px-4 py-3 rounded-card shadow-overlay text-sm font-medium animate-fade-in">
+    <div className="fixed bottom-6 right-6 z-500 bg-neutral-900 text-white px-4 py-3 rounded-card shadow-overlay text-sm font-medium animate-fade-in">
       {message}
     </div>
   )
@@ -40,28 +39,27 @@ interface ConfirmDialogProps {
   confirmLabel: string
   onConfirm: () => void
   onCancel: () => void
-  danger?: boolean
 }
-function ConfirmDialog({ title, description, confirmLabel, onConfirm, onCancel, danger }: ConfirmDialogProps) {
+function ConfirmDialog({ title, description, confirmLabel, onConfirm, onCancel }: ConfirmDialogProps) {
   return (
-    <div className="fixed inset-0 bg-black/45 z-[400] flex items-center justify-center p-4">
+    <div className="fixed inset-0 bg-black/45 z-400 flex items-center justify-center p-4">
       <div className="bg-white rounded-modal shadow-overlay w-full max-w-sm">
         <div className="px-6 py-5">
           <h2 className="font-semibold text-gray-900 mb-1">{title}</h2>
-          <p className="text-sm text-gray-600">{description}</p>
+          <p className="text-sm text-gray-500">{description}</p>
         </div>
         <div className="flex gap-3 px-6 pb-5">
           <button
+            type="button"
             onClick={onCancel}
-            className="flex-1 h-9 rounded-button border border-border-default text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+            className="flex-1 h-9 rounded-button border border-border-default text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors"
           >
             Cancel
           </button>
           <button
+            type="button"
             onClick={onConfirm}
-            className={`flex-1 h-9 rounded-button text-white text-sm font-semibold transition-colors ${
-              danger ? 'bg-status-critical hover:bg-red-600' : 'bg-brand-500 hover:bg-brand-600'
-            }`}
+            className="flex-1 h-9 rounded-button bg-brand-500 hover:bg-brand-600 text-white text-sm font-semibold transition-colors"
           >
             {confirmLabel}
           </button>
@@ -73,10 +71,12 @@ function ConfirmDialog({ title, description, confirmLabel, onConfirm, onCancel, 
 
 export default function WarehousePersonnelPage() {
   const [orders, setOrders] = useState<WorkOrder[]>(() =>
-    WORK_ORDERS.filter(
-      o =>
-        o.assignedTo === MY_ID &&
-        ['Warehouse Assigned', 'Processing', 'GI Created'].includes(o.stage)
+    sortNewestFirst(
+      WORK_ORDERS.filter(
+        o =>
+          o.assignedTo === MY_ID &&
+          ['Warehouse Assigned', 'Processing', 'GI Created'].includes(o.stage)
+      )
     )
   )
   const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null)
@@ -114,40 +114,53 @@ export default function WarehousePersonnelPage() {
     setConfirmAction(null)
   }
 
+  // Per-filter counts
+  const filterCounts = useMemo(() => {
+    const nearSla = orders.filter(o => {
+      const sla = STAGE_SLA_HOURS[o.stage]
+      if (!sla) return false
+      const pct = o.elapsedHours / sla
+      return pct >= 0.75
+    }).length
+
+    return {
+      'All':                orders.length,
+      'Warehouse Assigned': orders.filter(o => o.stage === 'Warehouse Assigned').length,
+      'Processing':         orders.filter(o => o.stage === 'Processing').length,
+      'GI Created':         orders.filter(o => o.stage === 'GI Created').length,
+      'Near SLA':           nearSla,
+    } satisfies Record<TaskFilter, number>
+  }, [orders])
+
   const filteredOrders = useMemo(() => {
     if (taskFilter === 'All') return orders
     if (taskFilter === 'Near SLA') {
       return orders.filter(o => {
         const sla = STAGE_SLA_HOURS[o.stage]
         if (!sla) return false
-        const pct = o.elapsedHours / sla
-        return pct >= 0.75
+        return o.elapsedHours / sla >= 0.75
       })
     }
     return orders.filter(o => o.stage === taskFilter)
   }, [orders, taskFilter])
 
-  const atRisk = orders.filter(o => {
-    const sla = STAGE_SLA_HOURS[o.stage]
-    return sla != null && o.elapsedHours / sla >= 0.75
-  }).length
-
+  const atRisk = filterCounts['Near SLA']
   const selectedOrder = orders.find(o => o.id === selectedOrderId) ?? null
 
   const confirmMeta: Record<string, { title: string; description: string; label: string }> = {
     process: {
       title: 'Start Processing',
-      description: 'Mark this order as being actively processed. This will update the stage to Processing.',
+      description: 'Mark this order as being actively processed. Stage will update to Processing.',
       label: 'Start Processing',
     },
     gi: {
       title: 'Create Goods Issue',
-      description: 'Confirm all items have been picked and GI document is ready. This will advance the order to GI Created.',
+      description: 'Confirm all items have been picked and GI document is ready.',
       label: 'Confirm GI Created',
     },
     transfer: {
       title: 'Transfer to Dispatch',
-      description: 'This will send the order to the Dispatch team. Once transferred, it will leave your active task list.',
+      description: 'This will send the order to the Dispatch team. It will leave your active task list.',
       label: 'Transfer to Dispatch',
     },
   }
@@ -158,14 +171,11 @@ export default function WarehousePersonnelPage() {
       currentPath="/warehouse-personnel"
       title="My Tasks"
       breadcrumb={[{ label: 'Home', href: '/' }, { label: 'My Tasks' }]}
-      actionLabel="View History"
-      actionHref="/warehouse-personnel/history"
     >
-      {/* Header actions */}
       <div className="flex items-center justify-between mb-5">
         <div className="flex items-center gap-3">
           <span className="text-sm text-gray-600">Emeka Okonkwo</span>
-          <span className="text-xs font-medium bg-stage-warehouse/10 text-stage-warehouse px-2 py-0.5 rounded-full">
+          <span className="text-xs font-medium bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full">
             Warehouse Personnel
           </span>
         </div>
@@ -181,7 +191,7 @@ export default function WarehousePersonnelPage() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
         <StatCard label="My Active Tasks" value={orders.length} icon={ClipboardCheck} />
         <StatCard label="Completed Today" value={3} color="#22C55E" icon={CheckCircle2} />
         <StatCard
@@ -192,24 +202,33 @@ export default function WarehousePersonnelPage() {
         />
       </div>
 
-      {/* Filter tabs */}
-      <div className="flex gap-2 mb-4">
-        {(['All', 'Warehouse Assigned', 'Processing', 'GI Created', 'Near SLA'] as TaskFilter[]).map(f => (
-          <button
-            key={f}
-            onClick={() => setTaskFilter(f)}
-            className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-colors duration-150 ${
-              taskFilter === f
-                ? 'bg-brand-500 border-brand-500 text-white'
-                : 'bg-white border-border-default text-gray-600 hover:border-brand-300'
-            }`}
-          >
-            {f}
-          </button>
-        ))}
+      {/* Filter tabs with counts */}
+      <div className="flex gap-2 flex-wrap mb-5">
+        {(['All', 'Warehouse Assigned', 'Processing', 'GI Created', 'Near SLA'] as TaskFilter[]).map(f => {
+          const count = filterCounts[f]
+          const isActive = taskFilter === f
+          return (
+            <button
+              key={f}
+              type="button"
+              onClick={() => setTaskFilter(f)}
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border transition-colors duration-150 ${
+                isActive
+                  ? 'bg-brand-500 border-brand-500 text-white'
+                  : 'bg-white border-border-default text-gray-600 hover:border-gray-300'
+              }`}
+            >
+              {f}
+              <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${
+                isActive ? 'bg-white/20 text-white' : 'bg-gray-100 text-gray-500'
+              }`}>
+                {count}
+              </span>
+            </button>
+          )
+        })}
       </div>
 
-      {/* Task list */}
       <SectionTitle title="My Assigned Tasks" count={filteredOrders.length} className="mb-3" />
 
       {filteredOrders.length === 0 ? (
@@ -226,22 +245,19 @@ export default function WarehousePersonnelPage() {
             return (
               <div
                 key={order.id}
-                className={`bg-white rounded-card border shadow-card relative overflow-hidden cursor-pointer transition-all duration-150 hover:shadow-raised ${
+                className={`bg-white rounded-card border shadow-card relative overflow-hidden cursor-pointer transition-shadow duration-150 hover:shadow-raised ${
                   breached ? 'border-red-200' : 'border-border-default'
                 } ${selectedOrderId === order.id ? 'ring-2 ring-brand-500' : ''}`}
                 onClick={() => setSelectedOrderId(order.id)}
               >
                 {breached && (
-                  <div className="absolute top-0 left-0 right-0 h-[3px] bg-status-critical rounded-t-card" />
+                  <div className="absolute top-0 left-0 right-0 h-0.75 bg-status-critical rounded-t-card" />
                 )}
                 <div className="p-4">
                   <div className="flex items-start justify-between gap-3 mb-2">
                     <div className="flex items-center gap-2">
                       <span className="font-mono-id text-brand-500 font-bold text-sm">{order.id}</span>
-                      <span
-                        className="text-xs font-medium px-2 py-0.5 rounded-full"
-                        style={{ background: urgConfig.bg, color: urgConfig.color }}
-                      >
+                      <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${urgConfig.badge}`}>
                         {order.urgency}
                       </span>
                     </div>
@@ -262,26 +278,28 @@ export default function WarehousePersonnelPage() {
                     </div>
                   )}
 
-                  {/* Action buttons — stop propagation so clicking doesn't open detail panel */}
                   <div className="flex gap-2 flex-wrap" onClick={e => e.stopPropagation()}>
                     {order.stage === 'Warehouse Assigned' && (
                       <button
+                        type="button"
                         onClick={() => handleAction(order.id, 'process')}
-                        className="px-3 h-8 rounded-button bg-stage-warehouse text-white text-xs font-semibold hover:bg-blue-600 transition-colors"
+                        className="px-3 h-8 rounded-button bg-blue-600 text-white text-xs font-semibold hover:bg-blue-700 transition-colors"
                       >
                         Start Processing
                       </button>
                     )}
                     {order.stage === 'Processing' && (
                       <button
+                        type="button"
                         onClick={() => handleAction(order.id, 'gi')}
-                        className="px-3 h-8 rounded-button bg-stage-warehouse text-white text-xs font-semibold hover:bg-blue-600 transition-colors"
+                        className="px-3 h-8 rounded-button bg-blue-600 text-white text-xs font-semibold hover:bg-blue-700 transition-colors"
                       >
                         Create GI
                       </button>
                     )}
                     {order.stage === 'GI Created' && (
                       <button
+                        type="button"
                         onClick={() => handleAction(order.id, 'transfer')}
                         className="px-3 h-8 rounded-button bg-brand-500 text-white text-xs font-semibold hover:bg-brand-600 transition-colors"
                       >
@@ -299,7 +317,6 @@ export default function WarehousePersonnelPage() {
         </div>
       )}
 
-      {/* Confirm dialog */}
       {confirmAction && confirmMeta[confirmAction.action] && (
         <ConfirmDialog
           title={confirmMeta[confirmAction.action].title}
@@ -310,7 +327,6 @@ export default function WarehousePersonnelPage() {
         />
       )}
 
-      {/* Detail panel */}
       {selectedOrder && (
         <DetailPanel
           order={selectedOrder}
@@ -319,7 +335,6 @@ export default function WarehousePersonnelPage() {
         />
       )}
 
-      {/* Toast */}
       {toast && <Toast message={toast} />}
     </AppShell>
   )

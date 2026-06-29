@@ -3,7 +3,7 @@ import Image from 'next/image'
 
 function LogoMark({ size = 36 }: { size?: number }) {
   return (
-    <div style={{ width: size, height: size }} className="bg-brand-500 rounded-lg flex items-center justify-center shrink-0">
+    <div className="w-9 h-9 bg-brand-500 rounded-lg flex items-center justify-center shrink-0">
       <svg width={size * 0.55} height={size * 0.55} viewBox="0 0 22 22" fill="none">
         <rect x="2" y="4" width="18" height="3" rx="1.5" fill="white" />
         <rect x="2" y="9.5" width="13" height="3" rx="1.5" fill="white" />
