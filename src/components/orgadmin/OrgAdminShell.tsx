@@ -110,7 +110,7 @@ export function OrgAdminShell({ orgSlug, currentPath, children }: OrgAdminShellP
                 <rect x="5" y="28" width="26" height="5" rx="2.5" fill="white" />
               </svg>
             </div>
-            <div className="hidden lg:block min-w-0">
+            <div className="block md:hidden lg:block min-w-0">
               <p style={{ fontSize: 13, fontWeight: 700, color: '#fff', margin: 0, letterSpacing: '-0.01em' }} className="truncate">
                 {org?.name ?? 'Org Admin'}
               </p>
@@ -135,7 +135,7 @@ export function OrgAdminShell({ orgSlug, currentPath, children }: OrgAdminShellP
                 key={href}
                 href={href}
                 onClick={() => setMobileOpen(false)}
-                className="flex items-center justify-center lg:justify-start h-10 rounded-[7px] transition-colors duration-150"
+                className="flex items-center justify-start md:justify-center lg:justify-start h-10 rounded-[7px] transition-colors duration-150"
                 style={{
                   gap: 9,
                   paddingLeft: '10px',
@@ -162,7 +162,7 @@ export function OrgAdminShell({ orgSlug, currentPath, children }: OrgAdminShellP
                 }}
               >
                 <Icon size={16} style={{ flexShrink: 0 }} />
-                <span className="hidden lg:block truncate">{item.label}</span>
+                <span className="block md:hidden lg:block truncate">{item.label}</span>
               </Link>
             )
           })}
@@ -170,9 +170,9 @@ export function OrgAdminShell({ orgSlug, currentPath, children }: OrgAdminShellP
 
         {/* User area */}
         <div className="px-3 py-3 flex-shrink-0" style={{ borderTop: '1px solid rgba(255,255,255,0.08)' }}>
-          <div className="flex items-center justify-center lg:justify-start gap-2 mb-2">
+          <div className="flex items-center justify-start md:justify-center lg:justify-start gap-2 mb-2">
             <Avatar name={adminUser?.displayName ?? 'Admin'} size={28} />
-            <div className="hidden lg:block min-w-0">
+            <div className="block md:hidden lg:block min-w-0">
               <p style={{ fontSize: 12, fontWeight: 600, color: '#fff', margin: 0 }} className="truncate">
                 {adminUser?.displayName ?? 'Org Admin'}
               </p>
@@ -184,7 +184,7 @@ export function OrgAdminShell({ orgSlug, currentPath, children }: OrgAdminShellP
 
           <Link
             href="/"
-            className="hidden lg:flex items-center gap-1.5 py-1 rounded transition-colors duration-150"
+            className="flex md:hidden lg:flex items-center gap-1.5 py-1 rounded transition-colors duration-150"
             style={{ fontSize: 11, color: 'rgba(255,255,255,0.38)', textDecoration: 'none' }}
             onMouseEnter={e => ((e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.65)')}
             onMouseLeave={e => ((e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.38)')}
@@ -211,6 +211,17 @@ export function OrgAdminShell({ orgSlug, currentPath, children }: OrgAdminShellP
           >
             {mobileOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
+          {/* Brand mark — visible on mobile only, since the sidebar (which normally carries it) is hidden behind the drawer */}
+          <div
+            className="md:hidden flex items-center justify-center shrink-0 rounded-[7px] mr-2.5"
+            style={{ width: 28, height: 28, background: '#F04A4A' }}
+          >
+            <svg width="15" height="15" viewBox="0 0 40 40" fill="none">
+              <rect x="5" y="8"  width="30" height="5" rx="2.5" fill="white" />
+              <rect x="5" y="18" width="22" height="5" rx="2.5" fill="white" />
+              <rect x="5" y="28" width="26" height="5" rx="2.5" fill="white" />
+            </svg>
+          </div>
           <h1 style={{ fontSize: 17, fontWeight: 700, color: '#111827', margin: 0 }}>
             {title}
           </h1>

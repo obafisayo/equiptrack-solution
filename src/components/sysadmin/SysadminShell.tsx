@@ -103,7 +103,7 @@ export function SysadminShell({ currentPath, children }: SysadminShellProps) {
               </svg>
             </div>
             <span
-              className="hidden lg:block font-bold text-sm truncate"
+              className="block md:hidden lg:block font-bold text-sm truncate"
               style={{ color: '#fff', letterSpacing: '-0.01em' }}
             >
               Equiptrack
@@ -112,7 +112,7 @@ export function SysadminShell({ currentPath, children }: SysadminShellProps) {
         </div>
 
         {/* SYSADMIN badge */}
-        <div className="hidden lg:flex justify-center px-4 pt-3 pb-1 flex-shrink-0">
+        <div className="flex md:hidden lg:flex justify-center px-4 pt-3 pb-1 shrink-0">
           <span style={{
             background: 'rgba(240,74,74,0.15)',
             color: '#F04A4A',
@@ -138,7 +138,7 @@ export function SysadminShell({ currentPath, children }: SysadminShellProps) {
                 key={item.href}
                 href={item.href}
                 onClick={() => setMobileOpen(false)}
-                className="flex items-center justify-center lg:justify-start h-10 rounded-[7px] transition-colors duration-150"
+                className="flex items-center justify-start md:justify-center lg:justify-start h-10 rounded-[7px] transition-colors duration-150"
                 style={{
                   gap: 9,
                   paddingLeft: '10px',
@@ -165,7 +165,7 @@ export function SysadminShell({ currentPath, children }: SysadminShellProps) {
                 }}
               >
                 <Icon size={16} style={{ flexShrink: 0 }} />
-                <span className="hidden lg:block truncate">{item.label}</span>
+                <span className="block md:hidden lg:block truncate">{item.label}</span>
               </Link>
             )
           })}
@@ -176,9 +176,9 @@ export function SysadminShell({ currentPath, children }: SysadminShellProps) {
 
         {/* User area */}
         <div className="px-3 py-3 flex-shrink-0" style={{ borderTop: '1px solid rgba(255,255,255,0.08)' }}>
-          <div className="flex items-center justify-center lg:justify-start gap-2 mb-2">
+          <div className="flex items-center justify-start md:justify-center lg:justify-start gap-2 mb-2">
             <Avatar name="Aminu Garba" size={30} />
-            <div className="hidden lg:block min-w-0">
+            <div className="block md:hidden lg:block min-w-0">
               <p style={{ fontSize: 12, fontWeight: 600, color: '#fff', margin: 0 }} className="truncate">
                 Aminu Garba
               </p>
@@ -190,7 +190,7 @@ export function SysadminShell({ currentPath, children }: SysadminShellProps) {
 
           <Link
             href="/shell-nigeria/admin"
-            className="hidden lg:flex items-center gap-1.5 py-1 rounded transition-colors duration-150"
+            className="flex md:hidden lg:flex items-center gap-1.5 py-1 rounded transition-colors duration-150"
             style={{ fontSize: 11, color: 'rgba(255,255,255,0.38)', textDecoration: 'none' }}
             onMouseEnter={e => ((e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.65)')}
             onMouseLeave={e => ((e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.38)')}
@@ -218,6 +218,18 @@ export function SysadminShell({ currentPath, children }: SysadminShellProps) {
           >
             {mobileOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
+
+          {/* Brand mark — visible on mobile only, since the sidebar (which normally carries it) is hidden behind the drawer */}
+          <div
+            className="md:hidden flex items-center justify-center shrink-0 rounded-[7px] mr-2.5"
+            style={{ width: 28, height: 28, background: '#F04A4A' }}
+          >
+            <svg width="15" height="15" viewBox="0 0 40 40" fill="none">
+              <rect x="5" y="8"  width="30" height="5" rx="2.5" fill="white" />
+              <rect x="5" y="18" width="22" height="5" rx="2.5" fill="white" />
+              <rect x="5" y="28" width="26" height="5" rx="2.5" fill="white" />
+            </svg>
+          </div>
 
           <h1 style={{ fontSize: 17, fontWeight: 700, color: '#111827', margin: 0 }}>
             {title}

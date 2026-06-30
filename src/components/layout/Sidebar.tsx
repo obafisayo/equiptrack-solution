@@ -132,7 +132,7 @@ export function Sidebar({ role, currentPath, mobileOpen, onMobileClose }: Sideba
               <rect x="5" y="28" width="26" height="5" rx="2.5" fill="white" />
             </svg>
           </div>
-          <span className="hidden lg:block font-bold text-sm text-white truncate tracking-[-0.01em]">
+          <span className="block md:hidden lg:block font-bold text-sm text-white truncate tracking-[-0.01em]">
             Equiptrack
           </span>
         </div>
@@ -140,7 +140,7 @@ export function Sidebar({ role, currentPath, mobileOpen, onMobileClose }: Sideba
 
       {/* Nav */}
       <nav className="flex-1 overflow-y-auto py-3 px-2 space-y-0.5">
-        <p className="hidden lg:block px-2 mb-2 text-[10px] font-semibold uppercase tracking-[0.08em] text-white/35">
+        <p className="block md:hidden lg:block px-2 mb-2 text-[10px] font-semibold uppercase tracking-[0.08em] text-white/35">
           {roleLabel}
         </p>
 
@@ -153,7 +153,7 @@ export function Sidebar({ role, currentPath, mobileOpen, onMobileClose }: Sideba
               href={item.href}
               onClick={onMobileClose}
               className={[
-                'flex items-center justify-center lg:justify-start h-10 rounded-[7px] px-2.5 gap-2.5',
+                'flex items-center justify-start md:justify-center lg:justify-start h-10 rounded-[7px] px-2.5 gap-2.5',
                 'text-sm font-medium transition-colors duration-150 no-underline',
                 active
                   ? 'bg-brand-500 text-white'
@@ -161,7 +161,7 @@ export function Sidebar({ role, currentPath, mobileOpen, onMobileClose }: Sideba
               ].join(' ')}
             >
               <Icon size={16} className="shrink-0" />
-              <span className="hidden lg:block truncate">{item.label}</span>
+              <span className="block md:hidden lg:block truncate">{item.label}</span>
             </Link>
           )
         })}
@@ -170,8 +170,8 @@ export function Sidebar({ role, currentPath, mobileOpen, onMobileClose }: Sideba
       {/* Divider */}
       <div className="mx-3 shrink-0 h-px bg-white/8" />
 
-      {/* Need Help — desktop only */}
-      <div className="hidden lg:block px-3 pt-3 pb-1 shrink-0">
+      {/* Need Help — hidden only on collapsed tablet rail */}
+      <div className="block md:hidden lg:block px-3 pt-3 pb-1 shrink-0">
         <div className="rounded-lg p-3 bg-white/6">
           <div className="flex items-center gap-2 mb-1.5">
             <HelpCircle size={13} className="text-white/50 shrink-0" />
@@ -191,16 +191,16 @@ export function Sidebar({ role, currentPath, mobileOpen, onMobileClose }: Sideba
 
       {/* User area */}
       <div className="px-3 py-3 shrink-0 border-t border-white/[0.08]">
-        <div className="flex items-center justify-center lg:justify-start gap-2 mb-2">
+        <div className="flex items-center justify-start md:justify-center lg:justify-start gap-2 mb-2">
           <Avatar name={userName} size={30} />
-          <div className="hidden lg:block min-w-0">
+          <div className="block md:hidden lg:block min-w-0">
             <p className="text-xs font-semibold text-white truncate">{userName}</p>
             <p className="text-[10px] text-white/45 truncate">{roleLabel}</p>
           </div>
         </div>
         <Link
           href="/login"
-          className="hidden lg:block text-center py-1 rounded text-[11px] text-white/[0.38] hover:text-white/65 transition-colors duration-150 no-underline"
+          className="block md:hidden lg:block text-center py-1 rounded text-[11px] text-white/[0.38] hover:text-white/65 transition-colors duration-150 no-underline"
         >
           Switch Role
         </Link>

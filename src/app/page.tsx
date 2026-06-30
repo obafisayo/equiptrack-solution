@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { Check, ArrowRight } from 'lucide-react'
+import { NewsletterForm } from '@/components/marketing/NewsletterForm'
 
 function LogoMark({ size = 36 }: { size?: number }) {
   return (
@@ -22,8 +23,8 @@ const NAV_LINKS = [
 
 const BTN_PRIMARY   = 'inline-flex items-center justify-center gap-2 h-11 px-6 rounded-button bg-brand-500 hover:bg-brand-600 text-white font-semibold text-sm transition-colors shadow-sm whitespace-nowrap'
 const BTN_SECONDARY = 'inline-flex items-center justify-center gap-2 h-11 px-6 rounded-button bg-white hover:bg-neutral-50 text-neutral-700 font-semibold text-sm border border-border-strong transition-colors whitespace-nowrap'
-const BTN_GHOST_NAV = 'inline-flex items-center justify-center h-10 px-4 rounded-button text-neutral-600 hover:text-neutral-900 font-medium text-sm transition-colors whitespace-nowrap'
-const BTN_BRAND_NAV = 'inline-flex items-center justify-center gap-1.5 h-10 px-5 rounded-button bg-brand-500 hover:bg-brand-600 text-white font-semibold text-sm transition-colors shadow-sm whitespace-nowrap'
+const BTN_GHOST_NAV = 'inline-flex items-center justify-center h-10 px-2.5 sm:px-4 rounded-button text-neutral-600 hover:text-neutral-900 font-medium text-sm transition-colors whitespace-nowrap'
+const BTN_BRAND_NAV = 'inline-flex items-center justify-center gap-1.5 h-10 px-3.5 sm:px-5 rounded-button bg-brand-500 hover:bg-brand-600 text-white font-semibold text-sm transition-colors shadow-sm whitespace-nowrap'
 
 const HOW_IT_WORKS = [
   {
@@ -100,10 +101,10 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen bg-page-bg text-neutral-900 font-sans selection:bg-brand-500/20">
       {/* ── STICKY NAV ─────────────────────────────────────────── */}
-      <nav className="fixed top-0 left-0 right-0 h-topbar z-50 bg-white/85 backdrop-blur-md border-b border-border-default flex items-center justify-between px-6 md:px-12">
-        <Link href="/" className="flex items-center gap-3 no-underline">
+      <nav className="fixed top-0 left-0 right-0 h-topbar z-50 bg-white/85 backdrop-blur-md border-b border-border-default flex items-center justify-between gap-3 px-4 sm:px-6 md:px-12">
+        <Link href="/" className="flex items-center gap-2 sm:gap-3 no-underline shrink-0">
           <LogoMark size={32} />
-          <span className="font-sans font-bold text-lg text-neutral-900 tracking-wide">
+          <span className="font-sans font-bold text-base sm:text-lg text-neutral-900 tracking-wide">
             EQUIPTRACK
           </span>
         </Link>
@@ -116,7 +117,7 @@ export default function LandingPage() {
           ))}
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1 sm:gap-2 shrink-0">
           <Link href="/login" className={BTN_GHOST_NAV}>
             Log In
           </Link>
@@ -411,9 +412,14 @@ export default function LandingPage() {
               <LogoMark size={28} />
               <span className="font-sans font-bold text-sm text-neutral-300 tracking-wider">EQUIPTRACK</span>
             </div>
-            <p className="text-sm text-neutral-500 leading-relaxed max-w-xs">
+            <p className="text-sm text-neutral-500 leading-relaxed max-w-xs mb-6">
               Equipment lifecycle tracking for any organisation that moves shipping equipment, from request to delivery.
             </p>
+            <h4 className="text-xs font-bold text-neutral-400 uppercase tracking-widest mb-3">Newsletter</h4>
+            <p className="text-sm text-neutral-500 leading-relaxed max-w-xs mb-3">
+              Product updates and release notes, straight to your inbox.
+            </p>
+            <NewsletterForm />
           </div>
           <div>
             <h4 className="text-xs font-bold text-neutral-400 uppercase tracking-widest mb-4">Product</h4>

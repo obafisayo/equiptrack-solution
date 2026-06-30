@@ -57,6 +57,15 @@ export function Topbar({
           <Menu size={20} />
         </button>
 
+        {/* Brand mark — visible on mobile only, since the sidebar (which normally carries it) is hidden behind the drawer */}
+        <div className="md:hidden flex items-center justify-center shrink-0 rounded-[7px] w-7 h-7 bg-brand-500">
+          <svg width="13" height="13" viewBox="0 0 40 40" fill="none">
+            <rect x="5" y="8"  width="30" height="5" rx="2.5" fill="white" />
+            <rect x="5" y="18" width="22" height="5" rx="2.5" fill="white" />
+            <rect x="5" y="28" width="26" height="5" rx="2.5" fill="white" />
+          </svg>
+        </div>
+
         {breadcrumb ? (
           <nav className="hidden sm:flex items-center gap-2 text-sm font-medium">
             {breadcrumb.map((b, i) => {
