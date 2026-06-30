@@ -24,7 +24,7 @@ export function NewsletterForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-2 max-w-sm">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-2.5 max-w-sm">
       <input
         type="email"
         required
@@ -32,11 +32,11 @@ export function NewsletterForm() {
         onChange={e => setEmail(e.target.value)}
         placeholder="you@company.com"
         aria-label="Email address"
-        className="flex-1 h-10 px-3.5 rounded-button bg-neutral-900 border border-neutral-700 text-sm text-white placeholder:text-neutral-500 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-all"
+        className="w-full h-11 px-4 rounded-button bg-white/6 border border-white/15 text-sm text-white placeholder:text-neutral-500 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent focus:bg-white/8 transition-all"
       />
       <button
         type="submit"
-        className="inline-flex items-center justify-center gap-1.5 h-10 px-4 rounded-button bg-brand-500 hover:bg-brand-600 text-white font-semibold text-sm transition-colors shrink-0 whitespace-nowrap"
+        className="inline-flex items-center justify-center gap-1.5 h-11 px-4 rounded-button bg-brand-500 hover:bg-brand-600 text-white font-semibold text-sm transition-colors w-full sm:w-auto sm:self-start whitespace-nowrap"
       >
         Subscribe <ArrowRight size={14} />
       </button>
