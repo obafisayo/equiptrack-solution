@@ -206,7 +206,7 @@ export default function LandingPage() {
       </div>
 
       {/* ── HOW IT WORKS ───────────────────────────────────────── */}
-      <section id="how-it-works" className="py-24 px-6 md:px-12 max-w-7xl mx-auto">
+      <section id="how-it-works" className="scroll-mt-16 py-24 px-6 md:px-12 max-w-7xl mx-auto">
         <div className="text-center mb-16">
           <span className="font-semibold text-xs tracking-widest text-brand-600 uppercase mb-3 block">
             How It Works
@@ -236,7 +236,7 @@ export default function LandingPage() {
       </section>
 
       {/* ── FEATURES ───────────────────────────────────────────── */}
-      <section id="features" className="py-24 px-6 md:px-12 max-w-7xl mx-auto bg-white">
+      <section id="features" className="scroll-mt-16 py-24 px-6 md:px-12 max-w-7xl mx-auto bg-white">
         <div className="text-center mb-16">
           <span className="font-semibold text-xs tracking-widest text-brand-600 uppercase mb-3 block">
             Features
@@ -312,7 +312,7 @@ export default function LandingPage() {
       </section>
 
       {/* ── PRICING ────────────────────────────────────────────── */}
-      <section id="pricing" className="py-24 px-6 md:px-12 max-w-7xl mx-auto">
+      <section id="pricing" className="scroll-mt-16 py-24 px-6 md:px-12 max-w-7xl mx-auto">
         <div className="text-center mb-16">
           <span className="font-semibold text-xs tracking-widest text-brand-600 uppercase mb-3 block">
             Pricing
