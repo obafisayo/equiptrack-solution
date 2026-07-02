@@ -5,6 +5,7 @@ import { STAGE_SLA_HOURS } from '@/config/sla'
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 export type RequestType = 'SAP' | 'TR' | 'VENDOR' | 'NON_STOCK'
+export type DangerousGoodsClass = 'normal' | 'dangerous' | 'explosive' | 'radioactive' | 'refrigerated' | 'hazardous'
 
 export interface StageHistoryEntry {
   stage: Stage
@@ -44,6 +45,7 @@ export interface WorkOrder {
   containerId?: string
   waybillNumber?: string
   status?: 'active' | 'rejected' | 'completed'
+  cargoClass?: DangerousGoodsClass
 }
 
 export type PersonnelDept = 'warehouse' | 'dispatch' | 'qaqc'

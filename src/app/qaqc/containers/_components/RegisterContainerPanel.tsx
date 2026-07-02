@@ -57,6 +57,14 @@ export function RegisterContainerPanel({ onClose, onRegister }: RegisterContaine
       inspectionExpiry: regForm.inspectionExpiry,
       status: 'Available', available: true,
       certNo: regForm.certNo || undefined, owner: regForm.owner || undefined, location: regForm.location || undefined,
+      currentSite: null,
+      trips: [],
+      movementLog: [],
+      hiringStartDate: null,
+      contractorId: null,
+      dailyRateUSD: null,
+      payments: [],
+      inspectionHistory: [],
     })
     setRegOk(true)
     setTimeout(() => {

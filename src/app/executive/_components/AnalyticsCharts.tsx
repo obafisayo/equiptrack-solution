@@ -37,7 +37,7 @@ export function AnalyticsCharts({ trendData, donutData, barData, loadBarsData }:
         <ChartCard title="Requests Submitted vs Shipped" subtitle="Last 7 days">
           <TrendChart
             series={[
-              { label: 'Submitted', values: trendData.map(d => d.submitted), color: '#3B82F6' },
+              { label: 'Submitted', values: trendData.map(d => d.submitted), color: '#F04A4A' },
               { label: 'Shipped',   values: trendData.map(d => d.shipped),   color: '#10B981' },
             ]}
             labels={trendData.map(d => d.day)}

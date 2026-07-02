@@ -65,10 +65,10 @@ export default function DispatchPersonnelTasksPage() {
     setOrders(prev => prev.map(o => orderIds.includes(o.id) ? { ...o, stage: nextStage, elapsedHours: 0 } : o))
   }
 
-  function handlePackOrders(orderIds: string[]) {
+  function handlePackOrders(orderIds: string[], cargoClass: import('@/lib/mock-data').DangerousGoodsClass) {
     const autoContainerId = `CNT-AUTO-${Date.now().toString(36).toUpperCase()}`
     setOrders(prev => prev.map(o =>
-      orderIds.includes(o.id) ? { ...o, stage: 'Containerization' as Stage, containerId: autoContainerId, elapsedHours: 0 } : o
+      orderIds.includes(o.id) ? { ...o, stage: 'Containerization' as Stage, containerId: autoContainerId, elapsedHours: 0, cargoClass } : o
     ))
     setShowPackDialog(false)
     setActiveTab('Containerization')

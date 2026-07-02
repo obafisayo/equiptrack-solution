@@ -3,7 +3,7 @@
 import { STAGE_SLA_HOURS, getSlaStatus, fmtHours } from '@/config/sla'
 import { STAGE_REVERSAL } from '@/lib/lifecycle'
 import type { WorkOrder } from '@/lib/mock-data'
-import { StagePill, UrgencyPill, TypeBadge, SLAChip } from './Pills'
+import { StagePill, UrgencyPill, TypeBadge, SLAChip, DangerousGoodsPill } from './Pills'
 import { SLABar } from './SLABar'
 
 interface WorkOrderCardProps {
@@ -65,13 +65,19 @@ export function WorkOrderCard({
       {/* ROW 2: destination */}
       <p className="text-sm font-medium text-gray-900 truncate mb-1.5">{dest}</p>
 
-      {/* ROW 3: type · urgency · assignee */}
+      {/* ROW 3: type · urgency · assignee · DG class */}
       <div className="flex items-center flex-wrap gap-x-1.5 gap-y-1 text-xs text-gray-500 mb-3">
         <TypeBadge type={order.requestType} />
         <span className="text-gray-200 select-none">·</span>
         <UrgencyPill level={order.urgency} />
         <span className="text-gray-200 select-none">·</span>
         <span className="font-medium text-gray-700">{order.assignedToName ?? 'Unassigned'}</span>
+        {order.cargoClass && order.cargoClass !== 'normal' && (
+          <>
+            <span className="text-gray-200 select-none">·</span>
+            <DangerousGoodsPill dgClass={order.cargoClass} />
+          </>
+        )}
       </div>
 
       {/* ROW 4: SLA bar */}

@@ -7,8 +7,9 @@ import {
   Package, Plus, Settings, ShieldCheck, Truck, Users,
   FileWarning, FileText, Eye,
   CalendarDays, Wrench, History,
-  Inbox, TrendingDown,
+  Inbox, TrendingDown, TrendingUp,
   LayoutDashboard, Building2, ListChecks, CreditCard, ScrollText,
+  RotateCcw, MessageSquare, Plug, Map,
 } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import type { Role } from '@/lib/lifecycle'
@@ -30,6 +31,7 @@ const NAV_ITEMS: Partial<Record<Role, NavItem[]>> = {
     { href: '/warehouse',           label: 'Dashboard',       icon: AlertTriangle },
     { href: '/warehouse/orders',    label: 'All Work Orders', icon: Layers },
     { href: '/warehouse/personnel', label: 'Personnel Load',  icon: Users },
+    { href: '/warehouse/returns',   label: 'Returns',         icon: RotateCcw },
   ],
   wh_per: [
     { href: '/warehouse-personnel',         label: 'My Tasks', icon: ClipboardCheck },
@@ -44,22 +46,38 @@ const NAV_ITEMS: Partial<Record<Role, NavItem[]>> = {
     { href: '/dispatch-personnel/history', label: 'History',  icon: Clock },
   ],
   qaqc: [
-    { href: '/qaqc',            label: 'QAQC Queue',      icon: ShieldCheck },
-    { href: '/qaqc/containers', label: 'Container Fleet', icon: Package },
+    { href: '/qaqc',                  label: 'QAQC Queue',      icon: ShieldCheck    },
+    { href: '/qaqc/containers',       label: 'Container Fleet', icon: Package        },
+    { href: '/qaqc/ccu-dashboard',    label: 'CCU Dashboard',   icon: LayoutDashboard },
+    { href: '/qaqc/ccu-invoicing',    label: 'CCU Invoicing',   icon: CreditCard     },
+    { href: '/qaqc/ccu-requests',     label: 'CCU Requests',    icon: MessageSquare  },
+    { href: '/qaqc/loadout',          label: 'Loadout QAQC',    icon: ClipboardCheck },
+    { href: '/messages',              label: 'Messages',        icon: Inbox          },
+  ],
+  loadout_qaqc: [
+    { href: '/qaqc/loadout',          label: 'Loadout QAQC',    icon: ShieldCheck   },
+    { href: '/qaqc/ccu-dashboard',    label: 'CCU Dashboard',   icon: LayoutDashboard },
+    { href: '/qaqc/ccu-requests',     label: 'CCU Requests',    icon: MessageSquare },
   ],
   exec: [
-    { href: '/executive',             label: 'Overview',        icon: BarChart2 },
-    { href: '/executive/bottlenecks', label: 'Bottlenecks',     icon: Activity },
-    { href: '/executive/users',       label: 'User Management', icon: Users },
-    { href: '/executive/settings',    label: 'Org Settings',    icon: Settings },
+    { href: '/executive',             label: 'Overview',        icon: BarChart2    },
+    { href: '/executive/bottlenecks', label: 'Bottlenecks',     icon: Activity     },
+    { href: '/executive/performance', label: 'Performance',     icon: TrendingUp   },
+    { href: '/messages',              label: 'Messages',        icon: MessageSquare },
+    { href: '/executive/users',       label: 'User Management', icon: Users        },
+    { href: '/executive/settings',    label: 'Org Settings',    icon: Settings     },
+  ],
+  site_logistics: [
+    { href: '/site-logistics', label: 'Return to Base', icon: RotateCcw },
   ],
   logistics: [
     { href: '/logistics',          label: 'Calendar',         icon: CalendarDays },
     { href: '/logistics/requests', label: 'Vessel Requests',  icon: Inbox        },
   ],
   inventory: [
-    { href: '/inventory',        label: 'Stock Overview', icon: Package    },
-    { href: '/inventory/alerts', label: 'Reorder Alerts', icon: TrendingDown },
+    { href: '/inventory',        label: 'Stock Overview',    icon: Package    },
+    { href: '/inventory/alerts', label: 'Reorder Alerts',    icon: TrendingDown },
+    { href: '/inventory/ooddle', label: 'Ooddle Integration', icon: Plug },
   ],
   maintenance: [
     { href: '/maintenance',         label: 'Work Orders', icon: Wrench  },
@@ -89,9 +107,11 @@ const ROLE_USER: Partial<Record<Role, string>> = {
   dsp_per:   'Biodun Adekunle',
   qaqc:      'Femi Emmanuel',
   exec:      'O. Bello',
-  logistics:   'Danjuma Yusuf',
-  inventory:   'Ngozi Eze',
-  maintenance: 'Segun Folarin',
+  logistics:      'Danjuma Yusuf',
+  inventory:      'Ngozi Eze',
+  maintenance:    'Segun Folarin',
+  loadout_qaqc:   'Ngozi Okafor',
+  site_logistics: 'Chukwudi Eze',
 }
 
 interface SidebarProps {
@@ -139,7 +159,7 @@ export function Sidebar({ role, currentPath, mobileOpen, onMobileClose }: Sideba
       </div>
 
       {/* Nav */}
-      <nav className="flex-1 overflow-y-auto py-3 px-2 space-y-0.5">
+      <nav className="flex-1 overflow-y-auto py-3 px-2 space-y-0.5 sidebar-scroll">
         <p className="block md:hidden lg:block px-2 mb-2 text-[10px] font-semibold uppercase tracking-[0.08em] text-white/35">
           {roleLabel}
         </p>
@@ -170,23 +190,15 @@ export function Sidebar({ role, currentPath, mobileOpen, onMobileClose }: Sideba
       {/* Divider */}
       <div className="mx-3 shrink-0 h-px bg-white/8" />
 
-      {/* Need Help — hidden only on collapsed tablet rail */}
-      <div className="block md:hidden lg:block px-3 pt-3 pb-1 shrink-0">
-        <div className="rounded-lg p-3 bg-white/6">
-          <div className="flex items-center gap-2 mb-1.5">
-            <HelpCircle size={13} className="text-white/50 shrink-0" />
-            <span className="text-xs font-semibold text-white">Need Help?</span>
-          </div>
-          <p className="text-[10px] text-white/[0.42] leading-relaxed mb-2.5">
-            Documentation, guides, and support resources for your role.
-          </p>
-          <a
-            href="mailto:support@equiptrack.io"
-            className="block text-center text-[11px] font-semibold text-white/70 bg-white/10 hover:bg-white/[0.15] rounded-md py-1.5 transition-colors duration-150 no-underline"
-          >
-            Contact Support
-          </a>
-        </div>
+      {/* Contact support — collapsed on tablet, visible on desktop */}
+      <div className="block md:hidden lg:block px-3 pt-2 pb-1 shrink-0">
+        <a
+          href="mailto:support@equiptrack.io"
+          className="flex items-center justify-center gap-2 text-[11px] font-semibold text-white/55 bg-white/6 hover:bg-white/[0.12] hover:text-white/80 rounded-lg py-2 transition-colors duration-150 no-underline"
+        >
+          <HelpCircle size={13} className="shrink-0" />
+          Contact Support
+        </a>
       </div>
 
       {/* User area */}

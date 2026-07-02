@@ -29,7 +29,7 @@ const breachedCount = allOrders.filter(o => {
   return sla != null && o.elapsedHours > sla
 }).length
 
-const slaBreachRate = Math.round((breachedCount / Math.max(allOrders.length, 1)) * 100)
+const slaPerformance = Math.round(((allOrders.length - breachedCount) / Math.max(allOrders.length, 1)) * 100)
 
 const avgCycleHours = Math.round(
   allOrders.reduce((sum, o) => sum + o.totalElapsedHours, 0) / Math.max(allOrders.length, 1)
@@ -66,10 +66,10 @@ function buildDonutData() {
   activeOrders.forEach(o => { counts[STAGE_DEPARTMENT[o.stage]]++ })
   const total = activeOrders.length || 1
   return [
-    { label: 'Warehouse', value: Math.round((counts.warehouse / total) * 100), color: '#3B82F6' },
+    { label: 'Warehouse', value: Math.round((counts.warehouse / total) * 100), color: '#10B981' },
     { label: 'Dispatch',  value: Math.round((counts.dispatch / total) * 100),  color: '#8B5CF6' },
     { label: 'QAQC',      value: Math.round((counts.qaqc / total) * 100),      color: '#F59E0B' },
-    { label: 'Final',     value: Math.round((counts.final / total) * 100),     color: '#10B981' },
+    { label: 'Final',     value: Math.round((counts.final / total) * 100),     color: '#22C55E' },
     { label: 'Pending',   value: Math.round((counts.pending / total) * 100),   color: '#94A3B8' },
   ]
 }
@@ -110,7 +110,7 @@ export default function ExecutivePage() {
         avgCycleHours={avgCycleHours}
         activeOrdersCount={activeOrders.length}
         shippedThisWeek={shippedThisWeek}
-        slaBreachRate={slaBreachRate}
+        slaPerformance={slaPerformance}
         breachedCount={breachedCount}
         targetCycleHours={TARGET_CYCLE_HOURS}
         fmtCycleTime={fmtCycleTime}

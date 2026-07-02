@@ -1,10 +1,11 @@
 'use client'
 
-import { Bell, Search, Menu, ChevronRight } from 'lucide-react'
+import { Search, Menu, ChevronRight } from 'lucide-react'
 import Link from 'next/link'
 import type { ReactNode } from 'react'
 import type { Role } from '@/lib/lifecycle'
 import { Avatar } from '@/components/ui/Avatar'
+import { NotificationBell } from './NotificationBell'
 
 const ROLE_USER: Record<Role, string> = {
   requester:   'Kenneth Nwosu',
@@ -17,8 +18,10 @@ const ROLE_USER: Record<Role, string> = {
   safety:      'Aisha Musa',
   logistics:   'Danjuma Yusuf',
   inventory:   'Ngozi Eze',
-  maintenance: 'Segun Folarin',
-  sysadmin:    'System Admin',
+  maintenance:    'Segun Folarin',
+  sysadmin:       'System Admin',
+  loadout_qaqc:   'Ngozi Okafor',
+  site_logistics: 'Chukwudi Eze',
 }
 
 interface TopbarProps {
@@ -109,10 +112,7 @@ export function Topbar({
         {actions}
 
         <div className="flex items-center gap-3 border-l border-border-default pl-3 sm:pl-5 ml-1">
-          <button className="relative p-1.5 text-neutral-500 hover:bg-neutral-100 rounded-full transition-colors focus:outline-none">
-            <Bell size={18} />
-            <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-status-critical rounded-full border-2 border-white" />
-          </button>
+          <NotificationBell />
           
           {/* Avatar (mobile & desktop) */}
           <div className="flex items-center gap-2 cursor-pointer group">

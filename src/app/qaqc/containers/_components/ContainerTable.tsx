@@ -1,11 +1,11 @@
 'use client'
 
-import { Package } from 'lucide-react'
+import { Package, MapPin } from 'lucide-react'
 import { type CCUContainer, STATUS_BADGE } from './types'
 import { StatusDot } from './StatusDot'
 import { ExpiryChip } from './ExpiryChip'
 
-const COLUMNS = ['Serial Number', 'Type', 'Footprint Area', 'Length', 'Width', 'Max Gross Weight', 'Inspection Expiry', 'Status', 'Available']
+const COLUMNS = ['Serial Number', 'Type', 'Current Location', 'Footprint Area', 'Max Gross Weight', 'Inspection Expiry', 'Status', 'Available']
 
 interface ContainerTableProps {
   containers: CCUContainer[]
@@ -35,9 +35,15 @@ export function ContainerTable({ containers, onSelect, onToggleAvailable }: Cont
                 <span className="font-mono text-sm font-bold text-neutral-900">{c.serialNumber}</span>
               </td>
               <td className="px-4 py-3 whitespace-nowrap text-xs text-neutral-700">{c.type}</td>
+              <td className="px-4 py-3 whitespace-nowrap">
+                <span className={`inline-flex items-center gap-1 text-[11px] font-semibold px-2 py-0.5 rounded-full ${
+                  c.currentSite ? 'bg-amber-50 text-amber-700' : 'bg-green-50 text-green-700'
+                }`}>
+                  <MapPin size={9} />
+                  {c.location ?? 'Unknown'}
+                </span>
+              </td>
               <td className="px-4 py-3 whitespace-nowrap text-xs text-neutral-700">{c.footprintM2} m²</td>
-              <td className="px-4 py-3 whitespace-nowrap text-xs text-neutral-700">{c.lengthM} m</td>
-              <td className="px-4 py-3 whitespace-nowrap text-xs text-neutral-700">{c.widthM} m</td>
               <td className="px-4 py-3 whitespace-nowrap text-xs text-neutral-700">
                 <span className="flex items-center gap-1.5"><Package size={11} className="text-neutral-300 shrink-0" />{c.maxGrossWeightKg.toLocaleString()} kg</span>
               </td>
