@@ -32,20 +32,20 @@ export function WorkOrderCard({
     ? order.destination.slice(0, 38) + '…'
     : order.destination
 
-  // Card border & shadow variants — all expressed as Tailwind
+  // Card border variant — a single shadow-card is shared by every state;
+  // only the border communicates selection / breach so the card stays flat.
   const cardClass = isSelected
-    ? 'border-2 border-brand-500 shadow-[0_0_0_3px_rgba(240,74,74,0.12)]'
+    ? 'border-2 border-brand-500'
     : status.breached
-    ? 'border border-red-200 shadow-[0_0_0_2px_rgba(239,68,68,0.08),0_1px_3px_rgba(0,0,0,0.06)]'
-    : 'border border-border-default shadow-card'
+    ? 'border border-red-200'
+    : 'border border-border-default hover:border-border-strong'
 
   return (
     <div
       onClick={onClick}
       className={[
-        'relative bg-white rounded-xl overflow-hidden transition-shadow duration-150 cursor-pointer',
+        'relative bg-white rounded-xl shadow-card overflow-hidden transition-colors duration-150 cursor-pointer',
         compact ? 'p-3' : 'p-4',
-        isSelected ? 'bg-red-50/20' : '',
         cardClass,
       ].join(' ')}
     >

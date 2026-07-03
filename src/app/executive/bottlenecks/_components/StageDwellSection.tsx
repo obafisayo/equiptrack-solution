@@ -20,7 +20,7 @@ function BarComparison({ label, actual, sla, dept }: { label: string; actual: nu
     <div className="py-2">
       <div className="flex items-center justify-between mb-1">
         <span className="text-xs font-medium text-gray-700 truncate flex-1 mr-2">{label}</span>
-        <span className={`text-xs font-semibold flex-shrink-0 ${breached ? 'text-red-600' : 'text-gray-500'}`}>
+        <span className={`text-xs font-semibold shrink-0 ${breached ? 'text-red-600' : 'text-gray-500'}`}>
           {fmtHours(actual)} / {fmtHours(sla)}
         </span>
       </div>

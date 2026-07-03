@@ -50,7 +50,7 @@ export function StockTab({ stock, catFilter, onCatFilterChange, onSelectItem, on
                     <span className="block truncate">{item.name}</span>
                   </td>
                   <td className="px-4 py-3 text-xs text-neutral-500">{item.category}</td>
-                  <td className="px-4 py-3 min-w-[120px]">
+                  <td className="px-4 py-3 min-w-30">
                     <div className="flex items-center gap-2">
                       <span className={`text-sm font-bold ${item.status==='critical'?'text-red-600':item.status==='reorder'?'text-amber-600':'text-neutral-900'}`}>
                         {item.qty}

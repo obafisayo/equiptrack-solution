@@ -3,7 +3,7 @@
 import { useState, useMemo } from 'react'
 import AppShell from '@/components/layout/AppShell'
 import { StatCard } from '@/components/domain/StatCard'
-import { Clock, CheckCircle2, AlertTriangle, XCircle, ShieldAlert } from 'lucide-react'
+import { Clock, CheckCircle2, AlertTriangle, XCircle } from 'lucide-react'
 import { IncomingDeliveryTable } from './_components/IncomingDeliveryTable'
 import { AnomalyPanel } from './_components/AnomalyPanel'
 import type { IncomingDelivery, AnomalyRecord } from './_components/types'
@@ -79,7 +79,7 @@ export default function LoadoutQaqcPage() {
 
   return (
     <AppShell
-      role="loadout_qaqc"
+      role="qaqc"
       currentPath="/qaqc/loadout"
       title="Loadout QAQC"
       breadcrumb={[{ label: 'Home', href: '/' }, { label: 'QAQC' }, { label: 'Loadout QAQC' }]}

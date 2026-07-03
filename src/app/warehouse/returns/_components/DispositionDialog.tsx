@@ -25,7 +25,7 @@ export function DispositionDialog({ order, onClose, onConfirm }: Props) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-      <div className="bg-white rounded-xl shadow-xl w-[480px]">
+      <div className="bg-white rounded-xl shadow-xl w-120">
         <div className="flex items-center justify-between px-6 py-4 border-b border-border-default">
           <div>
             <h2 className="text-[15px] font-bold text-gray-900">Assign Disposition</h2>

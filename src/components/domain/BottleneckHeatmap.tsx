@@ -58,10 +58,10 @@ export function BottleneckHeatmap({ data, onSelect, selectedStage }: BottleneckH
             <span className="w-2.5 h-2.5 rounded-sm bg-[#22C55E]"></span> On Track
           </span>
           <span className="flex items-center gap-1.5">
-            <span className="w-2.5 h-2.5 rounded-sm bg-[#F59E0B]"></span> Near SLA
+            <span className="w-2.5 h-2.5 rounded-sm bg-status-medium"></span> Near SLA
           </span>
           <span className="flex items-center gap-1.5">
-            <span className="w-2.5 h-2.5 rounded-sm bg-[#EF4444]"></span> Breached
+            <span className="w-2.5 h-2.5 rounded-sm bg-status-critical"></span> Breached
           </span>
         </div>
       </div>

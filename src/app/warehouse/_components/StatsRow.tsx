@@ -12,15 +12,15 @@ interface StatsRowProps {
 export function StatsRow({ activeOrdersCount, breachedOrdersCount, processingToday }: StatsRowProps) {
   return (
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-      <StatCard label="Total Active Orders" value={activeOrdersCount} icon={Package} />
+      <StatCard label="Total Active Orders" value={activeOrdersCount} color="#94A3B8" icon={Package} />
       <StatCard
         label="SLA Breaches"
         value={breachedOrdersCount}
         color={breachedOrdersCount > 0 ? '#EF4444' : '#22C55E'}
         icon={AlertTriangle}
       />
-      <StatCard label="Processing Today" value={processingToday} icon={Clock} />
-      <StatCard label="Avg Cycle Time" value="4h 12m" icon={Timer} />
+      <StatCard label="Processing Today" value={processingToday} color="#94A3B8" icon={Clock} />
+      <StatCard label="Avg Cycle Time" value="4h 12m" color="#94A3B8" icon={Timer} />
     </div>
   )
 }

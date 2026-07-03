@@ -56,7 +56,7 @@ export function ReportIncidentPanel({ incidentCount, onSubmit, onClose }: Report
   return (
     <>
       <div className="fixed inset-0 z-40 bg-black/20" onClick={onClose}/>
-      <aside className="fixed right-0 top-0 bottom-0 z-50 w-full sm:w-[480px] bg-white shadow-overlay flex flex-col animate-slide-in">
+      <aside className="fixed right-0 top-0 bottom-0 z-50 w-full sm:w-120 bg-white shadow-overlay flex flex-col animate-slide-in">
         {/* Header */}
         <div className="flex items-center justify-between gap-3 px-6 py-5 border-b border-border-default shrink-0">
           <div>

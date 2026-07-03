@@ -2,7 +2,6 @@
 
 import { WorkOrderCard } from '@/components/domain/WorkOrderCard'
 import { SectionTitle } from '@/components/domain/OrderGrid'
-import { Select } from '@/components/ui/Form'
 import { type WorkOrder } from '@/lib/mock-data'
 import { type UrgencyLevel } from '@/config/sla'
 
@@ -17,6 +16,39 @@ const STAGE_FILTER_OPTIONS = [
 ]
 
 const URGENCY_OPTIONS: Array<UrgencyLevel | 'All'> = ['All', 'Urgent', 'High', 'Medium', 'Low']
+
+// One consistent filter-pill row style, reused for both stage and urgency
+// filters so the two sections below don't read as two different UI patterns.
+function FilterRow({ label, options, active, onSelect, getCount }: {
+  label: string
+  options: string[]
+  active: string
+  onSelect: (value: string) => void
+  getCount?: (value: string) => number
+}) {
+  return (
+    <div className="flex items-center gap-3 flex-wrap">
+      <span className="text-[11px] font-semibold uppercase tracking-wide text-gray-400 shrink-0">{label}</span>
+      <div className="flex gap-1.5 flex-wrap">
+        {options.map(opt => (
+          <button
+            key={opt}
+            type="button"
+            onClick={() => onSelect(opt)}
+            className={`px-3 py-1 rounded-full text-xs font-medium border transition-colors duration-150 ${
+              active === opt
+                ? 'bg-gray-900 border-gray-900 text-white'
+                : 'bg-white border-border-default text-gray-600 hover:border-gray-300'
+            }`}
+          >
+            {opt}
+            {getCount && opt !== 'All' && <span className="ml-1 opacity-60">({getCount(opt)})</span>}
+          </button>
+        ))}
+      </div>
+    </div>
+  )
+}
 
 interface OverviewTabProps {
   incomingOrders: WorkOrder[]
@@ -52,28 +84,16 @@ export function OverviewTab({
   return (
     <>
       {/* PENDING INCOMING QUEUE */}
-      <section className="mb-6">
+      <section className="mb-8">
         <SectionTitle title="Pending Incoming Queue" count={incomingOrders.length} className="mb-3" />
-        <div className="flex gap-2 flex-wrap mb-3">
-          {URGENCY_OPTIONS.map(tab => (
-            <button
-              key={tab}
-              type="button"
-              onClick={() => onSetIncomingTab(tab)}
-              className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition-colors duration-150 ${
-                incomingTab === tab
-                  ? 'bg-brand-500 border-brand-500 text-white'
-                  : 'bg-white border-border-default text-gray-600 hover:border-gray-300'
-              }`}
-            >
-              {tab}
-              {tab !== 'All' && (
-                <span className="ml-1.5 opacity-75">
-                  ({incomingOrders.filter(o => o.urgency === tab).length})
-                </span>
-              )}
-            </button>
-          ))}
+        <div className="mb-4">
+          <FilterRow
+            label="Urgency"
+            options={URGENCY_OPTIONS}
+            active={incomingTab}
+            onSelect={v => onSetIncomingTab(v as UrgencyLevel | 'All')}
+            getCount={v => incomingOrders.filter(o => o.urgency === v).length}
+          />
         </div>
         {filteredIncoming.length === 0 ? (
           <p className="text-sm text-gray-400 py-4 text-center">No incoming requests at this priority</p>
@@ -95,35 +115,15 @@ export function OverviewTab({
 
       {/* ALL ACTIVE ORDERS */}
       <section>
-        <div className="flex flex-wrap items-center gap-3 mb-3">
-          <SectionTitle title="All Active Orders" count={filteredActive.length} />
-          <div className="flex gap-1.5 flex-wrap ml-auto">
-            {STAGE_FILTER_OPTIONS.map(f => (
-              <button
-                key={f}
-                type="button"
-                onClick={() => onSetStageFilter(f)}
-                className={`px-2.5 py-1 rounded-full text-xs font-medium border transition-colors duration-150 ${
-                  stageFilter === f
-                    ? 'bg-brand-500 border-brand-500 text-white'
-                    : 'bg-white border-border-default text-gray-600 hover:border-gray-300'
-                }`}
-              >
-                {f}
-              </button>
-            ))}
-            <Select
-              title="Filter by urgency"
-              value={urgencyFilter}
-              onChange={e => onSetUrgencyFilter(e.target.value as UrgencyLevel | 'All')}
-              size="sm"
-              className="ml-2 w-auto min-w-28"
-            >
-              {URGENCY_OPTIONS.map(u => (
-                <option key={u} value={u}>{u === 'All' ? 'All Urgency' : u}</option>
-              ))}
-            </Select>
-          </div>
+        <SectionTitle title="All Active Orders" count={filteredActive.length} className="mb-3" />
+        <div className="flex flex-col gap-2 mb-4">
+          <FilterRow label="Stage" options={STAGE_FILTER_OPTIONS} active={stageFilter} onSelect={onSetStageFilter} />
+          <FilterRow
+            label="Urgency"
+            options={URGENCY_OPTIONS}
+            active={urgencyFilter}
+            onSelect={v => onSetUrgencyFilter(v as UrgencyLevel | 'All')}
+          />
         </div>
         {filteredActive.length === 0 ? (
           <p className="text-sm text-gray-400 py-8 text-center">No orders match this filter</p>

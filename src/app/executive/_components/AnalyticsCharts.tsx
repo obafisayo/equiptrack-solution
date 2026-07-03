@@ -55,7 +55,7 @@ export function AnalyticsCharts({ trendData, donutData, barData, loadBarsData }:
           <BarChart data={barData} height={220} color="#8B5CF6" />
         </ChartCard>
         <ChartCard title="Team Load" subtitle="Active orders vs capacity">
-          <div className="max-h-[220px] overflow-y-auto pr-1">
+          <div className="max-h-55 overflow-y-auto pr-1">
             <LoadBars data={loadBarsData} />
           </div>
         </ChartCard>

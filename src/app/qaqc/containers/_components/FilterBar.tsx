@@ -33,7 +33,7 @@ export function FilterBar({
 
   return (
     <div className="flex flex-wrap items-center gap-2 mb-4">
-      <div className="flex-1 min-w-[180px] max-w-xs">
+      <div className="flex-1 min-w-45 max-w-xs">
         <SearchInput value={search} onChange={onSearchChange}
           placeholder="Search serial no. or type…"
           size="sm" />

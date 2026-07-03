@@ -130,7 +130,7 @@ export function NewRequestDialog({ onConfirm, onClose }: Props) {
                 <pre className="text-[12px] text-gray-700 whitespace-pre-wrap font-sans leading-relaxed">{message}</pre>
               </div>
               <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 text-[12px] text-amber-800">
-                After sending, wait for the contractor to provide serial numbers. Then use "Record Response" to enter and accept/reject each one.
+                After sending, wait for the contractor to provide serial numbers. Then use &quot;Record Response&quot; to enter and accept/reject each one.
               </div>
             </>
           )}

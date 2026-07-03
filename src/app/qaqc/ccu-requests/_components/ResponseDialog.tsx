@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { X, Check, XCircle, Plus, AlertTriangle } from 'lucide-react'
-import type { ContainerRequest, ContractorResponseItem } from './types'
+import type { ContainerRequest } from './types'
 
 interface Props {
   request: ContainerRequest
@@ -21,7 +21,6 @@ export function ResponseDialog({ request, onConfirm, onClose }: Props) {
   )
 
   const allSerialsEntered = lineItems.every(li => li.responses.every(r => r.serial.trim() !== ''))
-  const allActioned = lineItems.every(li => li.responses.every(r => r.accepted !== null))
 
   function setSerial(lineIdx: number, respIdx: number, value: string) {
     setLineItems(prev => prev.map((li, i) =>
@@ -145,7 +144,7 @@ export function ResponseDialog({ request, onConfirm, onClose }: Props) {
           ))}
 
           <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 text-[12px] text-amber-800">
-            Accepted containers will be added to the fleet with status "Pending Inspection". Billing starts only after Loadout QAQC passes the container.
+            Accepted containers will be added to the fleet with status &quot;Pending Inspection&quot;. Billing starts only after Loadout QAQC passes the container.
           </div>
         </div>
 

@@ -10,7 +10,6 @@ export const SLUG_TO_ROLE: Record<string, Role> = {
   'dispatch-supervisor':  'dsp_sup',
   'dispatch-personnel':   'dsp_per',
   'qaqc-officer':         'qaqc',
-  'loadout-qaqc':         'loadout_qaqc',
   'site-logistics':       'site_logistics',
   'executive':            'exec',
   'safety':               'safety',
@@ -38,22 +37,28 @@ export function clearSessionRole(): void {
 
 // Which roles may access each route prefix (longest prefix wins)
 // Used by AppShell for enforcement.
+// IMPORTANT: more-specific prefixes must appear BEFORE their parents so
+// the sort-by-length logic in getAllowedRolesForPath finds the right match.
 export const ROUTE_ACCESS: [prefix: string, roles: Role[]][] = [
-  ['/requester',           ['requester']],
-  ['/warehouse-personnel', ['wh_per']],
-  ['/warehouse',           ['wh_sup']],
-  ['/dispatch-personnel',  ['dsp_per']],
-  ['/dispatch',            ['dsp_sup']],
-  ['/qaqc',                ['qaqc', 'loadout_qaqc']],
-  ['/site-logistics',      ['site_logistics']],
-  ['/executive',           ['exec']],
-  ['/safety',              ['safety']],
-  ['/logistics',           ['logistics']],
-  ['/inventory',           ['inventory']],
-  ['/maintenance',         ['maintenance']],
-  ['/sysadmin',            ['sysadmin']],
-  // /messages is reachable by all authenticated roles
-  ['/messages',            ['requester','wh_sup','wh_per','dsp_sup','dsp_per','qaqc','loadout_qaqc','site_logistics','exec','safety','logistics','inventory','maintenance','sysadmin']],
+  ['/requester',                    ['requester']],
+  ['/warehouse-personnel',          ['wh_per']],
+  ['/warehouse/messages',           ['wh_sup']],
+  ['/warehouse',                    ['wh_sup']],
+  ['/dispatch-personnel',           ['dsp_per']],
+  ['/dispatch/messages',            ['dsp_sup']],
+  ['/dispatch',                     ['dsp_sup']],
+  ['/qaqc/messages',                ['qaqc']],
+  ['/qaqc',                         ['qaqc']],
+  ['/site-logistics',               ['site_logistics']],
+  ['/executive/messages',           ['exec']],
+  ['/executive',                    ['exec']],
+  ['/safety',                       ['safety']],
+  ['/logistics',                    ['logistics']],
+  ['/inventory',                    ['inventory']],
+  ['/maintenance',                  ['maintenance']],
+  ['/sysadmin',                     ['sysadmin']],
+  // /messages is now a redirect — allow all authenticated roles through
+  ['/messages',                     ['requester','wh_sup','wh_per','dsp_sup','dsp_per','qaqc','site_logistics','exec','safety','logistics','inventory','maintenance','sysadmin']],
 ]
 
 /** Return the allowed roles for the given path, or null if unrestricted */

@@ -1,7 +1,7 @@
 'use client'
 
-import { MapPin, Package, Clock } from 'lucide-react'
-import { CCU_SITES, CCU_SITE_COUNTS, CCU_SITE_LAST_MOVEMENT, type CCUSite } from '@/config/ccu'
+import { Package, Clock } from 'lucide-react'
+import { CCU_SITES, CCU_SITE_LAST_MOVEMENT, type CCUSite } from '@/config/ccu'
 import type { CCUContainer } from '@/app/qaqc/containers/_components/types'
 
 interface Props {

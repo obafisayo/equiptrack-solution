@@ -26,7 +26,7 @@ export function EmptyState({ icon: Icon, title, description, action, compact = f
         {title}
       </p>
 
-      <p className="text-[13px] text-gray-500 mt-1.5 max-w-[280px] leading-relaxed">
+      <p className="text-[13px] text-gray-500 mt-1.5 max-w-70 leading-relaxed">
         {description}
       </p>
 

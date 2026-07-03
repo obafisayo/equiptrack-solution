@@ -64,7 +64,7 @@ export function AllOrdersTable({ orders, isOpen, onToggle, sortCol, onSortColCha
                         {fmtHours(o.elapsedHours)}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-neutral-700 text-xs truncate max-w-[140px] font-medium">{o.destination}</td>
+                    <td className="px-4 py-3 text-neutral-700 text-xs truncate max-w-35 font-medium">{o.destination}</td>
                     <td className="px-4 py-3">
                       <span className="text-[11px] font-bold text-neutral-600 bg-neutral-100 px-2 py-0.5 rounded-badge">{o.urgency}</span>
                     </td>

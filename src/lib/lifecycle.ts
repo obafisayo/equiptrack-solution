@@ -52,7 +52,7 @@ export const STAGE_COLOR: Record<Stage, string> = Object.fromEntries(
   LIFECYCLE.map(s => [s, DEPARTMENT_COLOR[STAGE_DEPARTMENT[s]]])
 ) as Record<Stage, string>
 
-export type Role = 'requester' | 'wh_sup' | 'wh_per' | 'dsp_sup' | 'dsp_per' | 'qaqc' | 'loadout_qaqc' | 'site_logistics' | 'exec' | 'safety' | 'logistics' | 'inventory' | 'maintenance' | 'sysadmin'
+export type Role = 'requester' | 'wh_sup' | 'wh_per' | 'dsp_sup' | 'dsp_per' | 'qaqc' | 'site_logistics' | 'exec' | 'safety' | 'logistics' | 'inventory' | 'maintenance' | 'sysadmin'
 
 export const ROLE_LABEL: Record<Role, string> = {
   requester:     'Requester',
@@ -60,8 +60,7 @@ export const ROLE_LABEL: Record<Role, string> = {
   wh_per:        'Warehouse Personnel',
   dsp_sup:       'Dispatch Supervisor',
   dsp_per:       'Dispatch Personnel',
-  qaqc:          'Yard QAQC Officer',
-  loadout_qaqc:  'Loadout QAQC Officer',
+  qaqc:          'QAQC Officer',
   site_logistics: 'Site Logistics',
   exec:          'Executive',
   safety:        'Safety Officer',
@@ -78,7 +77,6 @@ export const ROLE_ROUTE: Record<Role, string> = {
   dsp_sup:       '/dispatch',
   dsp_per:       '/dispatch-personnel',
   qaqc:          '/qaqc',
-  loadout_qaqc:  '/qaqc/loadout',
   site_logistics: '/site-logistics',
   exec:          '/executive',
   safety:        '/safety',
@@ -95,7 +93,6 @@ export const ROLE_STAGES: Record<Role, Stage[]> = {
   dsp_sup:       ['Dispatch Queue', 'Dispatch Assigned', 'Preload QAQC', 'Containerization', 'Post QAQC', 'Waybill Pending Signature', 'Waybill Done', 'Awaiting Deckspace'],
   dsp_per:       ['Dispatch Assigned', 'Containerization', 'Waybill Pending Signature', 'Waybill Done', 'Awaiting Deckspace'],
   qaqc:          ['Preload QAQC', 'Containerization', 'Post QAQC'],
-  loadout_qaqc:  [],
   site_logistics: [],
   exec:          [...LIFECYCLE],
   safety:        [...LIFECYCLE],

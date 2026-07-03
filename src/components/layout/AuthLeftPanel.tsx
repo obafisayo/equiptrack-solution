@@ -2,7 +2,7 @@
 export function AuthLeftPanel() {
   return (
     <div
-      className="hidden md:flex flex-col flex-shrink-0 relative overflow-hidden"
+      className="hidden md:flex flex-col shrink-0 relative overflow-hidden"
       style={{ width: '50%', height: '100vh', background: '#F04A4A' }}
     >
       {/* Dot-grid overlay */}

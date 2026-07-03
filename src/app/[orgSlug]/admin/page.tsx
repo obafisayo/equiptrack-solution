@@ -60,7 +60,7 @@ export default function OrgAdminOverview({ params }: { params: Promise<{ orgSlug
         <TeamSnapshot orgSlug={orgSlug} members={members} />
 
         {/* Right: Subscription + Quick actions */}
-        <div className="flex-[1] flex flex-col gap-4">
+        <div className="flex-1 flex flex-col gap-4">
           <SubscriptionCard orgSlug={orgSlug} subscription={org.subscription} />
           <QuickActionsPanel orgSlug={orgSlug} />
         </div>

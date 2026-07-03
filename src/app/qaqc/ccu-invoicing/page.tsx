@@ -15,7 +15,7 @@ export default function CCUInvoicingPage() {
   const [activeTab, setActiveTab]             = useState<Tab>('by-contractor')
   const [payments, setPayments]               = useState<Payment[]>(MOCK_PAYMENTS)
   const [paymentDialogId, setPaymentDialogId] = useState<string | null>(null)
-  const [breakdownId, setBreakdownId]         = useState<string | null>(null)
+  const [, setBreakdownId]                    = useState<string | null>(null)
 
   const containers = INIT_CONTAINERS
   const today      = new Date()

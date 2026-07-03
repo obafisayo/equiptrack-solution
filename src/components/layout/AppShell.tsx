@@ -11,10 +11,10 @@ import { getAllowedRolesForPath } from '@/lib/session'
 
 interface AppShellProps {
   /**
-   * The role used to render the sidebar nav when no session is present.
-   * For pages accessible to only one role this is the only prop needed.
-   * For pages shared across multiple roles, omit this and rely on the
-   * session role — the sidebar will auto-adapt.
+   * The role used to render the sidebar nav. This prop ALWAYS determines the
+   * sidebar — it is never overridden by the session role.
+   * Each route should pass the single role that matches the URL so the nav
+   * items remain deterministic regardless of who is logged in.
    */
   role: Role
   currentPath: string
@@ -26,6 +26,12 @@ interface AppShellProps {
     value: string
     onChange: (v: string) => void
   }
+  /**
+   * Override the path-derived allowed-roles list for access guard checks.
+   * Use this on routes like /qaqc/loadout that legitimately serve more than
+   * one role. When omitted, the guard uses getAllowedRolesForPath(currentPath).
+   */
+  allowedRoles?: Role[]
   children: ReactNode
 }
 
@@ -36,6 +42,7 @@ export function AppShell({
   breadcrumb,
   actions,
   search,
+  allowedRoles: allowedRolesProp,
   children,
 }: AppShellProps) {
   const [mobileOpen, setMobileOpen] = useState(false)
@@ -51,10 +58,7 @@ export function AppShell({
 
   useEffect(() => { setMobileOpen(false) }, [currentPath])
 
-  // Determine which roles are allowed to view this path
-  const allowedRoles = getAllowedRolesForPath(currentPath)
-
-  // While we're reading localStorage, render nothing to avoid flicker
+  // While reading localStorage, render nothing to avoid flicker
   if (loading) {
     return (
       <div className="min-h-screen bg-page-bg flex items-center justify-center">
@@ -63,15 +67,13 @@ export function AppShell({
     )
   }
 
-  // Enforce access: if a session role exists and this path is restricted,
-  // block access if the session role isn't in the allowed list.
-  if (sessionRole && allowedRoles && !allowedRoles.includes(sessionRole)) {
-    return <AccessDenied sessionRole={sessionRole} allowedRoles={allowedRoles} />
-  }
+  // Determine allowed roles: caller can override via prop, otherwise derive from path
+  const effectiveAllowed = allowedRolesProp ?? getAllowedRolesForPath(currentPath)
 
-  // The sidebar renders for the session role when available, falling back to
-  // the prop-declared role (used in prototype when navigating directly).
-  const sidebarRole: Role = sessionRole ?? role
+  // Enforce access: block if a session role exists and is not in the allowed list
+  if (sessionRole && effectiveAllowed && !effectiveAllowed.includes(sessionRole)) {
+    return <AccessDenied sessionRole={sessionRole} allowedRoles={effectiveAllowed} />
+  }
 
   return (
     <div className="min-h-screen bg-page-bg">
@@ -83,21 +85,22 @@ export function AppShell({
         />
       )}
 
+      {/* Sidebar always uses the prop role — never the session role */}
       <Sidebar
-        role={sidebarRole}
+        role={role}
         currentPath={currentPath}
         mobileOpen={mobileOpen}
         onMobileClose={() => setMobileOpen(false)}
       />
 
-      <div className="flex flex-col min-h-screen ml-0 md:ml-16 lg:ml-[200px]">
+      <div className="flex flex-col min-h-screen ml-0 md:ml-16 lg:ml-50">
         <div className="sticky top-0 z-30">
           <Topbar
             title={title}
             breadcrumb={breadcrumb}
             actions={actions}
             search={search}
-            role={sidebarRole}
+            role={role}
             onMobileMenuToggle={() => setMobileOpen(v => !v)}
           />
         </div>

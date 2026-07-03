@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { X, ArrowRight, ArrowLeft, MapPin, Clock, DollarSign, ShieldCheck, Wifi, AlertTriangle } from 'lucide-react'
+import { X, ArrowRight, ArrowLeft, MapPin, ShieldCheck, Wifi } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { type CCUContainer, STATUS_BADGE, DG_CLASS_BADGE, getExpiryState } from './types'
 import { StatusDot } from './StatusDot'
@@ -63,7 +63,7 @@ export function ContainerDetailPanel({ detail, onClose, onToggleAvailable }: Pro
   return (
     <>
       <div className="fixed inset-0 z-40 bg-black/20" onClick={onClose} />
-      <aside className="fixed right-0 top-0 bottom-0 z-50 w-full sm:w-[480px] bg-white shadow-overlay flex flex-col">
+      <aside className="fixed right-0 top-0 bottom-0 z-50 w-full sm:w-120 bg-white shadow-overlay flex flex-col">
 
         {/* Header */}
         <div className="flex items-start justify-between gap-3 px-6 py-5 border-b border-border-default shrink-0">
@@ -297,7 +297,7 @@ export function ContainerDetailPanel({ detail, onClose, onToggleAvailable }: Pro
                               <p className="font-semibold text-gray-800">${p.amountUSD.toLocaleString()}</p>
                               <p className="text-[11px] text-gray-400">{p.date} · Ref: {p.reference}</p>
                             </div>
-                            {p.notes && <p className="text-[11px] text-gray-500 text-right max-w-[140px]">{p.notes}</p>}
+                            {p.notes && <p className="text-[11px] text-gray-500 text-right max-w-35">{p.notes}</p>}
                           </div>
                         ))}
                       </div>

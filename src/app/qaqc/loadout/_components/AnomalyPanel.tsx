@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { X, Plus, Trash2, Camera, AlertTriangle, CheckCircle2, XCircle, ShieldAlert } from 'lucide-react'
+import { X, Plus, Camera, CheckCircle2, XCircle } from 'lucide-react'
 import type { IncomingDelivery, AnomalyRecord, AnomalyType, AnomalySeverity } from './types'
 import { ANOMALY_TYPES, DELIVERY_STATUS_BADGE } from './types'
 
@@ -46,7 +46,7 @@ export function AnomalyPanel({ delivery, onClose, onPass, onReject, onQuarantine
   }
 
   return (
-    <div className="fixed inset-y-0 right-0 z-50 w-[480px] bg-white border-l border-border-default shadow-xl flex flex-col transition-transform duration-[250ms] ease">
+    <div className="fixed inset-y-0 right-0 z-50 w-120 bg-white border-l border-border-default shadow-xl flex flex-col transition-transform duration-250 ease">
 
       {/* Header */}
       <div className="flex items-center justify-between px-5 py-4 border-b border-border-default shrink-0">

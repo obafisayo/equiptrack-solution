@@ -222,7 +222,7 @@ export default function WaitlistPage() {
                     </button>
                   )}
                   <button type="submit" disabled={!canNext()}
-                    className={`flex-[2] h-10 rounded-lg text-sm font-semibold text-white transition-colors ${
+                    className={`flex-2 h-10 rounded-lg text-sm font-semibold text-white transition-colors ${
                       canNext() ? 'bg-brand-500 hover:bg-brand-600' : 'bg-neutral-300 cursor-not-allowed'
                     }`}>
                     {step < 2 ? 'Continue' : 'Submit Application'}

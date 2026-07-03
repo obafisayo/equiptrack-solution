@@ -1,6 +1,6 @@
 'use client'
 
-import { use } from 'react'
+import { use, Fragment } from 'react'
 import { Check, Minus } from 'lucide-react'
 import type { OrgRole, Permission } from '@/lib/types'
 import { getDefaultPermissions } from '@/lib/permissions'
@@ -147,9 +147,9 @@ export default function RolesPage({ params }: { params: Promise<{ orgSlug: strin
 
             <tbody>
               {PERM_GROUPS.map((group, gi) => (
-                <>
+                <Fragment key={`group-${gi}`}>
                   {/* Group header — first cell is sticky-left, rest are empty filler */}
-                  <tr key={`group-${gi}`} style={{ background: '#F1F5F9' }}>
+                  <tr style={{ background: '#F1F5F9' }}>
                     <td style={{
                       padding: '7px 16px',
                       position: 'sticky', left: 0, zIndex: 10,
@@ -226,7 +226,7 @@ export default function RolesPage({ params }: { params: Promise<{ orgSlug: strin
                       })}
                     </tr>
                   ))}
-                </>
+                </Fragment>
               ))}
             </tbody>
           </table>

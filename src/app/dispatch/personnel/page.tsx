@@ -110,7 +110,7 @@ export default function DispatchPersonnelPage() {
                       <p className="text-xs text-gray-400">load</p>
                     </div>
                     <svg
-                      className={`w-4 h-4 text-gray-400 transition-transform duration-200 flex-shrink-0 ${isExpanded ? 'rotate-180' : ''}`}
+                      className={`w-4 h-4 text-gray-400 transition-transform duration-200 shrink-0 ${isExpanded ? 'rotate-180' : ''}`}
                       fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}
                     >
                       <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
@@ -131,14 +131,14 @@ export default function DispatchPersonnelPage() {
                     {pOrders.length === 0 ? (
                       <p className="text-xs text-gray-400 italic">No active orders.</p>
                     ) : (
-                      <div className="space-y-3 max-h-[172px] overflow-y-auto pr-1">
+                      <div className="space-y-3 max-h-43 overflow-y-auto pr-1">
                       {pOrders.map(o => (
                         <div key={o.id} className="bg-gray-50 border border-gray-100 rounded-lg p-3">
                           <div className="flex items-start justify-between gap-3 mb-2">
                             <span className="font-mono text-brand-500 font-bold text-xs leading-tight">{o.id}</span>
                             <button
                               onClick={e => { e.stopPropagation(); setReassigningOrder(o) }}
-                              className="text-xs text-brand-500 hover:text-brand-600 font-semibold border border-brand-200 hover:border-brand-400 px-2.5 py-1 rounded transition-colors duration-150 flex-shrink-0"
+                              className="text-xs text-brand-500 hover:text-brand-600 font-semibold border border-brand-200 hover:border-brand-400 px-2.5 py-1 rounded transition-colors duration-150 shrink-0"
                             >
                               Reassign
                             </button>

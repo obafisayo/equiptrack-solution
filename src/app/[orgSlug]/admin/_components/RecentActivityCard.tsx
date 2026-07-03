@@ -26,7 +26,7 @@ export function RecentActivityCard({ orgSlug, events }: RecentActivityCardProps)
           View all
         </Link>
       </div>
-      <div className="divide-y divide-[#F3F4F6]">
+      <div className="divide-y divide-border-subtle">
         {events.map(e => (
           <div key={e.id} style={{ padding: '10px 18px', display: 'flex', alignItems: 'center', gap: 10 }}>
             <div style={{ flex: 1, minWidth: 0 }}>

@@ -65,7 +65,7 @@ export default function MaintenanceSchedulePage() {
             { label:'Critical Upcoming', value: SCHEDULE.filter(s=>s.priority==='critical').length,      icon:<AlertTriangle size={16}/>,   color:'#DC2626' },
             { label:'High Priority',     value: SCHEDULE.filter(s=>s.priority==='high').length,          icon:<Wrench size={16}/>,          color:'#EA580C' },
           ] as { label:string; value:string|number; icon:React.ReactNode; color:string }[]).map(k => (
-            <div key={k.label} className="bg-white border border-[#E2E8F0] rounded-card shadow-card p-4 flex items-start gap-3">
+            <div key={k.label} className="bg-white border border-border-default rounded-card shadow-card p-4 flex items-start gap-3">
               <div className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0" style={{background:`${k.color}14`, color:k.color}}>
                 {k.icon}
               </div>
@@ -93,7 +93,7 @@ export default function MaintenanceSchedulePage() {
         </div>
 
         {/* Table */}
-        <div className="bg-white border border-[#E2E8F0] rounded-card shadow-card overflow-hidden">
+        <div className="bg-white border border-border-default rounded-card shadow-card overflow-hidden">
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-neutral-100 bg-neutral-50">

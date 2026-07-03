@@ -9,7 +9,7 @@ import {
   CalendarDays, Wrench, History,
   Inbox, TrendingDown, TrendingUp,
   LayoutDashboard, Building2, ListChecks, CreditCard, ScrollText,
-  RotateCcw, MessageSquare, Plug, Map,
+  RotateCcw, MessageSquare,
 } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import type { Role } from '@/lib/lifecycle'
@@ -32,85 +32,81 @@ const NAV_ITEMS: Partial<Record<Role, NavItem[]>> = {
     { href: '/warehouse/orders',    label: 'All Work Orders', icon: Layers },
     { href: '/warehouse/personnel', label: 'Personnel Load',  icon: Users },
     { href: '/warehouse/returns',   label: 'Returns',         icon: RotateCcw },
+    { href: '/warehouse/messages',  label: 'Messages',        icon: MessageSquare },
   ],
   wh_per: [
     { href: '/warehouse-personnel',         label: 'My Tasks', icon: ClipboardCheck },
     { href: '/warehouse-personnel/history', label: 'History',  icon: Clock },
   ],
   dsp_sup: [
-    { href: '/dispatch',           label: 'Dispatch Queue', icon: Truck },
-    { href: '/dispatch/personnel', label: 'Personnel Load', icon: Users },
+    { href: '/dispatch',            label: 'Dispatch Queue', icon: Truck },
+    { href: '/dispatch/personnel',  label: 'Personnel Load', icon: Users },
+    { href: '/dispatch/messages',   label: 'Messages',       icon: MessageSquare },
   ],
   dsp_per: [
     { href: '/dispatch-personnel',         label: 'My Tasks', icon: ClipboardCheck },
     { href: '/dispatch-personnel/history', label: 'History',  icon: Clock },
   ],
   qaqc: [
-    { href: '/qaqc',                  label: 'QAQC Queue',      icon: ShieldCheck    },
-    { href: '/qaqc/containers',       label: 'Container Fleet', icon: Package        },
+    { href: '/qaqc',                  label: 'QAQC Queue',      icon: ShieldCheck     },
+    { href: '/qaqc/containers',       label: 'Container Fleet', icon: Package         },
     { href: '/qaqc/ccu-dashboard',    label: 'CCU Dashboard',   icon: LayoutDashboard },
-    { href: '/qaqc/ccu-invoicing',    label: 'CCU Invoicing',   icon: CreditCard     },
-    { href: '/qaqc/ccu-requests',     label: 'CCU Requests',    icon: MessageSquare  },
-    { href: '/qaqc/loadout',          label: 'Loadout QAQC',    icon: ClipboardCheck },
-    { href: '/messages',              label: 'Messages',        icon: Inbox          },
-  ],
-  loadout_qaqc: [
-    { href: '/qaqc/loadout',          label: 'Loadout QAQC',    icon: ShieldCheck   },
-    { href: '/qaqc/ccu-dashboard',    label: 'CCU Dashboard',   icon: LayoutDashboard },
-    { href: '/qaqc/ccu-requests',     label: 'CCU Requests',    icon: MessageSquare },
+    { href: '/qaqc/ccu-invoicing',    label: 'CCU Invoicing',   icon: CreditCard      },
+    { href: '/qaqc/ccu-requests',     label: 'CCU Requests',    icon: MessageSquare   },
+    { href: '/qaqc/loadout',          label: 'Loadout QAQC',    icon: ClipboardCheck  },
+    { href: '/qaqc/messages',         label: 'Messages',        icon: Inbox           },
   ],
   exec: [
-    { href: '/executive',             label: 'Overview',        icon: BarChart2    },
-    { href: '/executive/bottlenecks', label: 'Bottlenecks',     icon: Activity     },
-    { href: '/executive/performance', label: 'Performance',     icon: TrendingUp   },
-    { href: '/messages',              label: 'Messages',        icon: MessageSquare },
-    { href: '/executive/users',       label: 'User Management', icon: Users        },
-    { href: '/executive/settings',    label: 'Org Settings',    icon: Settings     },
+    { href: '/executive',             label: 'Overview',        icon: BarChart2     },
+    { href: '/executive/bottlenecks', label: 'Bottlenecks',     icon: Activity      },
+    { href: '/executive/performance', label: 'Performance',     icon: TrendingUp    },
+    { href: '/executive/messages',    label: 'Messages',        icon: MessageSquare },
+    { href: '/executive/users',       label: 'User Management', icon: Users         },
+    { href: '/executive/settings',    label: 'Org Settings',    icon: Settings      },
   ],
   site_logistics: [
     { href: '/site-logistics', label: 'Return to Base', icon: RotateCcw },
   ],
   logistics: [
-    { href: '/logistics',          label: 'Calendar',         icon: CalendarDays },
-    { href: '/logistics/requests', label: 'Vessel Requests',  icon: Inbox        },
+    { href: '/logistics',          label: 'Calendar',        icon: CalendarDays },
+    { href: '/logistics/requests', label: 'Vessel Requests', icon: Inbox        },
   ],
   inventory: [
-    { href: '/inventory',        label: 'Stock Overview',    icon: Package    },
-    { href: '/inventory/alerts', label: 'Reorder Alerts',    icon: TrendingDown },
-    { href: '/inventory/ooddle', label: 'Ooddle Integration', icon: Plug },
+    { href: '/inventory',           label: 'Stock Overview',    icon: Package      },
+    { href: '/inventory/alerts',    label: 'Reorder Alerts',    icon: TrendingDown },
+    { href: '/inventory/movements', label: 'Movements Log',     icon: RotateCcw    },
   ],
   maintenance: [
     { href: '/maintenance',         label: 'Work Orders', icon: Wrench  },
     { href: '/maintenance/history', label: 'History',     icon: History },
   ],
   safety: [
-    { href: '/safety',             label: 'Dashboard',         icon: ShieldCheck  },
-    { href: '/safety/inspections', label: 'Inspections',       icon: Eye          },
-    { href: '/safety/ptw',         label: 'Permit to Work',    icon: FileText     },
-    { href: '/safety/near-miss',   label: 'Near Misses',       icon: FileWarning  },
+    { href: '/safety',             label: 'Dashboard',      icon: ShieldCheck },
+    { href: '/safety/inspections', label: 'Inspections',    icon: Eye         },
+    { href: '/safety/ptw',         label: 'Permit to Work', icon: FileText    },
+    { href: '/safety/near-miss',   label: 'Near Misses',    icon: FileWarning },
   ],
   sysadmin: [
-    { href: '/sysadmin',                label: 'Platform Overview',  icon: LayoutDashboard },
-    { href: '/sysadmin/organisations',  label: 'Organisations',      icon: Building2       },
-    { href: '/sysadmin/waitlist',       label: 'Waitlist',           icon: ListChecks      },
-    { href: '/sysadmin/users',          label: 'All Users',          icon: Users           },
-    { href: '/sysadmin/billing',        label: 'Revenue & Billing',  icon: CreditCard      },
-    { href: '/sysadmin/audit',          label: 'Audit Log',          icon: ScrollText      },
+    { href: '/sysadmin',               label: 'Platform Overview', icon: LayoutDashboard },
+    { href: '/sysadmin/organisations', label: 'Organisations',     icon: Building2       },
+    { href: '/sysadmin/waitlist',      label: 'Waitlist',          icon: ListChecks      },
+    { href: '/sysadmin/users',         label: 'All Users',         icon: Users           },
+    { href: '/sysadmin/billing',       label: 'Revenue & Billing', icon: CreditCard      },
+    { href: '/sysadmin/audit',         label: 'Audit Log',         icon: ScrollText      },
   ],
 }
 
 const ROLE_USER: Partial<Record<Role, string>> = {
-  requester: 'Kenneth Nwosu',
-  wh_sup:    'Yinka Adeyemi',
-  wh_per:    'Emeka Okonkwo',
-  dsp_sup:   'Chika Obi',
-  dsp_per:   'Biodun Adekunle',
-  qaqc:      'Femi Emmanuel',
-  exec:      'O. Bello',
+  requester:      'Kenneth Nwosu',
+  wh_sup:         'Yinka Adeyemi',
+  wh_per:         'Emeka Okonkwo',
+  dsp_sup:        'Chika Obi',
+  dsp_per:        'Biodun Adekunle',
+  qaqc:           'Femi Emmanuel',
+  exec:           'O. Bello',
   logistics:      'Danjuma Yusuf',
   inventory:      'Ngozi Eze',
   maintenance:    'Segun Folarin',
-  loadout_qaqc:   'Ngozi Okafor',
   site_logistics: 'Chukwudi Eze',
 }
 
@@ -136,16 +132,16 @@ export function Sidebar({ role, currentPath, mobileOpen, onMobileClose }: Sideba
     <aside
       className={[
         'fixed top-0 left-0 z-50 h-screen flex flex-col bg-sidebar',
-        'w-[200px] md:w-16 lg:w-[200px]',
-        'transition-transform duration-[250ms] ease',
+        'w-50 md:w-16 lg:w-50',
+        'transition-transform duration-250 ease',
         mobileOpen ? 'translate-x-0' : '-translate-x-full',
         'md:translate-x-0',
       ].join(' ')}
     >
       {/* Logo */}
-      <div className="flex items-center h-16 px-4 shrink-0 border-b border-white/[0.08]">
+      <div className="flex items-center h-16 px-4 shrink-0 border-b border-white/8">
         <div className="flex items-center gap-2.5 min-w-0">
-          <div className="flex items-center justify-center shrink-0 rounded-[7px] w-[30px] h-[30px] bg-brand-500">
+          <div className="flex items-center justify-center shrink-0 rounded-[7px] w-7.5 h-7.5 bg-brand-500">
             <svg width="17" height="17" viewBox="0 0 40 40" fill="none">
               <rect x="5" y="8"  width="30" height="5" rx="2.5" fill="white" />
               <rect x="5" y="18" width="22" height="5" rx="2.5" fill="white" />
@@ -190,11 +186,11 @@ export function Sidebar({ role, currentPath, mobileOpen, onMobileClose }: Sideba
       {/* Divider */}
       <div className="mx-3 shrink-0 h-px bg-white/8" />
 
-      {/* Contact support — collapsed on tablet, visible on desktop */}
+      {/* Contact support */}
       <div className="block md:hidden lg:block px-3 pt-2 pb-1 shrink-0">
         <a
           href="mailto:support@equiptrack.io"
-          className="flex items-center justify-center gap-2 text-[11px] font-semibold text-white/55 bg-white/6 hover:bg-white/[0.12] hover:text-white/80 rounded-lg py-2 transition-colors duration-150 no-underline"
+          className="flex items-center justify-center gap-2 text-[11px] font-semibold text-white/55 bg-white/6 hover:bg-white/12 hover:text-white/80 rounded-lg py-2 transition-colors duration-150 no-underline"
         >
           <HelpCircle size={13} className="shrink-0" />
           Contact Support
@@ -202,7 +198,7 @@ export function Sidebar({ role, currentPath, mobileOpen, onMobileClose }: Sideba
       </div>
 
       {/* User area */}
-      <div className="px-3 py-3 shrink-0 border-t border-white/[0.08]">
+      <div className="px-3 py-3 shrink-0 border-t border-white/8">
         <div className="flex items-center justify-start md:justify-center lg:justify-start gap-2 mb-2">
           <Avatar name={userName} size={30} />
           <div className="block md:hidden lg:block min-w-0">
@@ -212,7 +208,7 @@ export function Sidebar({ role, currentPath, mobileOpen, onMobileClose }: Sideba
         </div>
         <Link
           href="/login"
-          className="block md:hidden lg:block text-center py-1 rounded text-[11px] text-white/[0.38] hover:text-white/65 transition-colors duration-150 no-underline"
+          className="block md:hidden lg:block text-center py-1 rounded text-[11px] text-white/38 hover:text-white/65 transition-colors duration-150 no-underline"
         >
           Switch Role
         </Link>

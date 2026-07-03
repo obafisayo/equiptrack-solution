@@ -29,7 +29,7 @@ export function HeatmapDetailPanel({ selectedCell, onClose }: HeatmapDetailPanel
         onClick={onClose}
       />
       {/* Panel */}
-      <aside className="fixed right-0 top-0 bottom-0 z-50 w-full sm:w-[420px] bg-white shadow-overlay flex flex-col animate-slide-in">
+      <aside className="fixed right-0 top-0 bottom-0 z-50 w-full sm:w-105 bg-white shadow-overlay flex flex-col animate-slide-in">
         {/* Panel header */}
         <div className="flex items-start justify-between px-6 py-5 border-b border-border-default shrink-0">
           <div>
@@ -140,7 +140,7 @@ export function HeatmapDetailPanel({ selectedCell, onClose }: HeatmapDetailPanel
                     <div key={o.id} className="flex items-center justify-between bg-neutral-50 rounded-lg px-3 py-2.5 border border-border-default">
                       <div className="flex items-center gap-2.5">
                         <span className="font-mono text-xs font-bold text-brand-500">{o.id}</span>
-                        <span className="text-xs text-neutral-600 font-medium truncate max-w-[120px]">{o.destination}</span>
+                        <span className="text-xs text-neutral-600 font-medium truncate max-w-30">{o.destination}</span>
                       </div>
                       <span className={`text-xs font-bold ${status.breached ? 'text-red-600' : status.warning ? 'text-amber-600' : 'text-green-600'}`}>
                         {fmtHours(o.elapsedHours)}

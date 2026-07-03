@@ -54,10 +54,6 @@ export const AVATAR_COLORS: Record<string, string> = {
   system:    '#64748B',
 }
 
-function initials(name: string) {
-  return name.split(' ').map(p => p[0]).join('').slice(0, 2).toUpperCase()
-}
-
 const NOW = new Date('2026-07-01T09:00:00Z')
 function ago(mins: number) { return new Date(NOW.getTime() - mins * 60000).toISOString() }
 

@@ -28,7 +28,7 @@ export function CalendarToolbar({ filterOpen, onToggleFilter, navLabel, onPrev, 
         </button>
         <div className="flex items-center gap-2">
           <button type="button" onClick={onPrev} className="p-1 text-neutral-400 hover:text-neutral-700 rounded hover:bg-neutral-100 transition-colors"><ChevronLeft size={16}/></button>
-          <p className="text-sm font-bold text-neutral-900 min-w-[180px] text-center">{navLabel}</p>
+          <p className="text-sm font-bold text-neutral-900 min-w-45 text-center">{navLabel}</p>
           <button type="button" onClick={onNext} className="p-1 text-neutral-400 hover:text-neutral-700 rounded hover:bg-neutral-100 transition-colors"><ChevronRight size={16}/></button>
         </div>
       </div>

@@ -20,7 +20,6 @@ const ROLE_USER: Record<Role, string> = {
   inventory:   'Ngozi Eze',
   maintenance:    'Segun Folarin',
   sysadmin:       'System Admin',
-  loadout_qaqc:   'Ngozi Okafor',
   site_logistics: 'Chukwudi Eze',
 }
 

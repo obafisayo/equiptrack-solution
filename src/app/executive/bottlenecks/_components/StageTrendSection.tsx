@@ -27,7 +27,7 @@ export function StageTrendSection() {
           <Card key={t.stage} className="p-3">
             <div className="flex items-center justify-between">
               <p className="text-xs font-semibold text-gray-700 truncate flex-1">{t.stage}</p>
-              <span className={`text-xs font-bold ml-2 flex-shrink-0 ${t.change > 0 ? 'text-red-600' : 'text-green-600'}`}>
+              <span className={`text-xs font-bold ml-2 shrink-0 ${t.change > 0 ? 'text-red-600' : 'text-green-600'}`}>
                 {t.change > 0 ? '+' : ''}{t.change}h
               </span>
             </div>

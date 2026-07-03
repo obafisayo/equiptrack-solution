@@ -32,7 +32,7 @@ export function WeekView({ weekDates, eventsByDate, selectedId, onSelectDate, on
           )
         })}
       </div>
-      <div className="grid grid-cols-7 min-h-[440px] divide-x divide-border-default">
+      <div className="grid grid-cols-7 min-h-110 divide-x divide-border-default">
         {weekDates.map((d, i) => {
           const key = toKey(d)
           const evts = eventsByDate.get(key) ?? []

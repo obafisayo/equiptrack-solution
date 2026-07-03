@@ -31,7 +31,7 @@ export function OldestOrdersTable({ orders }: OldestOrdersTableProps) {
                     <span className="font-mono font-semibold text-brand-500 text-xs">{o.id}</span>
                   </div>
                 </td>
-                <td className="px-4 py-3 text-gray-700 text-xs truncate max-w-[120px]">{o.destination}</td>
+                <td className="px-4 py-3 text-gray-700 text-xs truncate max-w-30">{o.destination}</td>
                 <td className="px-4 py-3"><StagePill stage={o.stage} /></td>
                 <td className="px-4 py-3">
                   <span className="text-xs font-bold text-red-600">{fmtHours(o.totalElapsedHours)}</span>

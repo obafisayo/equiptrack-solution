@@ -63,14 +63,14 @@ export function NotificationBell() {
       >
         <Bell size={18} />
         {unread > 0 && (
-          <span className="absolute top-1 right-1 min-w-[16px] h-[16px] flex items-center justify-center rounded-full bg-brand-500 text-white text-[9px] font-bold px-0.5 border-2 border-white">
+          <span className="absolute top-1 right-1 min-w-4 h-4 flex items-center justify-center rounded-full bg-brand-500 text-white text-[9px] font-bold px-0.5 border-2 border-white">
             {unread > 9 ? '9+' : unread}
           </span>
         )}
       </button>
 
       {open && (
-        <div className="absolute right-0 top-full mt-2 w-[360px] bg-white border border-border-default rounded-xl shadow-lg z-50">
+        <div className="absolute right-0 top-full mt-2 w-90 bg-white border border-border-default rounded-xl shadow-lg z-50">
           {/* Header */}
           <div className="flex items-center justify-between px-4 py-3 border-b border-border-default">
             <div className="flex items-center gap-2">
@@ -87,7 +87,7 @@ export function NotificationBell() {
           </div>
 
           {/* Notification list */}
-          <div className="max-h-[400px] overflow-y-auto divide-y divide-border-default">
+          <div className="max-h-100 overflow-y-auto divide-y divide-border-default">
             {notifications.length === 0 ? (
               <div className="text-center py-10 text-[13px] text-gray-400">All caught up.</div>
             ) : (

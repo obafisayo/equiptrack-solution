@@ -83,7 +83,6 @@ function groupByDate(messages: ChatMessage[]) {
 
 export function ChatView({ conversation, onSend }: Props) {
   const [input, setInput]   = useState('')
-  const [showChannels, setShowChannels] = useState(false)
   const [channels, setChannels]         = useState({ email: false, whatsapp: false })
   const endRef = useRef<HTMLDivElement>(null)
 

@@ -88,12 +88,12 @@ export function OnboardingWizard({ onClose }: OnboardingWizardProps) {
             )}
             {step < 3 ? (
               <button type="button" disabled={!canNext()} onClick={() => setStep(s => s + 1)}
-                className="flex-[2] h-9 text-sm font-semibold bg-brand-500 hover:bg-brand-600 disabled:opacity-40 disabled:cursor-not-allowed text-white rounded-lg transition-colors">
+                className="flex-2 h-9 text-sm font-semibold bg-brand-500 hover:bg-brand-600 disabled:opacity-40 disabled:cursor-not-allowed text-white rounded-lg transition-colors">
                 Continue
               </button>
             ) : (
               <button type="button" onClick={submit}
-                className="flex-[2] h-9 text-sm font-semibold bg-brand-500 hover:bg-brand-600 text-white rounded-lg transition-colors">
+                className="flex-2 h-9 text-sm font-semibold bg-brand-500 hover:bg-brand-600 text-white rounded-lg transition-colors">
                 Launch Organisation
               </button>
             )}

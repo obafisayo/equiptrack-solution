@@ -151,7 +151,7 @@ export function Textarea({ error, className = '', ...props }: TextareaProps) {
     <textarea
       className={[
         'w-full rounded-card border bg-neutral-50 px-4 py-3 text-sm text-gray-900',
-        'placeholder:text-gray-400 transition-colors duration-150 resize-y min-h-[96px]',
+        'placeholder:text-gray-400 transition-colors duration-150 resize-y min-h-24',
         'focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500',
         error
           ? 'border-status-critical'

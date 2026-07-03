@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import {
   LayoutDashboard, Users, UserPlus, ShieldCheck,
-  SlidersHorizontal, CreditCard, ScrollText,
+  SlidersHorizontal, CreditCard, ScrollText, Settings,
   Menu, X, ArrowLeft,
 } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
@@ -28,6 +28,7 @@ const NAV_ITEMS: NavItem[] = [
   { href: s => `/${s}/admin/roles`,    label: 'Roles & Perms',     icon: SlidersHorizontal},
   { href: s => `/${s}/admin/billing`,  label: 'Billing',           icon: CreditCard       },
   { href: s => `/${s}/admin/audit`,    label: 'Audit Log',         icon: ScrollText       },
+  { href: s => `/${s}/admin/settings`, label: 'Settings',          icon: Settings         },
 ]
 
 const TITLE_MAP: Record<string, string> = {
@@ -87,8 +88,8 @@ export function OrgAdminShell({ orgSlug, currentPath, children }: OrgAdminShellP
       <aside
         className={[
           'fixed top-0 left-0 z-50 h-screen flex flex-col',
-          'w-[200px] md:w-16 lg:w-[200px]',
-          'transition-transform duration-[250ms] ease',
+          'w-50 md:w-16 lg:w-50',
+          'transition-transform duration-250 ease',
           mobileOpen ? 'translate-x-0' : '-translate-x-full',
           'md:translate-x-0',
         ].join(' ')}
@@ -96,12 +97,12 @@ export function OrgAdminShell({ orgSlug, currentPath, children }: OrgAdminShellP
       >
         {/* Logo + org name */}
         <div
-          className="flex flex-col justify-center px-4 flex-shrink-0"
+          className="flex flex-col justify-center px-4 shrink-0"
           style={{ height: 64, borderBottom: '1px solid rgba(255,255,255,0.08)' }}
         >
           <div className="flex items-center gap-2.5 min-w-0">
             <div
-              className="flex items-center justify-center flex-shrink-0 rounded-[7px]"
+              className="flex items-center justify-center shrink-0 rounded-[7px]"
               style={{ width: 28, height: 28, background: '#F04A4A' }}
             >
               <svg width="15" height="15" viewBox="0 0 40 40" fill="none">
@@ -169,7 +170,7 @@ export function OrgAdminShell({ orgSlug, currentPath, children }: OrgAdminShellP
         </nav>
 
         {/* User area */}
-        <div className="px-3 py-3 flex-shrink-0" style={{ borderTop: '1px solid rgba(255,255,255,0.08)' }}>
+        <div className="px-3 py-3 shrink-0" style={{ borderTop: '1px solid rgba(255,255,255,0.08)' }}>
           <div className="flex items-center justify-start md:justify-center lg:justify-start gap-2 mb-2">
             <Avatar name={adminUser?.displayName ?? 'Admin'} size={28} />
             <div className="block md:hidden lg:block min-w-0">
@@ -196,11 +197,11 @@ export function OrgAdminShell({ orgSlug, currentPath, children }: OrgAdminShellP
       </aside>
 
       {/* ── Main area ──────────────────────────────────────────────────────── */}
-      <div className="flex flex-col min-h-screen ml-0 md:ml-16 lg:ml-[200px]">
+      <div className="flex flex-col min-h-screen ml-0 md:ml-16 lg:ml-50">
 
         {/* Topbar */}
         <header
-          className="sticky top-0 z-30 flex items-center bg-white px-6 flex-shrink-0"
+          className="sticky top-0 z-30 flex items-center bg-white px-6 shrink-0"
           style={{ height: 64, borderBottom: '1px solid #E2E8F0' }}
         >
           <button

@@ -29,7 +29,7 @@ export function AssignModal({ order, personnel, onConfirm, onClose }: AssignModa
       />
 
       {/* Right-sliding panel */}
-      <aside className="fixed right-0 top-0 bottom-0 z-460 w-full sm:w-[440px] bg-white shadow-overlay flex flex-col animate-slide-in">
+      <aside className="fixed right-0 top-0 bottom-0 z-460 w-full sm:w-110 bg-white shadow-overlay flex flex-col animate-slide-in">
 
         {/* Header */}
         <div className="flex items-start justify-between gap-4 shrink-0 px-6 py-5 border-b border-border-default">

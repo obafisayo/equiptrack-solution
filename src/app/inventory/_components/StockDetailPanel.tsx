@@ -19,7 +19,7 @@ export function StockDetailPanel({ item, movements, onClose, onIssue }: StockDet
   return (
     <>
       <div className="fixed inset-0 z-40 bg-black/20" onClick={onClose}/>
-      <aside className="fixed right-0 top-0 bottom-0 z-50 w-full sm:w-[420px] bg-white shadow-overlay flex flex-col animate-slide-in">
+      <aside className="fixed right-0 top-0 bottom-0 z-50 w-full sm:w-105 bg-white shadow-overlay flex flex-col animate-slide-in">
         <div className="flex items-start justify-between gap-3 px-6 py-5 border-b border-border-default shrink-0">
           <div>
             <p className="font-mono text-xs font-bold text-neutral-400 mb-1">{item.id}</p>
