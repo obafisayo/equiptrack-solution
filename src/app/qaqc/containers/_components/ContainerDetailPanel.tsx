@@ -49,6 +49,10 @@ export function ContainerDetailPanel({ detail, onClose, onToggleAvailable }: Pro
   const [activeTab, setActiveTab] = useState<Tab>('overview')
   const expiryState = getExpiryState(detail.inspectionExpiry)
   const dgClass = detail.dangerousGoodsClass ?? 'normal'
+  const latestTrip = detail.trips[detail.trips.length - 1] ?? null
+  const latestMovement = detail.movementLog[detail.movementLog.length - 1] ?? null
+  const currentPosition = detail.currentSite ?? latestMovement?.location ?? detail.location ?? 'Unknown location'
+  const tripCount = detail.trips.length
 
   const totalDaysDeployed = detail.hiringStartDate
     ? Math.max(0, Math.round((new Date().getTime() - new Date(detail.hiringStartDate).getTime()) / 86_400_000))
@@ -127,6 +131,22 @@ export function ContainerDetailPanel({ detail, onClose, onToggleAvailable }: Pro
 
           {activeTab === 'overview' && (
             <>
+              <div>
+                <p className="text-[10px] font-bold uppercase tracking-wider text-neutral-400 mb-2">Trip Snapshot</p>
+                <div className="grid grid-cols-2 gap-2.5">
+                  {([
+                    ['Trip Count', tripCount.toString()],
+                    ['Current Position', currentPosition],
+                    ['Latest Vessel', latestTrip?.vessel ?? 'No trips recorded'],
+                    ['Latest Destination', latestTrip?.destination ?? 'No trips recorded'],
+                  ] as [string, string][]).map(([l, v]) => (
+                    <div key={l} className="bg-neutral-50 rounded-lg border border-border-default p-3">
+                      <p className="text-[10px] font-bold uppercase text-neutral-400 mb-0.5">{l}</p>
+                      <p className="text-xs font-semibold text-neutral-800">{v}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
               <div>
                 <p className="text-[10px] font-bold uppercase tracking-wider text-neutral-400 mb-2">Physical Specifications</p>
                 <div className="grid grid-cols-2 gap-2.5">

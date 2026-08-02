@@ -47,6 +47,7 @@ export const ROUTE_ACCESS: [prefix: string, roles: Role[]][] = [
   ['/dispatch-personnel',           ['dsp_per']],
   ['/dispatch/messages',            ['dsp_sup']],
   ['/dispatch',                     ['dsp_sup']],
+  ['/qaqc/analytics',               ['qaqc']],
   ['/qaqc/messages',                ['qaqc']],
   ['/qaqc',                         ['qaqc']],
   ['/site-logistics',               ['site_logistics']],

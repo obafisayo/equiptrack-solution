@@ -4,16 +4,18 @@ import { useState, useMemo } from 'react'
 import AppShell from '@/components/layout/AppShell'
 import { StatCard } from '@/components/domain/StatCard'
 import { Package, MapPin, AlertTriangle, CheckCircle2, Wifi } from 'lucide-react'
-import { INIT_CONTAINERS } from '@/app/qaqc/containers/_components/types'
+import { INIT_CONTAINERS, type CCUContainer } from '@/app/qaqc/containers/_components/types'
 import { getExpiryState } from '@/app/qaqc/containers/_components/types'
 import type { CCUSite } from '@/config/ccu'
+import { ContainerDetailPanel } from '@/app/qaqc/containers/_components/ContainerDetailPanel'
 import { ColorCodeBanner } from './_components/ColorCodeBanner'
 import { SiteDistributionGrid } from './_components/SiteDistributionGrid'
 import { FleetHealthChart } from './_components/FleetHealthChart'
 
 export default function CCUDashboardPage() {
-  const containers = INIT_CONTAINERS
+  const [containers, setContainers] = useState<CCUContainer[]>(INIT_CONTAINERS)
   const [selectedSite, setSelectedSite] = useState<string | null>(null)
+  const [selectedContainer, setSelectedContainer] = useState<CCUContainer | null>(null)
 
   const stats = useMemo(() => {
     const atBase    = containers.filter(c => !c.currentSite).length
@@ -36,6 +38,11 @@ export default function CCUDashboardPage() {
   function handleSiteClick(site: CCUSite | 'base') {
     const key = site === 'base' ? 'Onne Base' : site
     setSelectedSite(prev => prev === key ? null : key)
+  }
+
+  function toggleAvailable(sn: string) {
+    setContainers(prev => prev.map(c => c.serialNumber === sn ? { ...c, available: !c.available } : c))
+    setSelectedContainer(prev => prev && prev.serialNumber === sn ? { ...prev, available: !prev.available } : prev)
   }
 
   return (
@@ -123,7 +130,11 @@ export default function CCUDashboardPage() {
                 </thead>
                 <tbody className="divide-y divide-border-default">
                   {filteredForSite.map(c => (
-                    <tr key={c.serialNumber} className="hover:bg-gray-50">
+                    <tr
+                      key={c.serialNumber}
+                      className="hover:bg-gray-50 cursor-pointer"
+                      onClick={() => setSelectedContainer(c)}
+                    >
                       <td className="px-4 py-2 font-mono text-[12px] font-semibold text-gray-800">{c.serialNumber}</td>
                       <td className="px-4 py-2 text-[12px] text-gray-600">{c.type}</td>
                       <td className="px-4 py-2">
@@ -169,6 +180,14 @@ export default function CCUDashboardPage() {
           </div>
         </div>
       </div>
+
+      {selectedContainer && (
+        <ContainerDetailPanel
+          detail={selectedContainer}
+          onClose={() => setSelectedContainer(null)}
+          onToggleAvailable={toggleAvailable}
+        />
+      )}
     </AppShell>
   )
 }
