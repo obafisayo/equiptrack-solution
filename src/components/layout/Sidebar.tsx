@@ -17,12 +17,20 @@ import { ROLE_LABEL } from '@/lib/lifecycle'
 import { Avatar } from '@/components/ui/Avatar'
 
 interface NavItem {
+  type?: never
   href: string
   label: string
   icon: LucideIcon
 }
 
-const NAV_ITEMS: Partial<Record<Role, NavItem[]>> = {
+interface NavSection {
+  type: 'section'
+  label: string
+}
+
+type NavEntry = NavItem | NavSection
+
+const NAV_ITEMS: Partial<Record<Role, NavEntry[]>> = {
   requester: [
     { href: '/requester',     label: 'My Requests',    icon: ClipboardList },
     { href: '/requester/new', label: 'Create Request', icon: Plus },
@@ -48,13 +56,16 @@ const NAV_ITEMS: Partial<Record<Role, NavItem[]>> = {
     { href: '/dispatch-personnel/history', label: 'History',  icon: Clock },
   ],
   qaqc: [
-    { href: '/qaqc',                  label: 'QAQC Queue',      icon: ShieldCheck     },
-    { href: '/qaqc/containers',       label: 'Container Fleet', icon: Package         },
-    { href: '/qaqc/ccu-dashboard',    label: 'CCU Dashboard',   icon: LayoutDashboard },
-    { href: '/qaqc/ccu-invoicing',    label: 'CCU Invoicing',   icon: CreditCard      },
-    { href: '/qaqc/ccu-requests',     label: 'CCU Requests',    icon: MessageSquare   },
-    { href: '/qaqc/loadout',          label: 'Loadout QAQC',    icon: ClipboardCheck  },
-    { href: '/qaqc/messages',         label: 'Messages',        icon: Inbox           },
+    { type: 'section', label: 'Operations' },
+    { href: '/qaqc',              label: 'QAQC Queue',      icon: ShieldCheck    },
+    { href: '/qaqc/loadout',      label: 'Loadout QAQC',    icon: ClipboardCheck },
+    { href: '/qaqc/ccu-requests', label: 'CCU Requests',    icon: MessageSquare  },
+    { type: 'section', label: 'Analysis' },
+    { href: '/qaqc/analytics',    label: 'Analytics',       icon: BarChart2      },
+    { href: '/qaqc/containers',   label: 'Container Fleet', icon: Package        },
+    { href: '/qaqc/ccu-dashboard', label: 'CCU Dashboard',  icon: LayoutDashboard},
+    { href: '/qaqc/ccu-invoicing', label: 'CCU Invoicing',  icon: CreditCard     },
+    { href: '/qaqc/messages',     label: 'Messages',        icon: Inbox          },
   ],
   exec: [
     { href: '/executive',             label: 'Overview',        icon: BarChart2     },
@@ -122,9 +133,11 @@ export function Sidebar({ role, currentPath, mobileOpen, onMobileClose }: Sideba
   const userName  = ROLE_USER[role] ?? 'User'
   const roleLabel = ROLE_LABEL[role]
 
+  const navItems = items.filter((e): e is NavItem => !('type' in e))
+
   // Best-match active href: longest matching prefix wins — prevents parent routes
   // from staying highlighted when a child route has its own nav entry.
-  const activeHref = [...items]
+  const activeHref = [...navItems]
     .filter(item => currentPath === item.href || currentPath.startsWith(item.href + '/'))
     .sort((a, b) => b.href.length - a.href.length)[0]?.href ?? null
 
@@ -160,13 +173,23 @@ export function Sidebar({ role, currentPath, mobileOpen, onMobileClose }: Sideba
           {roleLabel}
         </p>
 
-        {items.map(item => {
-          const active = item.href === activeHref
-          const Icon   = item.icon
+        {items.map((entry, idx) => {
+          if ('type' in entry) {
+            return (
+              <p
+                key={`section-${idx}`}
+                className="block md:hidden lg:block px-2 pb-1 text-[10px] font-semibold uppercase tracking-[0.08em] text-white/35 mt-3 first:mt-0"
+              >
+                {entry.label}
+              </p>
+            )
+          }
+          const active = entry.href === activeHref
+          const Icon   = entry.icon
           return (
             <Link
-              key={item.href}
-              href={item.href}
+              key={entry.href}
+              href={entry.href}
               onClick={onMobileClose}
               className={[
                 'flex items-center justify-start md:justify-center lg:justify-start h-10 rounded-[7px] px-2.5 gap-2.5',
@@ -177,7 +200,7 @@ export function Sidebar({ role, currentPath, mobileOpen, onMobileClose }: Sideba
               ].join(' ')}
             >
               <Icon size={16} className="shrink-0" />
-              <span className="block md:hidden lg:block truncate">{item.label}</span>
+              <span className="block md:hidden lg:block truncate">{entry.label}</span>
             </Link>
           )
         })}
