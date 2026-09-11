@@ -6,28 +6,36 @@ import AppShell from '@/components/layout/AppShell'
 import { StatCard } from '@/components/domain/StatCard'
 import { DetailPanel } from '@/components/domain/DetailPanel'
 import { AssignModal } from '@/components/domain/AssignModal'
-import { WORK_ORDERS, PERSONNEL, type WorkOrder, sortNewestFirst, getPersonnelByDept } from '@/lib/mock-data'
+import { type WorkOrder, sortNewestFirst, getPersonnelByDept } from '@/lib/mock-data'
+import { LIVE_ORDERS } from '@/lib/workflow-store'
 import { STAGE_REVERSAL, type Stage } from '@/lib/lifecycle'
 import { STAGE_SLA_HOURS } from '@/config/sla'
 import { SLABreachBanner } from './_components/SLABreachBanner'
 import { MainTabBar } from './_components/MainTabBar'
 import { QueueView } from './_components/QueueView'
 import { PersonnelTasksView } from './_components/PersonnelTasksView'
-import { DISPATCH_STAGES, QUEUE_STAGE_MAP, type MainTab, type QueueSubTab } from './_components/constants'
-
-const DISPATCH_PERSONNEL = PERSONNEL.filter(p => p.dept === 'dispatch')
+import { DISPATCH_STAGES, type MainTab } from './_components/constants'
 
 export default function DispatchSupervisorPage() {
   const [orders, setOrders] = useState<WorkOrder[]>(() =>
-    sortNewestFirst(WORK_ORDERS.filter(o => DISPATCH_STAGES.includes(o.stage)))
+    sortNewestFirst(LIVE_ORDERS.filter(o => DISPATCH_STAGES.includes(o.stage)))
   )
   const [mainTab, setMainTab] = useState<MainTab>('Queue')
-  const [queueSubTab, setQueueSubTab] = useState<QueueSubTab>('Dispatch Queue')
   const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null)
   const [assigningOrder, setAssigningOrder] = useState<WorkOrder | null>(null)
   const [slaOpen, setSlaOpen] = useState(true)
 
-  const dispatchPersonnel = getPersonnelByDept('dispatch')
+  const dispatchPersonnel = useMemo(() =>
+    getPersonnelByDept('dispatch').map(p => ({
+      ...p,
+      active: orders.filter(o =>
+        o.assignedTo === p.id &&
+        ['Dispatch Assigned', 'Preload QAQC', 'Containerization', 'Post QAQC', 'Waybill Pending Signature', 'Awaiting Deckspace'].includes(o.stage)
+      ).length,
+    })),
+    [orders]
+  )
+
   const selectedOrder = orders.find(o => o.id === selectedOrderId) ?? null
 
   const slaBreaches = useMemo(() =>
@@ -49,13 +57,10 @@ export default function DispatchSupervisorPage() {
   const qaqcCount      = orders.filter(o => ['Preload QAQC','Containerization','Post QAQC'].includes(o.stage)).length
   const deckspaceCount = orders.filter(o => o.stage === 'Awaiting Deckspace').length
 
-  const subTabOrders = useMemo(
-    () => orders.filter(o => QUEUE_STAGE_MAP[queueSubTab].includes(o.stage)),
-    [orders, queueSubTab]
-  )
-
   function handleAssign(personnelId: string, personnelName: string) {
     if (!assigningOrder) return
+    const live = LIVE_ORDERS.find(o => o.id === assigningOrder.id)
+    if (live) { live.assignedTo = personnelId; live.assignedToName = personnelName; live.stage = 'Dispatch Assigned'; live.elapsedHours = 0 }
     setOrders(prev => prev.map(o =>
       o.id === assigningOrder.id
         ? { ...o, assignedTo: personnelId, assignedToName: personnelName, stage: 'Dispatch Assigned', elapsedHours: 0 }
@@ -68,6 +73,8 @@ export default function DispatchSupervisorPage() {
   function handleReverse(order: WorkOrder) {
     const prevStage = STAGE_REVERSAL[order.stage]
     if (!prevStage) return
+    const live = LIVE_ORDERS.find(o => o.id === order.id)
+    if (live) { live.stage = prevStage; live.elapsedHours = 0; live.assignedTo = null; live.assignedToName = null }
     setOrders(prev => prev.map(o =>
       o.id === order.id
         ? { ...o, stage: prevStage, elapsedHours: 0, assignedTo: null, assignedToName: null }
@@ -77,6 +84,8 @@ export default function DispatchSupervisorPage() {
   }
 
   function advanceStage(orderId: string, nextStage: Stage) {
+    const live = LIVE_ORDERS.find(o => o.id === orderId)
+    if (live) { live.stage = nextStage; live.elapsedHours = 0 }
     setOrders(prev => prev.map(o =>
       o.id === orderId ? { ...o, stage: nextStage, elapsedHours: 0 } : o
     ))
@@ -101,9 +110,9 @@ export default function DispatchSupervisorPage() {
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         <StatCard label="Dispatch Queue"    value={queueCount}    color="#8B5CF6" icon={Truck} />
-        <StatCard label="Active (Assigned)" value={assignedCount} color="#3B82F6" icon={UserCheck} />
-        <StatCard label="QAQC Pending"      value={qaqcCount}     color="#F59E0B" icon={ShieldCheck} />
-        <StatCard label="Awaiting Deckspace" value={deckspaceCount} color="#10B981" icon={Anchor} />
+        <StatCard label="Active (Assigned)" value={assignedCount} color="#1A6FBF" icon={UserCheck} />
+        <StatCard label="QAQC Pending"      value={qaqcCount}     color="#D97706" icon={ShieldCheck} />
+        <StatCard label="Awaiting Deckspace" value={deckspaceCount} color="#16A34A" icon={Anchor} />
       </div>
 
       <MainTabBar active={mainTab} onSelect={setMainTab} />
@@ -111,9 +120,6 @@ export default function DispatchSupervisorPage() {
       {mainTab === 'Queue' && (
         <QueueView
           orders={orders}
-          subTabOrders={subTabOrders}
-          queueSubTab={queueSubTab}
-          onSelectSubTab={setQueueSubTab}
           selectedOrderId={selectedOrderId}
           onSelectOrder={setSelectedOrderId}
           onAssignOrder={setAssigningOrder}
@@ -123,7 +129,7 @@ export default function DispatchSupervisorPage() {
 
       {mainTab === 'Personnel Tasks' && (
         <PersonnelTasksView
-          personnel={DISPATCH_PERSONNEL}
+          personnel={dispatchPersonnel}
           orders={orders}
           onAdvanceStage={advanceStage}
           onViewOrder={(orderId) => { setSelectedOrderId(orderId); setMainTab('Queue') }}

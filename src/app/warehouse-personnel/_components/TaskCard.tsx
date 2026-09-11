@@ -69,10 +69,10 @@ export function TaskCard({ order, isSelected, onSelect, onAction }: TaskCardProp
               onClick={() => onAction(order.id, 'process')}
               className="px-3 h-8 rounded-button bg-blue-600 text-white text-xs font-semibold hover:bg-blue-700 transition-colors"
             >
-              Start Processing
+              Picked
             </button>
           )}
-          {order.stage === 'Processing' && (
+          {order.stage === 'Picking' && (
             <button
               type="button"
               onClick={() => onAction(order.id, 'gi')}

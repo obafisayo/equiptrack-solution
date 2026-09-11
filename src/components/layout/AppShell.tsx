@@ -13,8 +13,6 @@ interface AppShellProps {
   /**
    * The role used to render the sidebar nav. This prop ALWAYS determines the
    * sidebar — it is never overridden by the session role.
-   * Each route should pass the single role that matches the URL so the nav
-   * items remain deterministic regardless of who is logged in.
    */
   role: Role
   currentPath: string
@@ -26,11 +24,6 @@ interface AppShellProps {
     value: string
     onChange: (v: string) => void
   }
-  /**
-   * Override the path-derived allowed-roles list for access guard checks.
-   * Use this on routes like /qaqc/loadout that legitimately serve more than
-   * one role. When omitted, the guard uses getAllowedRolesForPath(currentPath).
-   */
   allowedRoles?: Role[]
   children: ReactNode
 }
@@ -46,7 +39,13 @@ export function AppShell({
   children,
 }: AppShellProps) {
   const [mobileOpen, setMobileOpen] = useState(false)
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
   const { role: sessionRole, loading } = useSessionRole()
+
+  useEffect(() => {
+    const stored = localStorage.getItem('et-sidebar-collapsed')
+    if (stored === 'true') setSidebarCollapsed(true)
+  }, [])
 
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
@@ -58,19 +57,24 @@ export function AppShell({
 
   useEffect(() => { setMobileOpen(false) }, [currentPath])
 
-  // While reading localStorage, render nothing to avoid flicker
+  const handleToggleCollapse = () => {
+    setSidebarCollapsed(prev => {
+      const next = !prev
+      localStorage.setItem('et-sidebar-collapsed', String(next))
+      return next
+    })
+  }
+
   if (loading) {
     return (
       <div className="min-h-screen bg-page-bg flex items-center justify-center">
-        <div className="w-6 h-6 border-2 border-brand-500 border-t-transparent rounded-full animate-spin" />
+        <div className="w-6 h-6 border-2 border-brand-accent border-t-transparent rounded-full animate-spin" />
       </div>
     )
   }
 
-  // Determine allowed roles: caller can override via prop, otherwise derive from path
   const effectiveAllowed = allowedRolesProp ?? getAllowedRolesForPath(currentPath)
 
-  // Enforce access: block if a session role exists and is not in the allowed list
   if (sessionRole && effectiveAllowed && !effectiveAllowed.includes(sessionRole)) {
     return <AccessDenied sessionRole={sessionRole} allowedRoles={effectiveAllowed} />
   }
@@ -85,15 +89,23 @@ export function AppShell({
         />
       )}
 
-      {/* Sidebar always uses the prop role — never the session role */}
       <Sidebar
         role={role}
         currentPath={currentPath}
         mobileOpen={mobileOpen}
         onMobileClose={() => setMobileOpen(false)}
+        collapsed={sidebarCollapsed}
+        onToggleCollapse={handleToggleCollapse}
       />
 
-      <div className="flex flex-col min-h-screen ml-0 md:ml-16 lg:ml-50">
+      {/* Main content — offset tracks sidebar width with smooth transition */}
+      <div
+        className={[
+          'flex flex-col min-h-screen ml-0',
+          'md:transition-[margin] md:duration-250 md:ease',
+          sidebarCollapsed ? 'md:ml-16' : 'md:ml-56',
+        ].join(' ')}
+      >
         <div className="sticky top-0 z-30">
           <Topbar
             title={title}

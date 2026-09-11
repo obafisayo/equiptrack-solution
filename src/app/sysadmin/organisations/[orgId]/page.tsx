@@ -22,7 +22,7 @@ export default function OrgDetailPage({ params }: { params: Promise<{ orgId: str
     return (
       <div style={{ padding: 40, textAlign: 'center' }}>
         <p style={{ fontSize: 15, color: '#6B7280' }}>Organisation not found.</p>
-        <Link href="/sysadmin/organisations" style={{ fontSize: 13, color: '#F04A4A', fontWeight: 600 }}>
+        <Link href="/sysadmin/organisations" style={{ fontSize: 13, color: '#1A6FBF', fontWeight: 600 }}>
           Back to Organisations
         </Link>
       </div>

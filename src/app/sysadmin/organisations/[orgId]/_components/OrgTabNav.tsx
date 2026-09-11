@@ -29,11 +29,11 @@ export function OrgTabNav({ active, onSelect }: OrgTabNavProps) {
             style={{
               display: 'flex', alignItems: 'center', gap: 6,
               padding: '9px 14px', border: 'none',
-              borderBottom: `2px solid ${isActive ? '#F04A4A' : 'transparent'}`,
+              borderBottom: `2px solid ${isActive ? '#1A6FBF' : 'transparent'}`,
               marginBottom: -1,
               background: 'transparent', cursor: 'pointer',
               fontSize: 13, fontWeight: isActive ? 700 : 500,
-              color: isActive ? '#F04A4A' : '#6B7280',
+              color: isActive ? '#1A6FBF' : '#6B7280',
             }}
           >
             <Icon size={14} />

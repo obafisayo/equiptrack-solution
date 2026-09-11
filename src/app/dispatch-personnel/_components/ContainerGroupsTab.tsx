@@ -10,9 +10,10 @@ interface ContainerGroupsTabProps {
   groups: Record<string, WorkOrder[]>
   onSubmitQAQC?: (orders: WorkOrder[]) => void
   onRequestDeckspace?: (order: WorkOrder) => void
+  onPrintWaybill?: (order: WorkOrder) => void
 }
 
-export function ContainerGroupsTab({ title, emptyLabel, groups, onSubmitQAQC, onRequestDeckspace }: ContainerGroupsTabProps) {
+export function ContainerGroupsTab({ title, emptyLabel, groups, onSubmitQAQC, onRequestDeckspace, onPrintWaybill }: ContainerGroupsTabProps) {
   const entries = Object.entries(groups)
   return (
     <section>
@@ -28,6 +29,7 @@ export function ContainerGroupsTab({ title, emptyLabel, groups, onSubmitQAQC, on
               orders={gOrders}
               onSubmitQAQC={onSubmitQAQC ? () => onSubmitQAQC(gOrders) : undefined}
               onRequestDeckspace={onRequestDeckspace}
+              onPrintWaybill={onPrintWaybill}
             />
           ))}
         </div>

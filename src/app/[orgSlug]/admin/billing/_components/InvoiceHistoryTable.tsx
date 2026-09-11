@@ -38,7 +38,7 @@ export function InvoiceHistoryTable({ invoices }: InvoiceHistoryTableProps) {
               </td>
               <td style={{ padding: '11px 16px', textAlign: 'right' }}>
                 <button style={{
-                  background: 'none', border: 'none', fontSize: 12, color: '#F04A4A',
+                  background: 'none', border: 'none', fontSize: 12, color: '#1A6FBF',
                   fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit',
                 }}>
                   Download

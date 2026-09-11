@@ -63,7 +63,7 @@ export function PeriodComparison({ current, previous, currentLabel, previousLabe
   return (
     <div className="bg-white border border-border-default rounded-card shadow-card p-5 mb-6">
       <div className="flex items-center gap-3 mb-5">
-        <span className="px-2.5 py-1 text-[12px] font-bold bg-gray-900 text-white rounded-lg">{currentLabel}</span>
+        <span className="px-2.5 py-1 text-[12px] font-bold bg-brand-navy text-white rounded-lg">{currentLabel}</span>
         <span className="text-gray-300">vs</span>
         <span className="px-2.5 py-1 text-[12px] font-semibold border border-border-default text-gray-500 rounded-lg">{previousLabel}</span>
       </div>

@@ -23,8 +23,8 @@ export function SettingsTabBar({ active, onSelect }: SettingsTabBarProps) {
             style={{
               padding: '9px 16px', border: 'none', background: 'none',
               fontSize: 13, fontWeight: isActive ? 700 : 500,
-              color: isActive ? (isDanger ? '#DC2626' : '#F04A4A') : isDanger ? '#DC2626' : '#6B7280',
-              borderBottom: isActive ? `2px solid ${isDanger ? '#DC2626' : '#F04A4A'}` : '2px solid transparent',
+              color: isActive ? (isDanger ? '#DC2626' : '#1A6FBF') : isDanger ? '#DC2626' : '#6B7280',
+              borderBottom: isActive ? `2px solid ${isDanger ? '#DC2626' : '#1A6FBF'}` : '2px solid transparent',
               marginBottom: -1, cursor: 'pointer', whiteSpace: 'nowrap',
               fontFamily: 'Inter, sans-serif',
             }}

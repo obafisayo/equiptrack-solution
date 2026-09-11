@@ -60,7 +60,7 @@ export function ConversationList({ conversations, selectedId, searchQuery, onSea
               onClick={() => onSelect(conv.id)}
               className={[
                 'w-full flex items-center gap-3 px-4 py-3 text-left transition-colors',
-                isActive ? 'bg-red-50 border-l-2 border-brand-500' : 'hover:bg-gray-50 border-l-2 border-transparent',
+                isActive ? 'bg-brand-tint border-l-2 border-brand-500' : 'hover:bg-gray-50 border-l-2 border-transparent',
               ].join(' ')}
             >
               <div className="shrink-0 relative">

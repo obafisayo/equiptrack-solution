@@ -22,7 +22,7 @@ export function OrdersTable({ orders, selectedOrderId, onSelectOrder, onPreviewT
     <div className="bg-white rounded-card border border-border-default shadow-card overflow-x-auto">
       <table className="w-full text-sm">
         <thead>
-          <tr className="bg-gray-50 border-b border-border-default">
+          <tr className="bg-slate-50 border-b border-border-default">
             {TABLE_HEADERS.map(h => (
               <th
                 key={h}
@@ -43,7 +43,7 @@ export function OrdersTable({ orders, selectedOrderId, onSelectOrder, onPreviewT
                 key={order.id}
                 onClick={() => onSelectOrder(order.id)}
                 className={`cursor-pointer border-b border-gray-100 transition-colors duration-150 ${
-                  selectedOrderId === order.id ? 'bg-red-50/50' : 'hover:bg-gray-50'
+                  selectedOrderId === order.id ? 'bg-brand-tint/50' : 'hover:bg-gray-50'
                 }`}
               >
                 <td className="px-4 py-3 whitespace-nowrap">

@@ -2,29 +2,24 @@
 
 import { Input } from '@/components/ui/Form'
 import { Dropdown } from '@/components/ui/Dropdown'
-import { DESTINATION_OPTIONS, CARGO_TYPES, WELL_FIELD_OPTIONS } from './constants'
+import { DESTINATION_OPTIONS, CARGO_TYPES, ENTITY_OPTIONS } from './constants'
 import { SectionHeader, Label, FieldError } from './FormHelpers'
 
 interface LogisticsSectionProps {
   destination: string
   customDest: string
   cargoType: string
-  wellField: string
-  costCode: string
-  contactPhone: string
+  entity: string
   errors: Record<string, string>
   onDestinationChange: (value: string) => void
   onCustomDestChange: (value: string) => void
   onCargoTypeChange: (value: string) => void
-  onWellFieldChange: (value: string) => void
-  onCostCodeChange: (value: string) => void
-  onContactPhoneChange: (value: string) => void
+  onEntityChange: (value: string) => void
 }
 
 export function LogisticsSection({
-  destination, customDest, cargoType, wellField, costCode, contactPhone, errors,
-  onDestinationChange, onCustomDestChange, onCargoTypeChange, onWellFieldChange,
-  onCostCodeChange, onContactPhoneChange,
+  destination, customDest, cargoType, entity, errors,
+  onDestinationChange, onCustomDestChange, onCargoTypeChange, onEntityChange,
 }: LogisticsSectionProps) {
   return (
     <div className="bg-white rounded-card shadow-card border border-border-default p-6 space-y-5">
@@ -55,6 +50,19 @@ export function LogisticsSection({
           {errors.customDest && <FieldError msg={errors.customDest} />}
         </div>
 
+        {/* Entity */}
+        <div className="flex flex-col gap-1.5">
+          <Label text="Entity" required />
+          <Dropdown
+            options={ENTITY_OPTIONS}
+            value={entity}
+            onChange={onEntityChange}
+            placeholder="Select entity…"
+            error={!!errors.entity}
+          />
+          {errors.entity && <FieldError msg={errors.entity} />}
+        </div>
+
         {/* Cargo Type */}
         <div className="flex flex-col gap-1.5">
           <Label text="Cargo Type" required />
@@ -67,40 +75,6 @@ export function LogisticsSection({
           />
           {errors.cargoType && <FieldError msg={errors.cargoType} />}
         </div>
-
-        {/* Well / Field */}
-        <div className="flex flex-col gap-1.5">
-          <Label text="Well / Field Name" />
-          <Dropdown
-            options={WELL_FIELD_OPTIONS}
-            value={wellField}
-            onChange={onWellFieldChange}
-            placeholder="Select well or field…"
-            searchable
-          />
-        </div>
-
-        {/* Cost Code */}
-        <div className="flex flex-col gap-1.5">
-          <Label text="Cost Centre / Cost Code" />
-          <Input
-            placeholder="e.g. CC-4821-OPS"
-            value={costCode}
-            onChange={e => onCostCodeChange(e.target.value)}
-          />
-        </div>
-      </div>
-
-      {/* Contact phone */}
-      <div className="flex flex-col gap-1.5">
-        <Label text="Requestor Contact Phone" />
-        <Input
-          type="tel"
-          placeholder="+234 800 000 0000"
-          value={contactPhone}
-          onChange={e => onContactPhoneChange(e.target.value)}
-          className="sm:w-64"
-        />
       </div>
     </div>
   )

@@ -7,7 +7,8 @@ import AppShell from '@/components/layout/AppShell'
 import { StatCard } from '@/components/domain/StatCard'
 import { DetailPanel } from '@/components/domain/DetailPanel'
 import { SectionTitle } from '@/components/domain/OrderGrid'
-import { WORK_ORDERS, type WorkOrder, sortNewestFirst } from '@/lib/mock-data'
+import { type WorkOrder, sortNewestFirst } from '@/lib/mock-data'
+import { LIVE_ORDERS } from '@/lib/workflow-store'
 import { STAGE_SLA_HOURS } from '@/config/sla'
 import { type Stage } from '@/lib/lifecycle'
 import { Toast } from './_components/Toast'
@@ -20,10 +21,10 @@ const MY_ID = 'WH1'
 export default function WarehousePersonnelPage() {
   const [orders, setOrders] = useState<WorkOrder[]>(() =>
     sortNewestFirst(
-      WORK_ORDERS.filter(
+      LIVE_ORDERS.filter(
         o =>
           o.assignedTo === MY_ID &&
-          ['Warehouse Assigned', 'Processing', 'GI Created'].includes(o.stage)
+          ['Warehouse Assigned', 'Picking', 'GI Created'].includes(o.stage)
       )
     )
   )
@@ -44,20 +45,43 @@ export default function WarehousePersonnelPage() {
   function executeAction() {
     if (!confirmAction) return
     const { orderId, action } = confirmAction
+    const now = new Date().toISOString()
+
+    const liveOrder = LIVE_ORDERS.find(o => o.id === orderId)
 
     if (action === 'process') {
+      if (liveOrder) {
+        const cur = liveOrder.stageHistory[liveOrder.stageHistory.length - 1]
+        if (cur && !cur.endedAt) { cur.endedAt = now; cur.personId = MY_ID; cur.personName = 'Emeka Okonkwo' }
+        liveOrder.stage = 'Picking'
+        liveOrder.stageHistory.push({ stage: 'Picking' as Stage, personId: MY_ID, personName: 'Emeka Okonkwo', startedAt: now })
+      }
       setOrders(prev =>
-        prev.map(o => o.id === orderId ? { ...o, stage: 'Processing' as Stage, elapsedHours: 0 } : o)
+        prev.map(o => o.id === orderId ? { ...o, stage: 'Picking' as Stage, elapsedHours: 0 } : o)
       )
       showToast('Order moved to Processing')
     } else if (action === 'gi') {
+      if (liveOrder) {
+        const cur = liveOrder.stageHistory[liveOrder.stageHistory.length - 1]
+        if (cur && !cur.endedAt) { cur.endedAt = now; cur.personId = MY_ID; cur.personName = 'Emeka Okonkwo' }
+        liveOrder.stage = 'GI Created'
+        liveOrder.stageHistory.push({ stage: 'GI Created' as Stage, personId: MY_ID, personName: 'Emeka Okonkwo', startedAt: now })
+      }
       setOrders(prev =>
         prev.map(o => o.id === orderId ? { ...o, stage: 'GI Created' as Stage, elapsedHours: 0 } : o)
       )
-      showToast('GI created - order is ready for dispatch transfer')
+      showToast('GI created — order is ready for dispatch transfer')
     } else if (action === 'transfer') {
+      if (liveOrder) {
+        const cur = liveOrder.stageHistory[liveOrder.stageHistory.length - 1]
+        if (cur && !cur.endedAt) { cur.endedAt = now; cur.personId = MY_ID; cur.personName = 'Emeka Okonkwo'; cur.durationHours = liveOrder.elapsedHours }
+        liveOrder.stage = 'Dispatch Queue'
+        liveOrder.assignedTo = null
+        liveOrder.assignedToName = null
+        liveOrder.stageHistory.push({ stage: 'Dispatch Queue' as Stage, personId: null, personName: null, startedAt: now })
+      }
       setOrders(prev => prev.filter(o => o.id !== orderId))
-      showToast('Transferred to Dispatch. Track progress in History.')
+      showToast('Transferred to Dispatch Queue.')
     }
     setConfirmAction(null)
   }
@@ -74,7 +98,7 @@ export default function WarehousePersonnelPage() {
     return {
       'All':                orders.length,
       'Warehouse Assigned': orders.filter(o => o.stage === 'Warehouse Assigned').length,
-      'Processing':         orders.filter(o => o.stage === 'Processing').length,
+      'Picking':         orders.filter(o => o.stage === 'Picking').length,
       'GI Created':         orders.filter(o => o.stage === 'GI Created').length,
       'Near SLA':           nearSla,
     } satisfies Record<TaskFilter, number>
@@ -97,9 +121,9 @@ export default function WarehousePersonnelPage() {
 
   const confirmMeta: Record<TaskAction, { title: string; description: string; label: string }> = {
     process: {
-      title: 'Start Processing',
-      description: 'Mark this order as being actively processed. Stage will update to Processing.',
-      label: 'Start Processing',
+      title: 'Confirm Item Picked',
+      description: 'Make sure that the item is picked before marking as picked.',
+      label: 'Yes, Mark as Picked',
     },
     gi: {
       title: 'Create Goods Issue',
@@ -141,11 +165,11 @@ export default function WarehousePersonnelPage() {
       {/* Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
         <StatCard label="My Active Tasks" value={orders.length} icon={ClipboardCheck} />
-        <StatCard label="Completed Today" value={3} color="#22C55E" icon={CheckCircle2} />
+        <StatCard label="Completed Today" value={3} color="#16A34A" icon={CheckCircle2} />
         <StatCard
           label="SLA At Risk"
           value={atRisk}
-          color={atRisk > 0 ? '#EF4444' : '#22C55E'}
+          color={atRisk > 0 ? '#DC2626' : '#16A34A'}
           icon={AlertTriangle}
         />
       </div>

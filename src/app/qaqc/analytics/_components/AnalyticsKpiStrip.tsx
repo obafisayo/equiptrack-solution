@@ -20,7 +20,7 @@ export function AnalyticsKpiStrip() {
         label="SLA Compliance Rate"
         value={`${kpis.slaCompliancePct}%`}
         icon={CheckCircle}
-        color="#10B981"
+        color="#16A34A"
         trend={kpis.slaCompliancePct >= 90
           ? { direction: 'up', value: 'On target', positive: true }
           : { direction: 'down', value: 'Below 90% target', positive: false }
@@ -41,7 +41,7 @@ export function AnalyticsKpiStrip() {
         label="Post QAQC Rejection Rate"
         value={`${kpis.rejectionRatePct}%`}
         icon={XCircle}
-        color="#EF4444"
+        color="#DC2626"
         trend={{ direction: 'down', value: '-3% vs last month', positive: true }}
       />
       <StatCard

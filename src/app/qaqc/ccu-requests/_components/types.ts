@@ -109,12 +109,12 @@ export const MOCK_REQUESTS: ContainerRequest[] = [
     contractorName: 'Delta Marine Containers',
     lineItems: [
       {
-        type: 'Open Top Basket',
+        type: '20ft Open Top Container',
         quantity: 1,
         responses: [{ serial: 'DMC-OTB-022', accepted: null }],
       },
     ],
-    composedMessage: composeContractorMessage('Delta Marine Containers', 'Mrs. Funke Akinwale', [{ type: 'Open Top Basket', quantity: 1 }]),
+    composedMessage: composeContractorMessage('Delta Marine Containers', 'Mrs. Funke Akinwale', [{ type: '20ft Open Top Container', quantity: 1 }]),
     status: 'Awaiting Response',
     createdBy: 'Ngozi Okafor',
     createdAt: '2026-06-29T14:00:00',

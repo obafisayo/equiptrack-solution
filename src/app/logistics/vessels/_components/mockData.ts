@@ -26,7 +26,7 @@ export const VESSELS: Vessel[] = [
   },
   {
     id: 'VSL-003', name: 'Seplat Pride', type: 'PSV', flag: 'Nigeria',
-    status: 'Loading', origin: 'Lagos Apapa Terminal', destination: 'Bonga FPSO Field',
+    status: 'Loading', origin: 'Lagos Apapa Terminal', destination: 'Akpo',
     etd: '2026-07-02', eta: '2026-07-03', progress: 10,
     captain: 'Capt. Emeka Obi', imo: 'IMO 9654321',
     priority: 'normal',
@@ -49,7 +49,7 @@ export const VESSELS: Vessel[] = [
   },
   {
     id: 'VSL-005', name: 'Delta Express', type: 'PSV', flag: 'Nigeria',
-    status: 'Departed', origin: 'Bonny Terminal', destination: 'Lagos Apapa Terminal',
+    status: 'Departed', origin: 'AMQ', destination: 'Lagos Apapa Terminal',
     etd: '2026-06-27', eta: '2026-06-28', progress: 100,
     captain: 'Capt. Fatima Yusuf', imo: 'IMO 9345678',
     priority: 'normal',

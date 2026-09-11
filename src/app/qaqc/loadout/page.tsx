@@ -86,10 +86,10 @@ export default function LoadoutQaqcPage() {
     >
       {/* Stats */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
-        <StatCard label="Pending Inspection" value={stats.pending}    color="#F59E0B" icon={Clock} />
-        <StatCard label="In Inspection"       value={stats.inspecting} color="#F59E0B" icon={AlertTriangle} />
-        <StatCard label="Passed Today"         value={stats.passedToday} color="#22C55E" icon={CheckCircle2} />
-        <StatCard label="Rejected / Quarantined" value={stats.rejected} color="#EF4444" icon={XCircle} />
+        <StatCard label="Pending Inspection"    value={stats.pending}     color="#D97706" icon={Clock} />
+        <StatCard label="In Inspection"          value={stats.inspecting}  color="#D97706" icon={AlertTriangle} />
+        <StatCard label="Passed Today"           value={stats.passedToday} color="#16A34A" icon={CheckCircle2} />
+        <StatCard label="Rejected / Quarantined" value={stats.rejected}    color="#DC2626" icon={XCircle} />
       </div>
 
       {/* Anomaly count banner */}
@@ -109,8 +109,8 @@ export default function LoadoutQaqcPage() {
             className={[
               'text-[12px] font-semibold px-3 py-1.5 rounded-lg border transition-colors duration-150',
               statusFilter === f
-                ? 'bg-gray-900 text-white border-gray-900'
-                : 'bg-white text-gray-600 border-border-default hover:bg-gray-50',
+                ? 'bg-brand-navy text-white border-brand-navy'
+                : 'bg-white text-slate-600 border-border-default hover:bg-slate-50',
             ].join(' ')}
           >
             {f}

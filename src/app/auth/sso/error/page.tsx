@@ -33,7 +33,7 @@ function SSOErrorContent() {
     }}>
       {/* Logo */}
       <div style={{
-        width: 48, height: 48, background: '#F04A4A', borderRadius: 11,
+        width: 48, height: 48, background: '#1A6FBF', borderRadius: 11,
         display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 32,
       }}>
         <svg width="26" height="26" viewBox="0 0 40 40" fill="none">
@@ -83,7 +83,7 @@ function SSOErrorContent() {
           <Link
             href="/auth/sso/microsoft"
             style={{
-              display: 'block', padding: '10px 0', background: '#F04A4A',
+              display: 'block', padding: '10px 0', background: '#1A6FBF',
               color: '#fff', borderRadius: 7, fontSize: 13, fontWeight: 600,
               textDecoration: 'none', textAlign: 'center',
             }}

@@ -23,7 +23,7 @@ export function IncomingDeliveryTable({ deliveries, selectedId, onSelect }: Prop
     <div className="bg-white border border-border-default rounded-card shadow-card overflow-hidden">
       <table className="w-full text-sm">
         <thead>
-          <tr className="border-b border-border-default bg-gray-50">
+          <tr className="border-b border-border-default bg-slate-50">
             <th className="text-left px-4 py-3 text-[11px] font-semibold text-gray-500 uppercase tracking-wide">Serial / Type</th>
             <th className="text-left px-4 py-3 text-[11px] font-semibold text-gray-500 uppercase tracking-wide">Contractor</th>
             <th className="text-left px-4 py-3 text-[11px] font-semibold text-gray-500 uppercase tracking-wide">Expected</th>
@@ -46,8 +46,8 @@ export function IncomingDeliveryTable({ deliveries, selectedId, onSelect }: Prop
               className={[
                 'cursor-pointer transition-colors duration-150',
                 selectedId === d.id
-                  ? 'bg-brand-500/5 border-l-2 border-l-brand-500'
-                  : 'hover:bg-gray-50',
+                  ? 'bg-brand-tint border-l-[3px] border-l-brand-accent'
+                  : 'hover:bg-slate-50',
               ].join(' ')}
             >
               <td className="px-4 py-3">

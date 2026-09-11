@@ -60,26 +60,26 @@ export default function CCUDashboardPage() {
         <StatCard
           label="Total CCU in Fleet"
           value={stats.total}
-          color="#10B981"
+          color="#1A6FBF"
           icon={Package}
         />
         <StatCard
           label="At Base (Available)"
           value={stats.atBase}
-          color="#22C55E"
+          color="#16A34A"
           trend={{ direction: 'up', value: 'at Onne Base', positive: true }}
           icon={CheckCircle2}
         />
         <StatCard
           label="At Site (Deployed)"
           value={stats.atSite}
-          color="#F59E0B"
+          color="#D97706"
           icon={MapPin}
         />
         <StatCard
           label="Inspection Due / Overdue"
           value={stats.awaitingInspection}
-          color={stats.awaitingInspection > 3 ? '#EF4444' : '#F59E0B'}
+          color={stats.awaitingInspection > 3 ? '#DC2626' : '#D97706'}
           trend={{
             direction: stats.awaitingInspection > 3 ? 'up' : 'down',
             value: 'need attention',

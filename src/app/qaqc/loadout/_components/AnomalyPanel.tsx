@@ -120,7 +120,7 @@ export function AnomalyPanel({ delivery, onClose, onPass, onReject, onQuarantine
                   <select
                     value={newType}
                     onChange={e => setNewType(e.target.value as AnomalyType)}
-                    className="w-full text-[13px] border border-border-default rounded-lg px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-brand-500/30"
+                    className="w-full text-[13px] border border-border-default rounded-lg px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-brand-accent/30"
                   >
                     {ANOMALY_TYPES.map(t => <option key={t} value={t}>{t}</option>)}
                   </select>
@@ -130,7 +130,7 @@ export function AnomalyPanel({ delivery, onClose, onPass, onReject, onQuarantine
                   <select
                     value={newSeverity}
                     onChange={e => setNewSeverity(e.target.value as AnomalySeverity)}
-                    className="w-full text-[13px] border border-border-default rounded-lg px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-brand-500/30"
+                    className="w-full text-[13px] border border-border-default rounded-lg px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-brand-accent/30"
                   >
                     {(['Minor', 'Major', 'Critical'] as AnomalySeverity[]).map(s => (
                       <option key={s} value={s}>{s}</option>
@@ -145,14 +145,14 @@ export function AnomalyPanel({ delivery, onClose, onPass, onReject, onQuarantine
                   onChange={e => setNewDesc(e.target.value)}
                   rows={3}
                   placeholder="Describe the anomaly in detail..."
-                  className="w-full text-[13px] border border-border-default rounded-lg px-3 py-2 bg-white resize-none focus:outline-none focus:ring-2 focus:ring-brand-500/30"
+                  className="w-full text-[13px] border border-border-default rounded-lg px-3 py-2 bg-white resize-none focus:outline-none focus:ring-2 focus:ring-brand-accent/30"
                 />
               </div>
               <div className="flex items-center gap-2">
                 <button
                   onClick={handleAddAnomaly}
                   disabled={!newDesc.trim()}
-                  className="flex items-center gap-1.5 text-[12px] font-semibold px-3 py-1.5 rounded-lg bg-brand-500 text-white hover:bg-brand-600 disabled:opacity-40 transition-colors"
+                  className="flex items-center gap-1.5 text-[12px] font-semibold px-3 py-1.5 rounded-lg bg-brand-accent text-white hover:bg-brand-accent-hover disabled:opacity-40 transition-colors"
                 >
                   <Plus size={13} />
                   Add Anomaly

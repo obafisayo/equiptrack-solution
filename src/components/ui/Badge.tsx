@@ -15,20 +15,20 @@ const variantClasses: Record<BadgeVariant, string> = {
   default: 'bg-neutral-100 text-neutral-600',
   blue:    'bg-status-info-bg text-blue-700',
   purple:  'bg-purple-50 text-purple-700',
-  amber:   'bg-status-medium-bg text-amber-700',
-  green:   'bg-status-low-bg text-green-700',
-  red:     'bg-status-critical-bg text-red-700',
-  orange:  'bg-status-high-bg text-orange-700',
+  amber:   'bg-status-warning-bg text-amber-700',
+  green:   'bg-status-success-bg text-green-700',
+  red:     'bg-status-danger-bg text-red-700',
+  orange:  'bg-status-major-bg text-orange-700',
 }
 
 const dotColors: Record<BadgeVariant, string> = {
   default: 'bg-neutral-400',
   blue:    'bg-status-info',
   purple:  'bg-purple-500',
-  amber:   'bg-status-medium',
-  green:   'bg-status-low',
-  red:     'bg-status-critical',
-  orange:  'bg-status-high',
+  amber:   'bg-status-warning',
+  green:   'bg-status-success',
+  red:     'bg-status-danger',
+  orange:  'bg-status-major',
 }
 
 const sizeClasses: Record<BadgeSize, string> = {

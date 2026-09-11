@@ -60,7 +60,7 @@ export default function MaintenanceSchedulePage() {
         {/* KPI strip */}
         <div className="grid grid-cols-4 gap-4">
           {([
-            { label:'Upcoming Items',    value: SCHEDULE.length,                                         icon:<Calendar size={16}/>,       color:'#3B82F6' },
+            { label:'Upcoming Items',    value: SCHEDULE.length,                                         icon:<Calendar size={16}/>,       color:'#1A6FBF' },
             { label:'Total Est. Hours',  value:`${SCHEDULE.reduce((s,i)=>s+i.estimatedHours,0)}h`,      icon:<Clock size={16}/>,           color:'#8B5CF6' },
             { label:'Critical Upcoming', value: SCHEDULE.filter(s=>s.priority==='critical').length,      icon:<AlertTriangle size={16}/>,   color:'#DC2626' },
             { label:'High Priority',     value: SCHEDULE.filter(s=>s.priority==='high').length,          icon:<Wrench size={16}/>,          color:'#EA580C' },
@@ -83,7 +83,7 @@ export default function MaintenanceSchedulePage() {
             <button key={p} onClick={() => setFilter(p)}
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold border transition-colors capitalize ${
                 filter === p
-                  ? 'bg-neutral-900 border-neutral-900 text-white'
+                  ? 'bg-brand-navy border-brand-navy text-white'
                   : 'bg-white border-neutral-200 text-neutral-600 hover:border-neutral-300'
               }`}>
               {p === 'all' ? 'All Priorities' : PRIORITY_CFG[p].label}

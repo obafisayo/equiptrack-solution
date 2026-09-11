@@ -17,3 +17,12 @@ export function generateDeliveryNumber(): string {
 export function today() {
   return new Date().toISOString().split('T')[0]
 }
+
+export function minDateForUrgency(urgency: UrgencyLevel | ''): string {
+  if (!urgency) return today()
+  const days = URGENCY_CONFIG[urgency].days
+  if (!days) return today()          // Urgent = next boat, no future-day constraint
+  const d = new Date()
+  d.setDate(d.getDate() + days)
+  return d.toISOString().split('T')[0]
+}

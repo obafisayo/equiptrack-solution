@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { X, Plus, Trash2 } from 'lucide-react'
 import type { ReturnOrder, ReturnItem } from './types'
 import type { DangerousGoodsClass } from '@/lib/mock-data'
+import { DESTINATIONS } from '@/lib/destinations'
 
 const DG_OPTIONS: { value: DangerousGoodsClass; label: string; color: string }[] = [
   { value: 'normal',       label: 'Normal',       color: 'border-gray-200 text-gray-700'   },
@@ -14,7 +15,7 @@ const DG_OPTIONS: { value: DangerousGoodsClass; label: string; color: string }[]
   { value: 'hazardous',    label: 'Hazardous',     color: 'border-red-400 text-red-600'    },
 ]
 
-const SITES = ['Bonga FPSO', 'Agbami FPSO', 'Escravos Terminal', 'Egina FPSO', 'Usan FPSO', 'Forcados Terminal', 'Bonny Terminal']
+const SITES = [...DESTINATIONS]
 
 interface Props {
   onClose: () => void

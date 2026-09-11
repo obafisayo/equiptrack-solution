@@ -22,7 +22,7 @@ export function RecentActivityCard({ orgSlug, events }: RecentActivityCardProps)
       style={{ boxShadow: '0 1px 3px rgba(0,0,0,0.06)' }}>
       <div style={{ padding: '14px 18px', borderBottom: '1px solid #E2E8F0', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <p style={{ fontSize: 14, fontWeight: 600, color: '#111827', margin: 0 }}>Recent Activity</p>
-        <Link href={`/${orgSlug}/admin/audit`} style={{ fontSize: 12, color: '#F04A4A', fontWeight: 600, textDecoration: 'none' }}>
+        <Link href={`/${orgSlug}/admin/audit`} style={{ fontSize: 12, color: '#1A6FBF', fontWeight: 600, textDecoration: 'none' }}>
           View all
         </Link>
       </div>

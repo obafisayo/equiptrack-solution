@@ -13,9 +13,9 @@ interface Props {
 export function KpiRow({ totalEvents, awaitingCount, loadingCount, inTransitCount }: Props) {
   return (
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-5">
-      <StatCard label="Total Events" value={totalEvents} color="#3B82F6" icon={CalIcon} />
-      <StatCard label="Vessels Available" value={awaitingCount} color="#22C55E" icon={Navigation} />
-      <StatCard label="Currently Loading" value={loadingCount} color="#F59E0B" icon={Package} />
+      <StatCard label="Total Events" value={totalEvents} color="#1A6FBF" icon={CalIcon} />
+      <StatCard label="Vessels Available" value={awaitingCount} color="#16A34A" icon={Navigation} />
+      <StatCard label="Currently Loading" value={loadingCount} color="#D97706" icon={Package} />
       <StatCard label="In Transit" value={inTransitCount} color="#8B5CF6" icon={Anchor} />
     </div>
   )

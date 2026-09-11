@@ -12,7 +12,7 @@ import { PersonnelCard } from './_components/PersonnelCard'
 import { ReassignModal } from './_components/ReassignModal'
 
 const WAREHOUSE_STAGES: Stage[] = [
-  'New Request', 'Warehouse Assigned', 'Processing', 'GI Created', 'Transferred to Dispatch',
+  'New Request', 'Warehouse Assigned', 'Picking', 'GI Created', 'Transferred to Dispatch',
 ]
 
 export default function PersonnelLoadPage() {
@@ -63,7 +63,7 @@ export default function PersonnelLoadPage() {
         <StatCard
           label="Overloaded"
           value={overloaded.length}
-          color={overloaded.length > 0 ? '#EF4444' : '#22C55E'}
+          color={overloaded.length > 0 ? '#DC2626' : '#16A34A'}
           icon={AlertTriangle}
         />
         <StatCard label="Avg Active Orders" value={avgLoad}    icon={BarChart2} />

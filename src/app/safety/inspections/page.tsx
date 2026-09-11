@@ -44,10 +44,10 @@ export default function SafetyInspectionsPage() {
       breadcrumb={[{label:'Home',href:'/'},{label:'Safety',href:'/safety'},{label:'Inspections'}]}
     >
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <StatCard label="Passed"    value={passed}    color="#10B981" icon={CheckCircle2}/>
-        <StatCard label="Scheduled" value={scheduled} color="#3B82F6" icon={Clock}/>
-        <StatCard label="Overdue"   value={overdue}   color={overdue>0?'#EF4444':'#22C55E'} icon={AlertTriangle}/>
-        <StatCard label="Failed"    value={failed}    color={failed>0?'#EF4444':'#22C55E'} icon={AlertTriangle}/>
+        <StatCard label="Passed"    value={passed}    color="#16A34A" icon={CheckCircle2}/>
+        <StatCard label="Scheduled" value={scheduled} color="#1A6FBF" icon={Clock}/>
+        <StatCard label="Overdue"   value={overdue}   color={overdue>0?'#DC2626':'#16A34A'} icon={AlertTriangle}/>
+        <StatCard label="Failed"    value={failed}    color={failed>0?'#DC2626':'#16A34A'} icon={AlertTriangle}/>
       </div>
 
       <div className="bg-white rounded-card border border-border-default shadow-card overflow-x-auto">

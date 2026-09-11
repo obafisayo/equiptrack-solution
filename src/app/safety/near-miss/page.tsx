@@ -59,9 +59,9 @@ export default function SafetyNearMissPage() {
       breadcrumb={[{label:'Home',href:'/'},{label:'Safety',href:'/safety'},{label:'Near Misses'}]}
     >
       <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
-        <StatCard label="Open"         value={open}        color={open>0?'#F59E0B':'#22C55E'} icon={AlertTriangle}/>
-        <StatCard label="Under Review" value={underReview} color="#3B82F6"                     icon={AlertTriangle}/>
-        <StatCard label="Closed"       value={closed}      color="#10B981"                     icon={CheckCircle2}/>
+        <StatCard label="Open"         value={open}        color={open>0?'#D97706':'#16A34A'} icon={AlertTriangle}/>
+        <StatCard label="Under Review" value={underReview} color="#1A6FBF"                     icon={AlertTriangle}/>
+        <StatCard label="Closed"       value={closed}      color="#16A34A"                     icon={CheckCircle2}/>
       </div>
 
       <div className="flex items-center justify-between mb-5">

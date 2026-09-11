@@ -43,8 +43,8 @@ export function MembersTable({ members, suspendedIds, onToggleSuspend }: Members
                   <td style={{ padding: '11px 16px', color: '#6B7280', fontFamily: 'monospace', fontSize: 12 }}>{user.email}</td>
                   <td style={{ padding: '11px 16px' }}>
                     <span style={{
-                      background: isAdmin ? '#FFF1F1' : '#F1F5F9',
-                      color: isAdmin ? '#F04A4A' : '#475569',
+                      background: isAdmin ? '#EFF6FF' : '#F1F5F9',
+                      color: isAdmin ? '#1A6FBF' : '#475569',
                       fontSize: 11, fontWeight: 600, padding: '2px 7px', borderRadius: 9999,
                     }}>{ROLE_LABEL[user.role] ?? user.role}</span>
                   </td>

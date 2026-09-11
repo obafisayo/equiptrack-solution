@@ -21,6 +21,7 @@ const ROLE_USER: Record<Role, string> = {
   maintenance:    'Segun Folarin',
   sysadmin:       'System Admin',
   site_logistics: 'Chukwudi Eze',
+  site_return:    'Tunde Oghenekaro',
 }
 
 interface TopbarProps {

@@ -12,12 +12,12 @@ export function StatusFilterBar({ statusFilter, shownCount, onSelect }: Props) {
   return (
     <div className="flex items-center gap-2 flex-wrap">
       <button onClick={() => onSelect('all')}
-        className={`px-3 py-1.5 rounded-lg text-xs font-semibold border transition-colors ${statusFilter === 'all' ? 'bg-neutral-900 border-neutral-900 text-white' : 'bg-white border-neutral-200 text-neutral-600 hover:border-neutral-300'}`}>
+        className={`px-3 py-1.5 rounded-lg text-xs font-semibold border transition-colors ${statusFilter === 'all' ? 'bg-brand-navy border-brand-navy text-white' : 'bg-white border-neutral-200 text-neutral-600 hover:border-neutral-300'}`}>
         All Vessels
       </button>
       {STATUSES.map(s => (
         <button key={s} onClick={() => onSelect(s)}
-          className={`px-3 py-1.5 rounded-lg text-xs font-semibold border transition-colors ${statusFilter === s ? 'bg-neutral-900 border-neutral-900 text-white' : 'bg-white border-neutral-200 text-neutral-600 hover:border-neutral-300'}`}>
+          className={`px-3 py-1.5 rounded-lg text-xs font-semibold border transition-colors ${statusFilter === s ? 'bg-brand-navy border-brand-navy text-white' : 'bg-white border-neutral-200 text-neutral-600 hover:border-neutral-300'}`}>
           {s}
         </button>
       ))}

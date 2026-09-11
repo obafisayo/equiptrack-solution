@@ -7,12 +7,12 @@ interface Props {
 }
 
 const STATUS_CONFIG: Record<CCUStatus, { label: string; color: string; bg: string }> = {
-  'Available':          { label: 'Available',          color: '#22C55E', bg: 'bg-green-500'  },
-  'In Transit':         { label: 'In Transit',         color: '#F59E0B', bg: 'bg-amber-500'  },
-  'Assigned':           { label: 'Assigned',           color: '#F59E0B', bg: 'bg-amber-400'  },
-  'Maintenance':        { label: 'Maintenance',        color: '#EF4444', bg: 'bg-red-500'    },
-  'Quarantine':         { label: 'Quarantine',         color: '#EF4444', bg: 'bg-red-600'    },
-  'Pending Inspection': { label: 'Pending Inspection', color: '#94A3B8', bg: 'bg-slate-400'  },
+  'Available':          { label: 'Available',          color: '#16A34A', bg: 'bg-green-600'  },
+  'In Transit':         { label: 'In Transit',         color: '#D97706', bg: 'bg-amber-600'  },
+  'Assigned':           { label: 'Assigned',           color: '#D97706', bg: 'bg-amber-400'  },
+  'Maintenance':        { label: 'Maintenance',        color: '#DC2626', bg: 'bg-red-600'    },
+  'Quarantine':         { label: 'Quarantine',         color: '#DC2626', bg: 'bg-red-700'    },
+  'Pending Inspection': { label: 'Pending Inspection', color: '#64748B', bg: 'bg-slate-400'  },
 }
 
 export function FleetHealthChart({ containers }: Props) {

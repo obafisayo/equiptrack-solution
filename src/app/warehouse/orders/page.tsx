@@ -6,7 +6,7 @@ import { DetailPanel } from '@/components/domain/DetailPanel'
 import { SectionTitle } from '@/components/domain/OrderGrid'
 import { TRDocumentModal, type TRDocumentData } from '@/components/domain/TRDocument'
 import { WORK_ORDERS, type WorkOrder } from '@/lib/mock-data'
-import { STAGE_DEPARTMENT, type Stage } from '@/lib/lifecycle'
+import { type Stage } from '@/lib/lifecycle'
 import { STAGE_SLA_HOURS, type UrgencyLevel } from '@/config/sla'
 import { FilterBar, type RequestType, type SortOption, type ViewMode } from './_components/FilterBar'
 import { OrdersCardGrid } from './_components/OrdersCardGrid'
@@ -21,9 +21,11 @@ function getSlaOverage(order: WorkOrder): number {
 export default function AllOrdersPage() {
   const [orders] = useState<WorkOrder[]>(WORK_ORDERS)
   const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null)
-  const [deptFilter, setDeptFilter] = useState<string>('all')
+  const [stageFilter, setStageFilter] = useState<string>('All')
   const [typeFilter, setTypeFilter] = useState<RequestType>('All')
   const [urgencyFilter, setUrgencyFilter] = useState<UrgencyLevel | 'All'>('All')
+  const [monthFilter, setMonthFilter] = useState<string>('')
+  const [yearFilter, setYearFilter] = useState<string>('')
   const [search, setSearch] = useState('')
   const [sort, setSort] = useState<SortOption>('oldest')
   const [viewMode, setViewMode] = useState<ViewMode>('cards')
@@ -32,14 +34,24 @@ export default function AllOrdersPage() {
   const filtered = useMemo(() => {
     let list = [...orders]
 
-    if (deptFilter !== 'all') {
-      list = list.filter(o => STAGE_DEPARTMENT[o.stage as Stage] === deptFilter)
+    if (stageFilter !== 'All') {
+      list = list.filter(o => o.stage === stageFilter)
     }
     if (typeFilter !== 'All') {
       list = list.filter(o => o.requestType === typeFilter)
     }
     if (urgencyFilter !== 'All') {
       list = list.filter(o => o.urgency === urgencyFilter)
+    }
+    if (monthFilter || yearFilter) {
+      list = list.filter(o => {
+        const d = new Date(o.createdAt)
+        const m = String(d.getMonth() + 1).padStart(2, '0')
+        const y = String(d.getFullYear())
+        if (monthFilter && m !== monthFilter) return false
+        if (yearFilter && y !== yearFilter) return false
+        return true
+      })
     }
     if (search.trim()) {
       const q = search.toLowerCase()
@@ -58,7 +70,7 @@ export default function AllOrdersPage() {
     })
 
     return list
-  }, [orders, deptFilter, typeFilter, urgencyFilter, search, sort])
+  }, [orders, stageFilter, typeFilter, urgencyFilter, monthFilter, yearFilter, search, sort])
 
   const selectedOrder = orders.find(o => o.id === selectedOrderId) ?? null
 
@@ -78,18 +90,21 @@ export default function AllOrdersPage() {
         search={search}
         sort={sort}
         viewMode={viewMode}
-        deptFilter={deptFilter}
+        stageFilter={stageFilter}
         typeFilter={typeFilter}
         urgencyFilter={urgencyFilter}
+        monthFilter={monthFilter}
+        yearFilter={yearFilter}
         onSearchChange={setSearch}
         onSortChange={setSort}
         onViewModeChange={setViewMode}
-        onDeptFilterChange={setDeptFilter}
+        onStageFilterChange={setStageFilter}
         onTypeFilterChange={setTypeFilter}
         onUrgencyFilterChange={setUrgencyFilter}
+        onMonthFilterChange={setMonthFilter}
+        onYearFilterChange={setYearFilter}
       />
 
-      {/* Results header */}
       <div className="flex items-center gap-3 mb-4">
         <SectionTitle title="Work Orders" count={filtered.length} />
         {slaBreachedCount > 0 && (

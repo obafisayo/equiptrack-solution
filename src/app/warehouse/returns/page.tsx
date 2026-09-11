@@ -43,10 +43,10 @@ export default function WarehouseReturnsPage() {
       breadcrumb={[{ label: 'Home', href: '/' }, { label: 'Warehouse', href: '/warehouse' }, { label: 'Returns' }]}
     >
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <StatCard label="Pending Returns"      value={pending}   color="#F59E0B" icon={Clock}        />
-        <StatCard label="In Transit"           value={inTransit} color="#F59E0B" icon={Package}      />
-        <StatCard label="Arrived — Pending Disposition" value={arrived} color="#F59E0B" icon={AlertCircle} />
-        <StatCard label="Disposition Assigned" value={disposed}  color="#10B981" icon={CheckCircle}  />
+        <StatCard label="Pending Returns"      value={pending}   color="#D97706" icon={Clock}        />
+        <StatCard label="In Transit"           value={inTransit} color="#D97706" icon={Package}      />
+        <StatCard label="Arrived — Pending Disposition" value={arrived} color="#D97706" icon={AlertCircle} />
+        <StatCard label="Disposition Assigned" value={disposed}  color="#16A34A" icon={CheckCircle}  />
       </div>
 
       <div className="bg-white border border-border-default rounded-card shadow-card overflow-hidden">
@@ -54,7 +54,7 @@ export default function WarehouseReturnsPage() {
           <h3 className="text-[14px] font-bold text-gray-800">All Return Orders</h3>
         </div>
         <table className="w-full text-sm">
-          <thead className="bg-gray-50 border-b border-border-default">
+          <thead className="bg-slate-50 border-b border-border-default">
             <tr>
               {['Return ID', 'Origin', 'Items', 'Status', 'Disposition', 'Actions'].map(h => (
                 <th key={h} className="px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-wide text-gray-400">{h}</th>

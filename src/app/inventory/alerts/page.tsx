@@ -88,7 +88,7 @@ export default function InventoryAlertsPage() {
         {/* KPI strip */}
         <div className="grid grid-cols-4 gap-4">
           {([
-            { label: 'Total Active Alerts', value: critical + reorder,                                      color: '#F04A4A', icon: <AlertTriangle size={16}/> },
+            { label: 'Total Active Alerts', value: critical + reorder,                                      color: '#DC2626', icon: <AlertTriangle size={16}/> },
             { label: 'Critical Stock',       value: critical,                                                color: '#DC2626', icon: <XCircle size={16}/> },
             { label: 'Reorder Required',     value: reorder,                                                 color: '#D97706', icon: <TrendingDown size={16}/> },
             { label: 'Max Lead Time',         value: `${Math.max(...ALERTS.map(a => a.leadDays))}d`,        color: '#8B5CF6', icon: <Clock size={16}/> },
@@ -111,7 +111,7 @@ export default function InventoryAlertsPage() {
             <button key={f} onClick={() => setFilter(f)}
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold border transition-colors capitalize ${
                 filter === f
-                  ? 'bg-neutral-900 border-neutral-900 text-white'
+                  ? 'bg-brand-navy border-brand-navy text-white'
                   : 'bg-white border-neutral-200 text-neutral-600 hover:border-neutral-300'
               }`}>
               {f === 'all' ? 'All Alerts' : LEVEL_CFG[f].label}

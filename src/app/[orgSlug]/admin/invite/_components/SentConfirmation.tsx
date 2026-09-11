@@ -42,7 +42,7 @@ export function SentConfirmation({ rows, method, onInviteMore }: SentConfirmatio
           onClick={onInviteMore}
           style={{
             marginTop: 24, padding: '9px 20px', border: 'none',
-            borderRadius: 7, background: '#F04A4A', color: '#fff',
+            borderRadius: 7, background: '#1A6FBF', color: '#fff',
             fontSize: 13, fontWeight: 600, cursor: 'pointer',
           }}
         >

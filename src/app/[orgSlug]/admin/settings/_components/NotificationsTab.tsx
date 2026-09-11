@@ -43,7 +43,7 @@ export function NotificationsTab() {
               onClick={() => setEnabled(e => ({ ...e, [item.id]: !e[item.id] }))}
               style={{
                 width: 40, height: 22, borderRadius: 11, border: 'none',
-                background: enabled[item.id] ? '#F04A4A' : '#D1D5DB',
+                background: enabled[item.id] ? '#1A6FBF' : '#D1D5DB',
                 cursor: 'pointer', position: 'relative', flexShrink: 0,
                 transition: 'background 150ms ease',
               }}
@@ -66,7 +66,7 @@ export function NotificationsTab() {
           style={{
             display: 'flex', alignItems: 'center', gap: 7,
             padding: '9px 20px', border: 'none', borderRadius: 7,
-            background: saved ? '#16A34A' : '#F04A4A', color: '#fff',
+            background: saved ? '#16A34A' : '#1A6FBF', color: '#fff',
             fontSize: 13, fontWeight: 600, cursor: 'pointer',
             transition: 'background 150ms ease',
           }}

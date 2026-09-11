@@ -111,8 +111,8 @@ export function Step2Details({ rows, onChangeRows, selectedRole, onSelectRole, m
         onClick={addRow}
         style={{
           display: 'flex', alignItems: 'center', gap: 6,
-          fontSize: 12, fontWeight: 600, color: '#F04A4A',
-          background: 'none', border: '1px dashed #F04A4A',
+          fontSize: 12, fontWeight: 600, color: '#1A6FBF',
+          background: 'none', border: '1px dashed #1A6FBF',
           borderRadius: 6, padding: '7px 12px', cursor: 'pointer', marginBottom: 24,
         }}
       >
@@ -129,7 +129,7 @@ export function Step2Details({ rows, onChangeRows, selectedRole, onSelectRole, m
         </button>
         <button onClick={onNext} disabled={!valid} style={{
           flex: 2, padding: '9px 0', border: 'none', borderRadius: 7,
-          background: valid ? '#F04A4A' : '#F3F4F6',
+          background: valid ? '#1A6FBF' : '#F3F4F6',
           fontSize: 13, fontWeight: 600, color: valid ? '#fff' : '#9CA3AF',
           cursor: valid ? 'pointer' : 'not-allowed',
           display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,

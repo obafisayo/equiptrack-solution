@@ -19,7 +19,7 @@ export const STAGE_SLA_HOURS: Partial<Record<Stage, number>> = {
   'Pending Base Coordinator Approval': 8,
   'New Request':                       4,
   'Warehouse Assigned':                2,
-  'Processing':                        8,
+  'Picking':                        8,
   'GI Created':                        2,
   'Transferred to Dispatch':           1,
   'Dispatch Queue':                    2,
@@ -35,9 +35,9 @@ export const STAGE_SLA_HOURS: Partial<Record<Stage, number>> = {
 export const SLA_WARNING_THRESHOLD = 0.75
 
 export const SLA_COLORS = {
-  onTrack:  { color: '#22C55E', bg: '#F0FDF4' },
-  warning:  { color: '#F59E0B', bg: '#FFFBEB' },
-  breached: { color: '#EF4444', bg: '#FEF2F2' },
+  onTrack:  { color: '#16A34A', bg: '#F0FDF4' },
+  warning:  { color: '#D97706', bg: '#FFFBEB' },
+  breached: { color: '#DC2626', bg: '#FEF2F2' },
 }
 
 export function getSlaStatus(elapsedHours: number, slaHours: number | undefined) {

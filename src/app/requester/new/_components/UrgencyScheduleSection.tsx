@@ -4,7 +4,7 @@ import { DatePicker } from '@/components/ui/DatePicker'
 import { URGENCY_CONFIG } from '@/config/sla'
 import type { UrgencyLevel } from '@/config/sla'
 import { URGENCY_STYLE } from './constants'
-import { getExpectedDate, today } from './helpers'
+import { getExpectedDate, today, minDateForUrgency } from './helpers'
 import { SectionHeader, Label, FieldError } from './FormHelpers'
 
 interface UrgencyScheduleSectionProps {
@@ -70,10 +70,16 @@ export function UrgencyScheduleSection({
           <DatePicker
             value={requiredDate}
             onChange={onRequiredDateChange}
-            min={today()}
+            min={minDateForUrgency(urgency)}
             placeholder="When is it needed offshore?"
             error={!!errors.requiredDate}
           />
+          {urgency && URGENCY_CONFIG[urgency].days && (
+            <p className="text-[11px] text-gray-400 flex items-center gap-1 mt-0.5">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l2 2"/></svg>
+              Must be at least {URGENCY_CONFIG[urgency].days} day{URGENCY_CONFIG[urgency].days !== 1 ? 's' : ''} from today for {urgency} priority
+            </p>
+          )}
           {errors.requiredDate && <FieldError msg={errors.requiredDate} />}
         </div>
 
@@ -82,10 +88,13 @@ export function UrgencyScheduleSection({
           <DatePicker
             value={returnDate}
             onChange={onReturnDateChange}
-            min={requiredDate || today()}
+            min={requiredDate || minDateForUrgency(urgency)}
             placeholder="When will it return?"
             error={!!errors.returnDate}
           />
+          {requiredDate && (
+            <p className="text-[11px] text-gray-400 mt-0.5">Must be on or after the required on-site date</p>
+          )}
           {errors.returnDate && <FieldError msg={errors.returnDate} />}
         </div>
       </div>

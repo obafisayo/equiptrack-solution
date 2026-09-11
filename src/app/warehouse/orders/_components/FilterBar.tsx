@@ -2,48 +2,91 @@
 
 import { SearchInput, Select } from '@/components/ui/Form'
 import { type UrgencyLevel } from '@/config/sla'
+import { LIFECYCLE } from '@/lib/lifecycle'
 
 export type RequestType = 'All' | 'SAP' | 'TR' | 'VENDOR' | 'NON_STOCK'
 export type SortOption = 'oldest' | 'newest' | 'overdue'
 export type ViewMode = 'cards' | 'table'
 
-const DEPT_GROUPS = [
-  { label: 'All Stages', value: 'all' },
-  { label: 'Warehouse', value: 'warehouse' },
-  { label: 'Dispatch', value: 'dispatch' },
-  { label: 'QAQC', value: 'qaqc' },
-  { label: 'Final', value: 'final' },
-  { label: 'Pending', value: 'pending' },
+const STAGE_OPTIONS = ['All', ...LIFECYCLE]
+const URGENCY_OPTIONS: Array<UrgencyLevel | 'All'> = ['All', 'Low', 'Medium', 'High', 'Urgent']
+const TYPE_OPTIONS: RequestType[] = ['All', 'SAP', 'TR', 'VENDOR', 'NON_STOCK']
+const TYPE_LABELS: Record<RequestType, string> = {
+  All: 'All', SAP: 'SAP', TR: 'TR', VENDOR: 'Vendor', NON_STOCK: 'Non-Stock',
+}
+
+const MONTHS = [
+  { value: '', label: 'All Months' },
+  { value: '01', label: 'January' }, { value: '02', label: 'February' },
+  { value: '03', label: 'March' },   { value: '04', label: 'April' },
+  { value: '05', label: 'May' },     { value: '06', label: 'June' },
+  { value: '07', label: 'July' },    { value: '08', label: 'August' },
+  { value: '09', label: 'September' },{ value: '10', label: 'October' },
+  { value: '11', label: 'November' },{ value: '12', label: 'December' },
 ]
+
+const currentYear = new Date().getFullYear()
+const YEARS = [
+  { value: '', label: 'All Years' },
+  ...Array.from({ length: 5 }, (_, i) => {
+    const y = (currentYear - i).toString()
+    return { value: y, label: y }
+  }),
+]
+
+function PillRow({ label, options, active, onSelect, getLabel }: {
+  label: string
+  options: string[]
+  active: string
+  onSelect: (v: string) => void
+  getLabel?: (v: string) => string
+}) {
+  return (
+    <div className="flex items-start gap-3 flex-wrap">
+      <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400 shrink-0 mt-[5px] w-24">{label}</span>
+      <div className="flex gap-1.5 flex-wrap">
+        {options.map(opt => (
+          <button
+            key={opt}
+            type="button"
+            onClick={() => onSelect(opt)}
+            className={`px-3 py-1 rounded-full text-xs font-medium border transition-colors duration-150 ${
+              active === opt
+                ? 'bg-gray-900 border-gray-900 text-white'
+                : 'bg-white border-border-default text-gray-600 hover:border-gray-400'
+            }`}
+          >
+            {getLabel ? getLabel(opt) : opt}
+          </button>
+        ))}
+      </div>
+    </div>
+  )
+}
 
 interface FilterBarProps {
   search: string
   sort: SortOption
   viewMode: ViewMode
-  deptFilter: string
+  stageFilter: string
   typeFilter: RequestType
   urgencyFilter: UrgencyLevel | 'All'
+  monthFilter: string
+  yearFilter: string
   onSearchChange: (v: string) => void
   onSortChange: (v: SortOption) => void
   onViewModeChange: (v: ViewMode) => void
-  onDeptFilterChange: (v: string) => void
+  onStageFilterChange: (v: string) => void
   onTypeFilterChange: (v: RequestType) => void
   onUrgencyFilterChange: (v: UrgencyLevel | 'All') => void
+  onMonthFilterChange: (v: string) => void
+  onYearFilterChange: (v: string) => void
 }
 
 export function FilterBar({
-  search,
-  sort,
-  viewMode,
-  deptFilter,
-  typeFilter,
-  urgencyFilter,
-  onSearchChange,
-  onSortChange,
-  onViewModeChange,
-  onDeptFilterChange,
-  onTypeFilterChange,
-  onUrgencyFilterChange,
+  search, sort, viewMode, stageFilter, typeFilter, urgencyFilter, monthFilter, yearFilter,
+  onSearchChange, onSortChange, onViewModeChange, onStageFilterChange,
+  onTypeFilterChange, onUrgencyFilterChange, onMonthFilterChange, onYearFilterChange,
 }: FilterBarProps) {
   return (
     <div className="bg-white border border-border-default rounded-card shadow-card p-4 mb-5 space-y-3">
@@ -92,49 +135,32 @@ export function FilterBar({
         </div>
       </div>
 
-      {/* Row 2: Department + Type + Urgency pills */}
-      <div className="flex flex-wrap gap-2">
-        {DEPT_GROUPS.map(g => (
-          <button
-            key={g.value}
-            onClick={() => onDeptFilterChange(g.value)}
-            className={`px-3 py-1 rounded-full text-xs font-medium border transition-colors duration-150 ${
-              deptFilter === g.value
-                ? 'bg-brand-500 border-brand-500 text-white'
-                : 'bg-white border-border-default text-gray-600 hover:border-brand-300'
-            }`}
-          >
-            {g.label}
-          </button>
-        ))}
-        <div className="w-px bg-border-default mx-1" />
-        {(['All', 'SAP', 'TR', 'VENDOR', 'NON_STOCK'] as RequestType[]).map(t => (
-          <button
-            key={t}
-            onClick={() => onTypeFilterChange(t)}
-            className={`px-3 py-1 rounded-full text-xs font-medium border transition-colors duration-150 ${
-              typeFilter === t
-                ? 'bg-neutral-800 border-neutral-800 text-white'
-                : 'bg-white border-border-default text-gray-600 hover:border-neutral-400'
-            }`}
-          >
-            {t}
-          </button>
-        ))}
-        <div className="w-px bg-border-default mx-1" />
-        {(['All', 'Urgent', 'High', 'Medium', 'Low'] as Array<UrgencyLevel | 'All'>).map(u => (
-          <button
-            key={u}
-            onClick={() => onUrgencyFilterChange(u)}
-            className={`px-3 py-1 rounded-full text-xs font-medium border transition-colors duration-150 ${
-              urgencyFilter === u
-                ? 'bg-neutral-800 border-neutral-800 text-white'
-                : 'bg-white border-border-default text-gray-600 hover:border-neutral-400'
-            }`}
-          >
-            {u}
-          </button>
-        ))}
+      {/* Filter rows with labels */}
+      <PillRow label="Stages" options={STAGE_OPTIONS} active={stageFilter} onSelect={onStageFilterChange} />
+      <PillRow label="Urgency" options={URGENCY_OPTIONS} active={urgencyFilter} onSelect={v => onUrgencyFilterChange(v as UrgencyLevel | 'All')} />
+      <PillRow label="Order Type" options={TYPE_OPTIONS} active={typeFilter} onSelect={v => onTypeFilterChange(v as RequestType)} getLabel={v => TYPE_LABELS[v as RequestType]} />
+
+      {/* Date filter row */}
+      <div className="flex items-center gap-3 flex-wrap">
+        <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400 shrink-0 w-24">Date</span>
+        <Select
+          aria-label="Filter by month"
+          value={monthFilter}
+          onChange={e => onMonthFilterChange(e.target.value)}
+          size="sm"
+          className="w-auto min-w-36"
+        >
+          {MONTHS.map(m => <option key={m.value} value={m.value}>{m.label}</option>)}
+        </Select>
+        <Select
+          aria-label="Filter by year"
+          value={yearFilter}
+          onChange={e => onYearFilterChange(e.target.value)}
+          size="sm"
+          className="w-auto min-w-28"
+        >
+          {YEARS.map(y => <option key={y.value} value={y.value}>{y.label}</option>)}
+        </Select>
       </div>
     </div>
   )

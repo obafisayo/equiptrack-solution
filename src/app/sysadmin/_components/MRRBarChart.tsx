@@ -36,7 +36,7 @@ export function MRRBarChart({ data }: MRRBarChartProps) {
                   <div key={d.label} className="flex-1 flex flex-col items-center justify-end h-full">
                     <div
                       className="w-full rounded-t-[4px] relative group"
-                      style={{ height: `${pct}%`, background: '#F04A4A', minHeight: 4 }}
+                      style={{ height: `${pct}%`, background: '#1A6FBF', minHeight: 4 }}
                     >
                       {/* Tooltip on hover */}
                       <div className="absolute -top-7 left-1/2 -translate-x-1/2 bg-neutral-900 text-white text-[10px] font-semibold px-1.5 py-0.5 rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">

@@ -42,11 +42,11 @@ export function ContractorSummaryCard({ contractor, containers, payments, onView
       </div>
 
       <div className="grid grid-cols-3 gap-3 mb-4">
-        <div className="bg-gray-50 rounded-lg p-3 text-center">
+        <div className="bg-slate-50 rounded-lg p-3 text-center">
           <p className="text-[18px] font-bold text-gray-900">{owned.length}</p>
           <p className="text-[10px] text-gray-400 uppercase">Containers</p>
         </div>
-        <div className="bg-gray-50 rounded-lg p-3 text-center">
+        <div className="bg-slate-50 rounded-lg p-3 text-center">
           <p className="text-[16px] font-bold text-gray-900">${(totalAccrued / 1000).toFixed(0)}k</p>
           <p className="text-[10px] text-gray-400 uppercase">Accrued</p>
         </div>
@@ -65,7 +65,7 @@ export function ContractorSummaryCard({ contractor, containers, payments, onView
         </div>
         <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
           <div
-            className="h-full bg-green-500 rounded-full transition-all duration-500"
+            className="h-full bg-green-600 rounded-full transition-all duration-500"
             style={{ width: Math.min(100, totalAccrued > 0 ? (totalPaid / totalAccrued) * 100 : 0) + '%' }}
           />
         </div>
@@ -80,7 +80,7 @@ export function ContractorSummaryCard({ contractor, containers, payments, onView
         </button>
         <button
           onClick={() => onRecordPayment(contractor.id)}
-          className="flex-1 py-2 text-[12px] font-semibold rounded-lg bg-brand-500 text-white hover:bg-brand-600 transition-colors"
+          className="flex-1 py-2 text-[12px] font-semibold rounded-lg bg-brand-accent text-white hover:bg-brand-accent-hover transition-colors"
         >
           Record Payment
         </button>

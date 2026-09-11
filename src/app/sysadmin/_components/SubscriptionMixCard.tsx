@@ -4,7 +4,7 @@ import { ORGANISATIONS } from '@/lib/mock-platform'
 
 export function SubscriptionMixCard() {
   const tiers = [
-    { label: 'Enterprise',   count: ORGANISATIONS.filter(o => o.subscription.tier === 'enterprise').length,   color: '#F04A4A' },
+    { label: 'Enterprise',   count: ORGANISATIONS.filter(o => o.subscription.tier === 'enterprise').length,   color: '#1A6FBF' },
     { label: 'Professional', count: ORGANISATIONS.filter(o => o.subscription.tier === 'professional').length, color: '#3B82F6' },
     { label: 'Starter',      count: ORGANISATIONS.filter(o => o.subscription.tier === 'starter').length,      color: '#9CA3AF' },
   ]

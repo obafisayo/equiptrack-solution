@@ -1,27 +1,16 @@
 import type { DropdownOption } from '@/components/ui/Dropdown'
 import type { UrgencyLevel } from '@/config/sla'
+import { DESTINATIONS } from '@/lib/destinations'
 
 export const DESTINATION_OPTIONS: DropdownOption[] = [
-  { value: 'Bonny Terminal',         label: 'Bonny Terminal',          hint: 'Rivers State' },
-  { value: 'Escravos Terminal',      label: 'Escravos Terminal',       hint: 'Delta State' },
-  { value: 'Forcados Terminal',      label: 'Forcados Terminal',       hint: 'Delta State' },
-  { value: 'Bonga FPSO',            label: 'Bonga FPSO',              hint: 'Offshore OML 118' },
-  { value: 'Agbami FPSO',           label: 'Agbami FPSO',             hint: 'Offshore OML 127/128' },
-  { value: 'Erha FPSO',             label: 'Erha FPSO',               hint: 'Offshore OML 133' },
-  { value: 'Egina FPSO',            label: 'Egina FPSO',              hint: 'Offshore OML 130' },
-  { value: 'Akpo FPSO',             label: 'Akpo FPSO',               hint: 'Offshore OML 130' },
-  { value: 'Usan FPSO',             label: 'Usan FPSO',               hint: 'Offshore OML 138' },
-  { value: 'Okwori FPSO',           label: 'Okwori FPSO',             hint: 'Offshore OML 119' },
-  { value: 'Pennington Terminal',    label: 'Pennington Terminal',     hint: 'Delta State' },
-  { value: 'Brass Terminal',        label: 'Brass Terminal',           hint: 'Bayelsa State' },
-  { value: 'Ima Field',             label: 'Ima Field',                hint: 'Onshore' },
-  { value: 'Abo FPSO',              label: 'Abo FPSO',                 hint: 'OML 125' },
-  { value: 'Other',                 label: 'Other (specify below)' },
+  ...DESTINATIONS.map(d => ({ value: d, label: d })),
+  { value: 'Other', label: 'Other (specify below)' },
 ]
 
 export const REQUEST_TYPES = [
-  { value: 'SAP',       label: 'SAP Request',           hint: 'Standard stock item from SAP system' },
-  { value: 'TR',        label: 'Temporary Requisition', hint: 'Requires Base Coordinator email approval first' },
+  { value: 'SAP',       label: 'SAP Request',           hint: 'Standard stock item — routes to Warehouse' },
+  { value: 'TR',        label: 'Temporary Requisition', hint: 'Requires Base Coordinator approval before routing to Warehouse' },
+  { value: 'VENDOR',    label: 'Vendor Request',        hint: 'Direct vendor supply — routes straight to Dispatch Queue' },
   { value: 'NON_STOCK', label: 'Non-Stock Item',        hint: 'Goes directly to Dispatch — no warehouse staging' },
 ]
 
@@ -71,8 +60,19 @@ export const URGENCY_STYLE: Record<UrgencyLevel, { active: string; dot: string; 
   Urgent: { active: 'border-red-500 bg-red-50',       dot: 'bg-red-500',    text: 'text-red-700' },
 }
 
+export const ENTITY_OPTIONS: DropdownOption[] = [
+  { value: 'FOPS',     label: 'FOPS',     hint: 'Field Operations' },
+  { value: 'TECHLOG',  label: 'TECHLOG',  hint: 'Technical Logistics' },
+  { value: 'ECP',      label: 'ECP',      hint: 'Engineering & Construction Projects' },
+  { value: 'DRILLING', label: 'DRILLING', hint: 'Drilling Operations' },
+  { value: 'PROJECT',  label: 'PROJECT',  hint: 'Project Management' },
+]
+
 export interface LineItem {
   description: string
   qty:         string
   unit:        string
+  plant?:      string  // SAP plant code — shown for TR requests
+  binLoc?:     string  // bin location — shown for TR requests
+  prWoNumber?: string  // PR/WO number & remarks — shown for TR requests
 }

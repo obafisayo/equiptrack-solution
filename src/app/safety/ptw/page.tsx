@@ -50,10 +50,10 @@ export default function SafetyPTWPage() {
       breadcrumb={[{label:'Home',href:'/'},{label:'Safety',href:'/safety'},{label:'Permit to Work'}]}
     >
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <StatCard label="Active Permits"  value={active}  color="#10B981" icon={CheckCircle2}/>
-        <StatCard label="Pending Approval"value={pending} color={pending>0?'#F59E0B':'#22C55E'} icon={Clock}/>
-        <StatCard label="Expired Today"   value={expired} color={expired>0?'#EF4444':'#22C55E'} icon={AlertTriangle}/>
-        <StatCard label="Completed"       value={done}    color="#3B82F6" icon={FileText}/>
+        <StatCard label="Active Permits"  value={active}  color="#16A34A" icon={CheckCircle2}/>
+        <StatCard label="Pending Approval"value={pending} color={pending>0?'#D97706':'#16A34A'} icon={Clock}/>
+        <StatCard label="Expired Today"   value={expired} color={expired>0?'#DC2626':'#16A34A'} icon={AlertTriangle}/>
+        <StatCard label="Completed"       value={done}    color="#1A6FBF" icon={FileText}/>
       </div>
 
       <div className="space-y-3">

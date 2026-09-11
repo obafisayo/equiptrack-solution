@@ -8,7 +8,7 @@ import { getDefaultPermissions } from '@/lib/permissions'
 /* ── Config ───────────────────────────────────────────────────────────────── */
 
 const ROLES: { role: OrgRole; label: string; dept: string; color: string }[] = [
-  { role: 'org_admin',             label: 'Org Admin',        dept: 'Admin',      color: '#F04A4A' },
+  { role: 'org_admin',             label: 'Org Admin',        dept: 'Admin',      color: '#1A6FBF' },
   { role: 'requester',             label: 'Requester',        dept: 'Field',      color: '#3B82F6' },
   { role: 'wh_supervisor',         label: 'WH Supervisor',    dept: 'Warehouse',  color: '#3B82F6' },
   { role: 'wh_personnel',          label: 'WH Personnel',     dept: 'Warehouse',  color: '#3B82F6' },
@@ -80,7 +80,7 @@ export default function RolesPage({ params }: { params: Promise<{ orgSlug: strin
   }
 
   const DEPT_COLORS: Record<string, string> = {
-    Admin: '#F04A4A', Field: '#3B82F6', Warehouse: '#3B82F6',
+    Admin: '#1A6FBF', Field: '#3B82F6', Warehouse: '#3B82F6',
     Dispatch: '#8B5CF6', QAQC: '#F59E0B', Executive: '#10B981',
     Safety: '#EF4444', Logistics: '#F97316', Inventory: '#06B6D4',
   }

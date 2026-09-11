@@ -98,7 +98,7 @@ export function WorkOrderCard({
             <button
               type="button"
               onClick={(e) => { e.stopPropagation(); onAssign() }}
-              className="text-xs font-semibold text-brand-500 bg-red-50 px-3 py-1 rounded-md border border-red-200 hover:bg-red-100 transition-colors duration-150"
+              className="text-xs font-semibold text-brand-accent bg-brand-tint px-3 py-1 rounded-md border border-brand-100 hover:bg-brand-100 transition-colors duration-150"
             >
               {order.assignedTo ? 'Reassign' : 'Assign'}
             </button>

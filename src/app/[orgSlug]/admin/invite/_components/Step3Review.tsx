@@ -51,7 +51,7 @@ export function Step3Review({ rows, method, onBack, onSend }: Step3ReviewProps) 
         </button>
         <button onClick={onSend} style={{
           flex: 2, padding: '9px 0', border: 'none', borderRadius: 7,
-          background: '#F04A4A', fontSize: 13, fontWeight: 600, color: '#fff', cursor: 'pointer',
+          background: '#1A6FBF', fontSize: 13, fontWeight: 600, color: '#fff', cursor: 'pointer',
         }}>
           Send {rows.length} Invitation{rows.length > 1 ? 's' : ''}
         </button>

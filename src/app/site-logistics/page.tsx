@@ -39,10 +39,10 @@ export default function SiteLogisticsPage() {
       breadcrumb={[{ label: 'Home', href: '/' }, { label: 'Return to Base' }]}
     >
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <StatCard label="Items to Return"    value={initiated}      color="#F59E0B" icon={RotateCcw} />
-        <StatCard label="Manifest Pending"   value={manifestReady}  color="#F59E0B" icon={FileText}  />
-        <StatCard label="Awaiting Vessel"    value={awaitingVessel} color="#F59E0B" icon={Ship}      />
-        <StatCard label="In Transit"         value={inTransit}      color="#10B981" icon={Package}   />
+        <StatCard label="Items to Return"    value={initiated}      color="#D97706" icon={RotateCcw} />
+        <StatCard label="Manifest Pending"   value={manifestReady}  color="#D97706" icon={FileText}  />
+        <StatCard label="Awaiting Vessel"    value={awaitingVessel} color="#D97706" icon={Ship}      />
+        <StatCard label="In Transit"         value={inTransit}      color="#16A34A" icon={Package}   />
       </div>
 
       <div className="flex items-center justify-between mb-4">

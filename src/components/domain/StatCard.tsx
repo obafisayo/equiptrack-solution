@@ -20,23 +20,33 @@ interface StatCardProps {
 type TrendVariant = 'positive' | 'negative' | 'neutral'
 
 // Map the known runtime `color` prop values to Tailwind class pairs (bg + text).
-// The icon square uses a ~10% tint of the accent color — these map to /10 opacity variants.
+// The icon square uses a ~10% tint of the accent color.
 const ICON_CLASS: Record<string, string> = {
-  '#F04A4A': 'bg-red-500/10     text-red-500',
-  '#E02828': 'bg-red-600/10     text-red-600',
-  '#22C55E': 'bg-green-500/10   text-green-500',
+  // Brand / action
+  '#0E2240': 'bg-blue-900/10   text-blue-900',
+  '#1A6FBF': 'bg-blue-600/10   text-blue-600',
+  '#155FA0': 'bg-blue-700/10   text-blue-700',
+  // Semantic status
+  '#16A34A': 'bg-green-600/10  text-green-600',
+  '#22C55E': 'bg-green-500/10  text-green-500',
   '#10B981': 'bg-emerald-500/10 text-emerald-500',
-  '#F59E0B': 'bg-amber-500/10   text-amber-500',
-  '#F97316': 'bg-orange-500/10  text-orange-500',
-  '#EF4444': 'bg-red-500/10     text-red-500',
-  '#8B5CF6': 'bg-violet-500/10  text-violet-500',
-  '#94A3B8': 'bg-slate-400/10   text-slate-400',
+  '#D97706': 'bg-amber-600/10  text-amber-600',
+  '#F59E0B': 'bg-amber-500/10  text-amber-500',
+  '#F97316': 'bg-orange-500/10 text-orange-500',
+  '#EA580C': 'bg-orange-600/10 text-orange-600',
+  '#DC2626': 'bg-red-600/10    text-red-600',
+  '#EF4444': 'bg-red-500/10    text-red-500',
+  '#2563EB': 'bg-blue-600/10   text-blue-600',
+  '#3B82F6': 'bg-blue-500/10   text-blue-500',
+  '#8B5CF6': 'bg-violet-500/10 text-violet-500',
+  '#64748B': 'bg-slate-500/10  text-slate-500',
+  '#94A3B8': 'bg-slate-400/10  text-slate-400',
 }
 
 const TREND_CLASS: Record<TrendVariant, string> = {
   positive: 'bg-green-50 text-green-700',
   negative: 'bg-red-50   text-red-700',
-  neutral:  'bg-gray-100 text-gray-500',
+  neutral:  'bg-slate-100 text-slate-500',
 }
 
 function resolveTrend(

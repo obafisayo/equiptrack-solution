@@ -30,8 +30,8 @@ export const EVT_CHIP: Record<EventType, string> = {
 }
 
 export const COMMON_PORTS = [
-  'Warri Port','Port Harcourt','Escravos Terminal','Bonga FPSO',
-  'Agbami FPSO','Erha FPSO','Forcados Terminal','Lagos Apapa',
+  'Warri Port','Port Harcourt','Akpo','Amadi-Base',
+  'Egina','Hosh-1','Amenam','Lagos Apapa',
 ].map(v => ({ value: v, label: v }))
 
 export const TODAY_ISO = '2026-06-28'

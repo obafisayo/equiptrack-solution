@@ -1,8 +1,8 @@
 'use client'
 
-export type TaskFilter = 'All' | 'Warehouse Assigned' | 'Processing' | 'GI Created' | 'Near SLA'
+export type TaskFilter = 'All' | 'Warehouse Assigned' | 'Picking' | 'GI Created' | 'Near SLA'
 
-const FILTERS: TaskFilter[] = ['All', 'Warehouse Assigned', 'Processing', 'GI Created', 'Near SLA']
+const FILTERS: TaskFilter[] = ['All', 'Warehouse Assigned', 'Picking', 'GI Created', 'Near SLA']
 
 interface TaskFilterBarProps {
   active: TaskFilter

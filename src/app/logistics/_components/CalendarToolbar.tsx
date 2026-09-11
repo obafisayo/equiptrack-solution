@@ -39,7 +39,7 @@ export function CalendarToolbar({ filterOpen, onToggleFilter, navLabel, onPrev, 
             <button
               key={v} type="button"
               onClick={() => onSelectView(v)}
-              className={`px-3 py-1.5 transition-colors ${calView === v ? 'bg-neutral-900 text-white' : 'text-neutral-600 hover:bg-neutral-50'}`}
+              className={`px-3 py-1.5 transition-colors ${calView === v ? 'bg-brand-navy text-white' : 'text-neutral-600 hover:bg-neutral-50'}`}
             >
               {v}
             </button>

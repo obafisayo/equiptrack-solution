@@ -31,7 +31,7 @@ export function KpiStrip({
       <StatCard
         label="Avg Cycle Time"
         value={fmtCycleTime(avgCycleHours)}
-        color={cycleOverTarget ? '#EF4444' : '#10B981'}
+        color={cycleOverTarget ? '#DC2626' : '#16A34A'}
         trend={{
           direction: cycleOverTarget ? 'up' : 'down',
           value: 'Target: ' + fmtCycleTime(targetCycleHours),
@@ -44,7 +44,7 @@ export function KpiStrip({
       <StatCard
         label="Active Requests"
         value={activeOrdersCount}
-        color="#10B981"
+        color="#16A34A"
         icon={Package}
       />
 
@@ -52,7 +52,7 @@ export function KpiStrip({
       <StatCard
         label="Shipped This Week"
         value={shippedThisWeek}
-        color="#22C55E"
+        color="#16A34A"
         trend={{ direction: 'up', value: 'this week', positive: true }}
         icon={CheckCircle2}
       />
@@ -61,7 +61,7 @@ export function KpiStrip({
       <StatCard
         label="SLA Performance"
         value={slaPerformance + '%'}
-        color={slaPerformance >= 90 ? '#22C55E' : slaPerformance >= 70 ? '#F59E0B' : '#EF4444'}
+        color={slaPerformance >= 90 ? '#16A34A' : slaPerformance >= 70 ? '#D97706' : '#DC2626'}
         trend={{
           direction: slaPerformance >= 90 ? 'up' : 'down',
           value: breachedCount + ' at risk',
@@ -74,7 +74,7 @@ export function KpiStrip({
       <StatCard
         label="Orders at Risk"
         value={breachedCount}
-        color={breachedCount === 0 ? '#22C55E' : breachedCount <= 3 ? '#F59E0B' : '#EF4444'}
+        color={breachedCount === 0 ? '#16A34A' : breachedCount <= 3 ? '#D97706' : '#DC2626'}
         trend={{
           direction: breachedCount === 0 ? 'down' : 'up',
           value: breachedCount === 0 ? 'all on track' : 'SLA exceeded',

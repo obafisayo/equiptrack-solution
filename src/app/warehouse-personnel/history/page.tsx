@@ -7,7 +7,8 @@ import { SearchInput } from '@/components/ui/Form'
 import { DetailPanel } from '@/components/domain/DetailPanel'
 import { StagePill } from '@/components/domain/Pills'
 import { EmptyState } from '@/components/ui/EmptyState'
-import { WORK_ORDERS, type WorkOrder } from '@/lib/mock-data'
+import type { WorkOrder } from '@/lib/mock-data'
+import { LIVE_ORDERS } from '@/lib/workflow-store'
 import { fmtHours } from '@/config/sla'
 import { type Stage } from '@/lib/lifecycle'
 
@@ -26,7 +27,7 @@ function formatDate(isoStr: string): string {
 }
 
 export default function WarehousePersonnelHistoryPage() {
-  const historyOrders = WORK_ORDERS.filter(
+  const historyOrders = LIVE_ORDERS.filter(
     o => HISTORY_STAGES.includes(o.stage as Stage) && o.stageHistory?.some(h => h.personId === 'WH1')
   )
 
@@ -77,7 +78,7 @@ export default function WarehousePersonnelHistoryPage() {
         <div className="bg-white rounded-card border border-border-default shadow-card overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-border-default bg-gray-50">
+              <tr className="border-b border-border-default bg-slate-50">
                 {['Delivery No.', 'Destination', 'Handed Off At', 'My Time', 'Current Stage', 'Date'].map(h => (
                   <th key={h} className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide whitespace-nowrap">
                     {h}

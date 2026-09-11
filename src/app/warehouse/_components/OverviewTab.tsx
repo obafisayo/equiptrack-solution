@@ -4,21 +4,12 @@ import { WorkOrderCard } from '@/components/domain/WorkOrderCard'
 import { SectionTitle } from '@/components/domain/OrderGrid'
 import { type WorkOrder } from '@/lib/mock-data'
 import { type UrgencyLevel } from '@/config/sla'
+import { LIFECYCLE } from '@/lib/lifecycle'
 
-const STAGE_FILTER_OPTIONS = [
-  'All',
-  'New Request',
-  'Warehouse Assigned',
-  'Processing',
-  'GI Created',
-  'Transferred to Dispatch',
-  'Near SLA',
-]
+const STAGE_FILTER_OPTIONS = ['All', ...LIFECYCLE, 'Near SLA']
 
 const URGENCY_OPTIONS: Array<UrgencyLevel | 'All'> = ['All', 'Urgent', 'High', 'Medium', 'Low']
 
-// One consistent filter-pill row style, reused for both stage and urgency
-// filters so the two sections below don't read as two different UI patterns.
 function FilterRow({ label, options, active, onSelect, getCount }: {
   label: string
   options: string[]
@@ -27,8 +18,8 @@ function FilterRow({ label, options, active, onSelect, getCount }: {
   getCount?: (value: string) => number
 }) {
   return (
-    <div className="flex items-center gap-3 flex-wrap">
-      <span className="text-[11px] font-semibold uppercase tracking-wide text-gray-400 shrink-0">{label}</span>
+    <div className="flex items-start gap-3 flex-wrap">
+      <span className="text-[11px] font-semibold uppercase tracking-wide text-gray-400 shrink-0 mt-1">{label}</span>
       <div className="flex gap-1.5 flex-wrap">
         {options.map(opt => (
           <button
@@ -37,12 +28,12 @@ function FilterRow({ label, options, active, onSelect, getCount }: {
             onClick={() => onSelect(opt)}
             className={`px-3 py-1 rounded-full text-xs font-medium border transition-colors duration-150 ${
               active === opt
-                ? 'bg-gray-900 border-gray-900 text-white'
+                ? 'bg-brand-navy border-brand-navy text-white'
                 : 'bg-white border-border-default text-gray-600 hover:border-gray-300'
             }`}
           >
             {opt}
-            {getCount && opt !== 'All' && <span className="ml-1 opacity-60">({getCount(opt)})</span>}
+            {getCount && opt !== 'All' && opt !== 'Near SLA' && <span className="ml-1 opacity-60">({getCount(opt)})</span>}
           </button>
         ))}
       </div>
@@ -83,9 +74,9 @@ export function OverviewTab({
 }: OverviewTabProps) {
   return (
     <>
-      {/* PENDING INCOMING QUEUE */}
+      {/* UNASSIGNED REQUESTS */}
       <section className="mb-8">
-        <SectionTitle title="Pending Incoming Queue" count={incomingOrders.length} className="mb-3" />
+        <SectionTitle title="Unassigned Requests" count={incomingOrders.length} className="mb-3" />
         <div className="mb-4">
           <FilterRow
             label="Urgency"

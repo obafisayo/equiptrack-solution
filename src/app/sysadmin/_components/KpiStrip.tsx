@@ -16,7 +16,7 @@ export function KpiStrip({ pendingWaitlistCount }: KpiStripProps) {
         label="Total Organisations"
         value={PLATFORM_STATS.totalOrgs}
         icon={Building2}
-        color="#3B82F6"
+        color="#1A6FBF"
         trend="+3 this month"
         trendPositive
       />
@@ -24,7 +24,7 @@ export function KpiStrip({ pendingWaitlistCount }: KpiStripProps) {
         label="Active Orgs"
         value={PLATFORM_STATS.activeOrgs}
         icon={CheckCircle2}
-        color="#10B981"
+        color="#16A34A"
         trend={`${PLATFORM_STATS.activeOrgs}/${PLATFORM_STATS.totalOrgs} orgs`}
       />
       <StatCard
@@ -39,7 +39,7 @@ export function KpiStrip({ pendingWaitlistCount }: KpiStripProps) {
         label="Monthly Revenue"
         value={fmtMRR(PLATFORM_STATS.mrr)}
         icon={DollarSign}
-        color="#F04A4A"
+        color="#1A6FBF"
         trend="+12.4% MoM"
         trendPositive
       />
@@ -47,7 +47,7 @@ export function KpiStrip({ pendingWaitlistCount }: KpiStripProps) {
         label="Waitlist Pending"
         value={pendingWaitlistCount}
         icon={Clock}
-        color="#F59E0B"
+        color="#D97706"
         trend={`${PLATFORM_STATS.waitlistCount} total`}
       />
     </div>

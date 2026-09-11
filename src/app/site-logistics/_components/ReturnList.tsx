@@ -17,7 +17,7 @@ export function ReturnList({ returns }: Props) {
   return (
     <div className="bg-white border border-border-default rounded-card shadow-card overflow-hidden">
       <table className="w-full text-sm">
-        <thead className="bg-gray-50 border-b border-border-default">
+        <thead className="bg-slate-50 border-b border-border-default">
           <tr>
             {['Return ID', 'Origin', 'Cargo Class', 'Items', 'Manifest', 'Status', 'Initiated'].map(h => (
               <th key={h} className="px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-wide text-gray-400">{h}</th>

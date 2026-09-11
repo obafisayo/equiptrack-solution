@@ -14,7 +14,7 @@ export const INIT_STOCK: StockItem[] = [
 ]
 
 export const INIT_MOVEMENTS: Movement[] = [
-  { id:'MOV-1001', itemId:'EQ-0012', itemName:'Drill Pipe — 5" 19.5ppf',  type:'Issue',      qty:12, date:'2026-06-27', time:'14:30', by:'Emeka Okonkwo',   reference:'WO-0087', note:'Issued to Bonga FPSO expedition.' },
+  { id:'MOV-1001', itemId:'EQ-0012', itemName:'Drill Pipe — 5" 19.5ppf',  type:'Issue',      qty:12, date:'2026-06-27', time:'14:30', by:'Emeka Okonkwo',   reference:'WO-0087', note:'Issued to Akpo expedition.' },
   { id:'MOV-1002', itemId:'EQ-0051', itemName:'Chemical — Barite Sacks',  type:'Receive',    qty:50, date:'2026-06-26', time:'09:15', by:'Ngozi Eze',       reference:'PO-2241', note:'Received from Halliburton delivery.' },
   { id:'MOV-1003', itemId:'EQ-0037', itemName:'BOP Gasket Kit — 13.5"',   type:'Issue',      qty:2,  date:'2026-06-25', time:'11:00', by:'Tunde Bello',     reference:'WO-0085', note:'Issued for BOP maintenance.' },
   { id:'MOV-1004', itemId:'EQ-0078', itemName:'Safety Valve — 4.5"',      type:'Transfer',   qty:3,  date:'2026-06-24', time:'16:45', by:'Ngozi Eze',       reference:'TRF-099', note:'Transferred to Bay 2-B from Bay 4.' },

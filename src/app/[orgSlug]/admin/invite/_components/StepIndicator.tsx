@@ -20,10 +20,10 @@ export function StepIndicator({ step }: StepIndicatorProps) {
               <div style={{
                 width: 26, height: 26, borderRadius: '50%', flexShrink: 0,
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                background: done ? '#F04A4A' : current ? '#FFF1F1' : '#F3F4F6',
-                border: `2px solid ${done || current ? '#F04A4A' : '#E2E8F0'}`,
+                background: done ? '#1A6FBF' : current ? '#EFF6FF' : '#F3F4F6',
+                border: `2px solid ${done || current ? '#1A6FBF' : '#E2E8F0'}`,
                 fontSize: 11, fontWeight: 700,
-                color: done ? '#fff' : current ? '#F04A4A' : '#9CA3AF',
+                color: done ? '#fff' : current ? '#1A6FBF' : '#9CA3AF',
               }}>
                 {done ? <Check size={12} /> : idx}
               </div>
@@ -35,7 +35,7 @@ export function StepIndicator({ step }: StepIndicatorProps) {
               </span>
             </div>
             {i < steps.length - 1 && (
-              <div style={{ flex: 1, height: 1, background: done ? '#F04A4A' : '#E2E8F0', margin: '0 10px' }} />
+              <div style={{ flex: 1, height: 1, background: done ? '#1A6FBF' : '#E2E8F0', margin: '0 10px' }} />
             )}
           </div>
         )

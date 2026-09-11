@@ -39,7 +39,7 @@ export function CurrentPlanCard({ sub, showUpgrade, onToggleUpgrade }: CurrentPl
         <button
           onClick={onToggleUpgrade}
           style={{
-            padding: '8px 16px', background: '#F04A4A', color: '#fff',
+            padding: '8px 16px', background: '#1A6FBF', color: '#fff',
             border: 'none', borderRadius: 7, fontSize: 13, fontWeight: 600,
             cursor: 'pointer',
           }}

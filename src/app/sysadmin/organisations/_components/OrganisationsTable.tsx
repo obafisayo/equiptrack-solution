@@ -52,10 +52,10 @@ export function OrganisationsTable({ organisations, suspendedIds, onToggleSuspen
                     <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                       <div style={{
                         width: 30, height: 30, borderRadius: '50%',
-                        background: '#F04A4A18',
+                        background: '#1A6FBF18',
                         display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
                       }}>
-                        <span style={{ fontSize: 11, fontWeight: 700, color: '#F04A4A' }}>
+                        <span style={{ fontSize: 11, fontWeight: 700, color: '#1A6FBF' }}>
                           {org.name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase()}
                         </span>
                       </div>
@@ -100,9 +100,9 @@ export function OrganisationsTable({ organisations, suspendedIds, onToggleSuspen
                       <Link
                         href={`/sysadmin/organisations/${org.id}`}
                         style={{
-                          fontSize: 11, fontWeight: 600, color: '#F04A4A',
+                          fontSize: 11, fontWeight: 600, color: '#1A6FBF',
                           textDecoration: 'none', padding: '4px 10px',
-                          background: '#FFF1F1', borderRadius: 5,
+                          background: '#EFF6FF', borderRadius: 5,
                         }}
                       >
                         View

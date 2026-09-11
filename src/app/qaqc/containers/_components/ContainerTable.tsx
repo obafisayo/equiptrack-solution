@@ -17,11 +17,11 @@ export function ContainerTable({ containers, onSelect, onToggleAvailable }: Cont
   return (
     <div className="bg-white rounded-card border border-border-default shadow-card overflow-x-auto">
       <table className="w-full min-w-max text-sm">
-        <thead className="bg-neutral-50 border-b border-border-default">
+        <thead className="bg-slate-50 border-b border-border-default">
           <tr>
             <th className="w-10 px-4 py-3" />
             {COLUMNS.map(h => (
-              <th key={h} className="px-4 py-3 text-left text-[11px] font-bold uppercase tracking-wider text-neutral-400 whitespace-nowrap">{h}</th>
+              <th key={h} className="px-4 py-3 text-left text-[11px] font-bold uppercase tracking-wider text-slate-400 whitespace-nowrap">{h}</th>
             ))}
           </tr>
         </thead>
@@ -29,7 +29,7 @@ export function ContainerTable({ containers, onSelect, onToggleAvailable }: Cont
           {containers.length === 0 ? (
             <tr><td colSpan={10} className="py-14 text-center text-neutral-400 text-sm">No CCUs match the current filters.</td></tr>
           ) : containers.map(c => (
-            <tr key={c.serialNumber} className="hover:bg-neutral-50 transition-colors cursor-pointer" onClick={() => onSelect(c)}>
+            <tr key={c.serialNumber} className="hover:bg-slate-50 transition-colors cursor-pointer" onClick={() => onSelect(c)}>
               <td className="px-4 py-3"><StatusDot c={c} /></td>
               <td className="px-4 py-3 whitespace-nowrap">
                 <span className="font-mono text-sm font-bold text-neutral-900">{c.serialNumber}</span>
@@ -56,7 +56,7 @@ export function ContainerTable({ containers, onSelect, onToggleAvailable }: Cont
               <td className="px-4 py-3 whitespace-nowrap" onClick={e => e.stopPropagation()}>
                 <button type="button" role="switch" aria-checked={c.available}
                   onClick={() => onToggleAvailable(c.serialNumber)}
-                  className={`relative inline-flex h-5 w-9 shrink-0 items-center rounded-full transition-colors duration-200 ${c.available ? 'bg-brand-500' : 'bg-neutral-200'}`}>
+                  className={`relative inline-flex h-5 w-9 shrink-0 items-center rounded-full transition-colors duration-200 ${c.available ? 'bg-brand-accent' : 'bg-neutral-200'}`}>
                   <span className={`inline-block h-3.5 w-3.5 transform rounded-full bg-white shadow transition-transform duration-200 ${c.available ? 'translate-x-4' : 'translate-x-0.5'}`} />
                 </button>
               </td>

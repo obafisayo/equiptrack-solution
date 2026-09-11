@@ -18,7 +18,7 @@ const ROLE_LABEL: Record<string, string> = {
   qaqc_officer:         'QAQC Officer',
   exec_viewer:          'Executive Viewer',
   safety_officer:       'Safety Officer',
-  logistics_coordinator:'Logistics Coordinator',
+  logistics_coordinator:'Vessel Coordinator',
   inventory_manager:    'Inventory Manager',
   rig_manager:          'Rig Manager',
   crane_operator:       'Crane Operator',
@@ -27,7 +27,7 @@ const ROLE_LABEL: Record<string, string> = {
 
 function LogoMark() {
   return (
-    <div style={{ width: 44, height: 44, background: '#F04A4A', borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+    <div style={{ width: 44, height: 44, background: '#1A6FBF', borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
       <svg width="23" height="23" viewBox="0 0 40 40" fill="none">
         <rect x="5" y="8"  width="30" height="5" rx="2.5" fill="white" />
         <rect x="5" y="18" width="22" height="5" rx="2.5" fill="white" />
@@ -88,7 +88,7 @@ export default function AcceptInvitePage({ params }: { params: Promise<{ token: 
             <p style={{ fontSize: 13, color: '#6B7280', margin: '0 0 24px', lineHeight: 1.6 }}>
               This invitation link is invalid. Please check the link in your email or contact your administrator.
             </p>
-            <Link href="/login" style={{ fontSize: 13, fontWeight: 600, color: '#F04A4A', textDecoration: 'none' }}>
+            <Link href="/login" style={{ fontSize: 13, fontWeight: 600, color: '#1A6FBF', textDecoration: 'none' }}>
               Return to login
             </Link>
           </div>
@@ -111,7 +111,7 @@ export default function AcceptInvitePage({ params }: { params: Promise<{ token: 
             <p style={{ fontSize: 13, color: '#6B7280', margin: '0 0 24px', lineHeight: 1.6 }}>
               Invitations are valid for 7 days. Please ask your administrator to send a new invitation.
             </p>
-            <Link href="/login" style={{ fontSize: 13, fontWeight: 600, color: '#F04A4A', textDecoration: 'none' }}>
+            <Link href="/login" style={{ fontSize: 13, fontWeight: 600, color: '#1A6FBF', textDecoration: 'none' }}>
               Return to login
             </Link>
           </div>
@@ -136,7 +136,7 @@ export default function AcceptInvitePage({ params }: { params: Promise<{ token: 
               href="/login"
               style={{
                 display: 'inline-block', padding: '9px 24px',
-                background: '#F04A4A', color: '#fff', borderRadius: 7,
+                background: '#1A6FBF', color: '#fff', borderRadius: 7,
                 fontSize: 13, fontWeight: 600, textDecoration: 'none',
               }}
             >
@@ -164,7 +164,7 @@ export default function AcceptInvitePage({ params }: { params: Promise<{ token: 
                   href="/login"
                   style={{
                     display: 'inline-block', padding: '10px 28px',
-                    background: '#F04A4A', color: '#fff', borderRadius: 7,
+                    background: '#1A6FBF', color: '#fff', borderRadius: 7,
                     fontSize: 13, fontWeight: 600, textDecoration: 'none',
                   }}
                 >
@@ -180,10 +180,10 @@ export default function AcceptInvitePage({ params }: { params: Promise<{ token: 
                   borderRadius: 8, border: '1px solid #E2E8F0', marginBottom: 24,
                 }}>
                   <div style={{
-                    width: 36, height: 36, borderRadius: 8, background: '#FFF1F1',
+                    width: 36, height: 36, borderRadius: 8, background: '#EFF6FF',
                     display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
                   }}>
-                    <span style={{ fontSize: 13, fontWeight: 700, color: '#F04A4A' }}>
+                    <span style={{ fontSize: 13, fontWeight: 700, color: '#1A6FBF' }}>
                       {org?.name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase() ?? '??'}
                     </span>
                   </div>
@@ -257,7 +257,7 @@ export default function AcceptInvitePage({ params }: { params: Promise<{ token: 
                       disabled={submitting}
                       style={{
                         padding: '11px 0', border: 'none', borderRadius: 7,
-                        background: '#F04A4A', color: '#fff',
+                        background: '#1A6FBF', color: '#fff',
                         fontSize: 13, fontWeight: 600, cursor: submitting ? 'not-allowed' : 'pointer',
                         opacity: submitting ? 0.8 : 1,
                       }}

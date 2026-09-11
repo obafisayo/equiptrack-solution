@@ -46,7 +46,7 @@ function MicrosoftSSOCallbackContent() {
     }}>
       {/* Logo */}
       <div style={{
-        width: 48, height: 48, background: '#F04A4A', borderRadius: 11,
+        width: 48, height: 48, background: '#1A6FBF', borderRadius: 11,
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         marginBottom: 32,
       }}>
@@ -70,7 +70,7 @@ function MicrosoftSSOCallbackContent() {
             <div style={{
               width: 64, height: 64, borderRadius: '50%',
               border: '3px solid #F3F4F6',
-              borderTopColor: '#F04A4A',
+              borderTopColor: '#1A6FBF',
               animation: 'spin 0.9s linear infinite',
               margin: '0 auto 20px',
             }} />
@@ -91,9 +91,9 @@ function MicrosoftSSOCallbackContent() {
                   <div key={step} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                     <div style={{
                       width: 20, height: 20, borderRadius: '50%', flexShrink: 0,
-                      background: done ? '#F0FDF4' : current ? '#FFF1F1' : '#F9FAFB',
+                      background: done ? '#F0FDF4' : current ? '#EFF6FF' : '#F9FAFB',
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      border: `1.5px solid ${done ? '#86EFAC' : current ? '#F04A4A' : '#E2E8F0'}`,
+                      border: `1.5px solid ${done ? '#86EFAC' : current ? '#1A6FBF' : '#E2E8F0'}`,
                       transition: 'all 250ms ease',
                     }}>
                       {done && (
@@ -102,7 +102,7 @@ function MicrosoftSSOCallbackContent() {
                         </svg>
                       )}
                       {current && (
-                        <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#F04A4A' }} />
+                        <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#1A6FBF' }} />
                       )}
                     </div>
                     <span style={{
@@ -138,7 +138,7 @@ function MicrosoftSSOCallbackContent() {
             <Link
               href={`/${orgSlug}/admin`}
               style={{
-                display: 'block', padding: '10px 0', background: '#F04A4A',
+                display: 'block', padding: '10px 0', background: '#1A6FBF',
                 color: '#fff', borderRadius: 7, fontSize: 13, fontWeight: 600,
                 textDecoration: 'none',
               }}
@@ -168,7 +168,7 @@ function MicrosoftSSOCallbackContent() {
               <button
                 onClick={() => { setPhase('loading'); setStepIndex(0) }}
                 style={{
-                  padding: '10px 0', background: '#F04A4A', color: '#fff',
+                  padding: '10px 0', background: '#1A6FBF', color: '#fff',
                   border: 'none', borderRadius: 7, fontSize: 13, fontWeight: 600, cursor: 'pointer',
                 }}
               >

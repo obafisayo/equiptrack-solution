@@ -26,7 +26,7 @@ export function FilterBar({
   const hasFilters = search || typeFilter !== 'all' || expiryFilter !== 'all' || statusFilter !== 'all'
 
   const filterDefs: { val: string; set: (v: string) => void; opts: [string, string][] }[] = [
-    { val: typeFilter,   set: onTypeFilterChange,   opts: [['all','All Types'],['Waste Skip','Waste Skip'],['15ft Half Height Basket','15ft HH Basket'],['23ft Half Height Basket','23ft HH Basket'],['Chemical Tote Tank','Chemical Tote Tank'],['Open Top Basket','Open Top Basket'],['Closed Top Basket','Closed Top Basket']] },
+    { val: typeFilter,   set: onTypeFilterChange,   opts: [['all','All Types'],['Waste Skip','Waste Skip'],['Mini Container','Mini Container'],['10ft Half Height Basket','10ft HH Basket'],['20ft Half Height Basket','20ft HH Basket'],['23ft Half Height Basket','23ft HH Basket'],['15ft Half Height Basket','15ft HH Basket'],['8ft Cargo Basket','8ft Cargo Basket'],['4ft Cargo Basket','4ft Cargo Basket'],['10ft Closed Top Container','10ft CT Container'],['20ft Closed Top Container','20ft CT Container'],['8ft Closed Top Container','8ft CT Container'],['20ft Open Top Container','20ft OT Container'],['Gas Rack','Gas Rack'],['Chemical Tote Tank','Chemical Tote Tank'],['MUD SKID','MUD SKID']] },
     { val: expiryFilter, set: onExpiryFilterChange, opts: [['all','All Expiry'],['expired','Expired'],['locked','Locked (1-3d)'],['warning','Warning (4-7d)'],['soon','Expiring Soon'],['ok','Valid (30d+)']] },
     { val: statusFilter, set: onStatusFilterChange, opts: [['all','All Statuses'],['Available','Available'],['In Transit','In Transit'],['Assigned','Assigned'],['Maintenance','Maintenance'],['Quarantine','Quarantine']] },
   ]
@@ -47,7 +47,7 @@ export function FilterBar({
 
       {hasFilters && (
         <button type="button" onClick={onClear}
-          className="flex items-center gap-1 text-xs font-semibold text-brand-500 hover:text-brand-700">
+          className="flex items-center gap-1 text-xs font-semibold text-brand-accent hover:text-brand-accent-hover">
           <X size={12} /> Clear
         </button>
       )}

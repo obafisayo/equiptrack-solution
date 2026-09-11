@@ -69,15 +69,15 @@ export default function CCUInvoicingPage() {
     >
       {/* KPIs */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <StatCard label="Total Accrued"     value={`$${(allStats.totalAccrued / 1000).toFixed(0)}k`} color="#10B981" icon={DollarSign} />
-        <StatCard label="Total Paid"        value={`$${(allStats.totalPaid / 1000).toFixed(0)}k`}    color="#22C55E" icon={CheckCircle2}
+        <StatCard label="Total Accrued"     value={`$${(allStats.totalAccrued / 1000).toFixed(0)}k`} color="#1A6FBF" icon={DollarSign} />
+        <StatCard label="Total Paid"        value={`$${(allStats.totalPaid / 1000).toFixed(0)}k`}    color="#16A34A" icon={CheckCircle2}
           trend={{ direction: 'up', value: 'all time', positive: true }} />
         <StatCard label="Outstanding Balance" value={`$${(allStats.balance / 1000).toFixed(0)}k`}
-          color={allStats.balance > 10000 ? '#EF4444' : allStats.balance > 0 ? '#F59E0B' : '#22C55E'}
+          color={allStats.balance > 10000 ? '#DC2626' : allStats.balance > 0 ? '#D97706' : '#16A34A'}
           icon={AlertCircle}
           trend={{ direction: allStats.balance > 0 ? 'up' : 'down', value: allStats.balance > 0 ? 'unpaid' : 'all clear', positive: allStats.balance === 0 }}
         />
-        <StatCard label="Containers on Hire" value={containers.filter(c => c.hiringStartDate).length} color="#F59E0B" icon={Package} />
+        <StatCard label="Containers on Hire" value={containers.filter(c => c.hiringStartDate).length} color="#D97706" icon={Package} />
       </div>
 
       {/* Tabs */}
@@ -89,7 +89,7 @@ export default function CCUInvoicingPage() {
             className={[
               'px-5 py-2.5 text-[13px] font-semibold border-b-2 transition-colors',
               activeTab === t.id
-                ? 'border-brand-500 text-brand-500'
+                ? 'border-brand-accent text-brand-accent'
                 : 'border-transparent text-gray-500 hover:text-gray-700',
             ].join(' ')}
           >
@@ -177,14 +177,13 @@ export default function CCUInvoicingPage() {
         </div>
       )}
 
-      {/* Payment dialog */}
-      {payingContractor && (
-        <PaymentDialog
-          contractor={payingContractor}
-          onConfirm={handleRecordPayment}
-          onClose={() => setPaymentDialogId(null)}
-        />
-      )}
+      {/* Payment panel — always mounted for slide animation */}
+      <PaymentDialog
+        contractor={payingContractor ?? null}
+        open={!!paymentDialogId}
+        onConfirm={handleRecordPayment}
+        onClose={() => setPaymentDialogId(null)}
+      />
     </AppShell>
   )
 }

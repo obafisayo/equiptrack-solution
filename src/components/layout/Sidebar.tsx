@@ -9,7 +9,7 @@ import {
   CalendarDays, Wrench, History,
   Inbox, TrendingDown, TrendingUp,
   LayoutDashboard, Building2, ListChecks, CreditCard, ScrollText,
-  RotateCcw, MessageSquare,
+  RotateCcw, MessageSquare, ChevronLeft, ChevronRight, Anchor, Ship,
 } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import type { Role } from '@/lib/lifecycle'
@@ -32,23 +32,28 @@ type NavEntry = NavItem | NavSection
 
 const NAV_ITEMS: Partial<Record<Role, NavEntry[]>> = {
   requester: [
-    { href: '/requester',     label: 'My Requests',    icon: ClipboardList },
-    { href: '/requester/new', label: 'Create Request', icon: Plus },
+    { href: '/requester',         label: 'My Requests',    icon: ClipboardList },
+    { href: '/requester/new',     label: 'Create Request', icon: Plus },
+    { href: '/requester/history', label: 'History',        icon: History },
   ],
   wh_sup: [
-    { href: '/warehouse',           label: 'Dashboard',       icon: AlertTriangle },
-    { href: '/warehouse/orders',    label: 'All Work Orders', icon: Layers },
-    { href: '/warehouse/personnel', label: 'Personnel Load',  icon: Users },
-    { href: '/warehouse/returns',   label: 'Returns',         icon: RotateCcw },
-    { href: '/warehouse/messages',  label: 'Messages',        icon: MessageSquare },
+    { href: '/warehouse',            label: 'Dashboard',       icon: AlertTriangle },
+    { href: '/warehouse/orders',     label: 'All Work Orders', icon: Layers },
+    { href: '/warehouse/analytics',  label: 'Analytics',       icon: BarChart2 },
+    { href: '/warehouse/personnel',  label: 'Personnel Load',  icon: Users },
+    { href: '/warehouse/returns',    label: 'Returns',         icon: RotateCcw },
+    { href: '/warehouse/messages',   label: 'Messages',        icon: MessageSquare },
   ],
   wh_per: [
     { href: '/warehouse-personnel',         label: 'My Tasks', icon: ClipboardCheck },
     { href: '/warehouse-personnel/history', label: 'History',  icon: Clock },
   ],
   dsp_sup: [
-    { href: '/dispatch',            label: 'Dispatch Queue', icon: Truck },
+    { href: '/dispatch',            label: 'Dashboard',      icon: Truck },
+    { href: '/dispatch/orders',     label: 'All Work Orders',icon: Layers },
+    { href: '/dispatch/analytics',  label: 'Analytics',      icon: BarChart2 },
     { href: '/dispatch/personnel',  label: 'Personnel Load', icon: Users },
+    { href: '/dispatch/returns',    label: 'Returns',        icon: RotateCcw },
     { href: '/dispatch/messages',   label: 'Messages',       icon: MessageSquare },
   ],
   dsp_per: [
@@ -78,9 +83,15 @@ const NAV_ITEMS: Partial<Record<Role, NavEntry[]>> = {
   site_logistics: [
     { href: '/site-logistics', label: 'Return to Base', icon: RotateCcw },
   ],
+  site_return: [
+    { href: '/site-return',          label: 'Returns Dashboard', icon: RotateCcw  },
+    { href: '/site-return/history',  label: 'Return History',    icon: History    },
+  ],
   logistics: [
-    { href: '/logistics',          label: 'Calendar',        icon: CalendarDays },
-    { href: '/logistics/requests', label: 'Vessel Requests', icon: Inbox        },
+    { href: '/logistics',            label: 'Calendar',         icon: CalendarDays },
+    { href: '/logistics/voyages',    label: 'Voyage Manifests', icon: Ship         },
+    { href: '/logistics/deckspace',  label: 'Deck Space',       icon: Anchor       },
+    { href: '/logistics/fleet',      label: 'Vessel Fleet',     icon: Layers       },
   ],
   inventory: [
     { href: '/inventory',           label: 'Stock Overview',    icon: Package      },
@@ -126,17 +137,24 @@ interface SidebarProps {
   currentPath: string
   mobileOpen?: boolean
   onMobileClose?: () => void
+  collapsed?: boolean
+  onToggleCollapse?: () => void
 }
 
-export function Sidebar({ role, currentPath, mobileOpen, onMobileClose }: SidebarProps) {
+export function Sidebar({
+  role,
+  currentPath,
+  mobileOpen,
+  onMobileClose,
+  collapsed = false,
+  onToggleCollapse,
+}: SidebarProps) {
   const items     = NAV_ITEMS[role] ?? []
   const userName  = ROLE_USER[role] ?? 'User'
   const roleLabel = ROLE_LABEL[role]
 
   const navItems = items.filter((e): e is NavItem => !('type' in e))
 
-  // Best-match active href: longest matching prefix wins — prevents parent routes
-  // from staying highlighted when a child route has its own nav entry.
   const activeHref = [...navItems]
     .filter(item => currentPath === item.href || currentPath.startsWith(item.href + '/'))
     .sort((a, b) => b.href.length - a.href.length)[0]?.href ?? null
@@ -145,62 +163,84 @@ export function Sidebar({ role, currentPath, mobileOpen, onMobileClose }: Sideba
     <aside
       className={[
         'fixed top-0 left-0 z-50 h-screen flex flex-col bg-sidebar',
-        'w-50 md:w-16 lg:w-50',
-        'transition-transform duration-250 ease',
+        'transition-all duration-250 ease',
+        collapsed ? 'w-16' : 'w-56',
         mobileOpen ? 'translate-x-0' : '-translate-x-full',
         'md:translate-x-0',
       ].join(' ')}
     >
-      {/* Logo */}
-      <div className="flex items-center h-16 px-4 shrink-0 border-b border-white/8">
-        <div className="flex items-center gap-2.5 min-w-0">
-          <div className="flex items-center justify-center shrink-0 rounded-[7px] w-7.5 h-7.5 bg-brand-500">
+      {/* Logo + collapse toggle */}
+      <div className="flex items-center h-16 px-3 shrink-0 border-b border-white/8 gap-2">
+        <div className="flex items-center gap-2.5 min-w-0 flex-1">
+          <div className="flex items-center justify-center shrink-0 rounded-[7px] w-8 h-8 bg-brand-accent">
             <svg width="17" height="17" viewBox="0 0 40 40" fill="none">
               <rect x="5" y="8"  width="30" height="5" rx="2.5" fill="white" />
               <rect x="5" y="18" width="22" height="5" rx="2.5" fill="white" />
               <rect x="5" y="28" width="26" height="5" rx="2.5" fill="white" />
             </svg>
           </div>
-          <span className="block md:hidden lg:block font-bold text-sm text-white truncate tracking-[-0.01em]">
-            Equiptrack
-          </span>
+          {!collapsed && (
+            <span className="font-bold text-sm text-white truncate tracking-[-0.01em]">
+              Equiptrack
+            </span>
+          )}
         </div>
+
+        {onToggleCollapse && (
+          <button
+            onClick={onToggleCollapse}
+            className="hidden md:flex items-center justify-center w-6 h-6 rounded-md text-white/35 hover:text-white/75 hover:bg-white/8 transition-colors duration-150 shrink-0"
+            title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+          >
+            {collapsed ? <ChevronRight size={13} /> : <ChevronLeft size={13} />}
+          </button>
+        )}
       </div>
 
       {/* Nav */}
       <nav className="flex-1 overflow-y-auto py-3 px-2 space-y-0.5 sidebar-scroll">
-        <p className="block md:hidden lg:block px-2 mb-2 text-[10px] font-semibold uppercase tracking-[0.08em] text-white/35">
-          {roleLabel}
-        </p>
+        {!collapsed && (
+          <p className="px-2 mb-2 text-[10px] font-semibold uppercase tracking-[0.08em] text-white/30">
+            {roleLabel}
+          </p>
+        )}
 
         {items.map((entry, idx) => {
           if ('type' in entry) {
+            if (collapsed) return null
             return (
               <p
                 key={`section-${idx}`}
-                className="block md:hidden lg:block px-2 pb-1 text-[10px] font-semibold uppercase tracking-[0.08em] text-white/35 mt-3 first:mt-0"
+                className="px-2 pb-1 text-[10px] font-semibold uppercase tracking-[0.08em] text-brand-tint/45 mt-4 first:mt-0"
               >
                 {entry.label}
               </p>
             )
           }
+
           const active = entry.href === activeHref
           const Icon   = entry.icon
+
           return (
             <Link
               key={entry.href}
               href={entry.href}
               onClick={onMobileClose}
+              title={collapsed ? entry.label : undefined}
               className={[
-                'flex items-center justify-start md:justify-center lg:justify-start h-10 rounded-[7px] px-2.5 gap-2.5',
+                'flex items-center h-10 rounded-[7px] gap-2.5',
                 'text-sm font-medium transition-colors duration-150 no-underline',
+                collapsed ? 'justify-center px-2' : 'px-2.5',
                 active
-                  ? 'bg-brand-500 text-white'
+                  ? 'bg-brand-accent/18 text-white border-l-[3px] border-brand-accent'
                   : 'text-white/55 hover:bg-white/8 hover:text-white/85',
               ].join(' ')}
             >
-              <Icon size={16} className="shrink-0" />
-              <span className="block md:hidden lg:block truncate">{entry.label}</span>
+              <Icon
+                size={16}
+                className={['shrink-0', active && !collapsed ? 'ml-[-3px]' : ''].join(' ')}
+              />
+              {!collapsed && <span className="truncate">{entry.label}</span>}
             </Link>
           )
         })}
@@ -210,31 +250,47 @@ export function Sidebar({ role, currentPath, mobileOpen, onMobileClose }: Sideba
       <div className="mx-3 shrink-0 h-px bg-white/8" />
 
       {/* Contact support */}
-      <div className="block md:hidden lg:block px-3 pt-2 pb-1 shrink-0">
-        <a
-          href="mailto:support@equiptrack.io"
-          className="flex items-center justify-center gap-2 text-[11px] font-semibold text-white/55 bg-white/6 hover:bg-white/12 hover:text-white/80 rounded-lg py-2 transition-colors duration-150 no-underline"
-        >
-          <HelpCircle size={13} className="shrink-0" />
-          Contact Support
-        </a>
-      </div>
+      {!collapsed ? (
+        <div className="px-3 pt-2 pb-1 shrink-0">
+          <a
+            href="mailto:support@equiptrack.io"
+            className="flex items-center justify-center gap-2 text-[11px] font-semibold text-white/50 bg-white/6 hover:bg-white/12 hover:text-white/80 rounded-lg py-2 transition-colors duration-150 no-underline"
+          >
+            <HelpCircle size={13} className="shrink-0" />
+            Contact Support
+          </a>
+        </div>
+      ) : (
+        <div className="px-2 pt-2 pb-1 shrink-0 flex justify-center">
+          <a
+            href="mailto:support@equiptrack.io"
+            title="Contact Support"
+            className="flex items-center justify-center w-8 h-8 text-white/40 hover:text-white/80 hover:bg-white/8 rounded-md transition-colors duration-150"
+          >
+            <HelpCircle size={14} />
+          </a>
+        </div>
+      )}
 
       {/* User area */}
       <div className="px-3 py-3 shrink-0 border-t border-white/8">
-        <div className="flex items-center justify-start md:justify-center lg:justify-start gap-2 mb-2">
+        <div className={['flex items-center gap-2 mb-2', collapsed ? 'justify-center' : 'justify-start'].join(' ')}>
           <Avatar name={userName} size={30} />
-          <div className="block md:hidden lg:block min-w-0">
-            <p className="text-xs font-semibold text-white truncate">{userName}</p>
-            <p className="text-[10px] text-white/45 truncate">{roleLabel}</p>
-          </div>
+          {!collapsed && (
+            <div className="min-w-0">
+              <p className="text-xs font-semibold text-white truncate">{userName}</p>
+              <p className="text-[10px] text-white/45 truncate">{roleLabel}</p>
+            </div>
+          )}
         </div>
-        <Link
-          href="/login"
-          className="block md:hidden lg:block text-center py-1 rounded text-[11px] text-white/38 hover:text-white/65 transition-colors duration-150 no-underline"
-        >
-          Switch Role
-        </Link>
+        {!collapsed && (
+          <Link
+            href="/login"
+            className="block text-center py-1 rounded text-[11px] text-white/38 hover:text-white/65 transition-colors duration-150 no-underline"
+          >
+            Switch Role
+          </Link>
+        )}
       </div>
     </aside>
   )

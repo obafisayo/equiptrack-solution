@@ -33,7 +33,7 @@ export default function OrgAdminOverview({ params }: { params: Promise<{ orgSlug
     .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
     .slice(0, 5)
 
-  const scoreColor = org.healthScore >= 80 ? '#10B981' : org.healthScore >= 50 ? '#F59E0B' : '#EF4444'
+  const scoreColor = org.healthScore >= 80 ? '#16A34A' : org.healthScore >= 50 ? '#D97706' : '#DC2626'
 
   return (
     <div className="space-y-5">
@@ -49,9 +49,9 @@ export default function OrgAdminOverview({ params }: { params: Promise<{ orgSlug
 
       {/* KPI row */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard label="Team Members"    value={members.length}        icon={Users}         color="#3B82F6" trend={`${active.length} active`} />
-        <StatCard label="Pending Invites" value={pending.length}        icon={UserPlus}      color="#F59E0B" trend={`${org.subscription.seatsUsed}/${org.subscription.seats} seats`} />
-        <StatCard label="Active Orders"   value={org.activeWorkOrders}  icon={Activity}      color="#F04A4A" />
+        <StatCard label="Team Members"    value={members.length}        icon={Users}         color="#1A6FBF" trend={`${active.length} active`} />
+        <StatCard label="Pending Invites" value={pending.length}        icon={UserPlus}      color="#D97706" trend={`${org.subscription.seatsUsed}/${org.subscription.seats} seats`} />
+        <StatCard label="Active Orders"   value={org.activeWorkOrders}  icon={Activity}      color="#1A6FBF" />
         <StatCard label="Health Score"    value={org.healthScore}       icon={CheckCircle2}  color={scoreColor} />
       </div>
 

@@ -7,6 +7,8 @@ import { type HeatmapCellData } from '@/components/domain/BottleneckHeatmap'
 import { LIFECYCLE, STAGE_DEPARTMENT } from '@/lib/lifecycle'
 import { STAGE_SLA_HOURS } from '@/config/sla'
 import { AdminQuickLinks } from './_components/AdminQuickLinks'
+import { TRApprovalSection } from './_components/TRApprovalSection'
+import { WaybillApprovalSection } from './_components/WaybillApprovalSection'
 import { KpiStrip } from './_components/KpiStrip'
 import { BottleneckSection } from './_components/BottleneckSection'
 import { HeatmapDetailPanel } from './_components/HeatmapDetailPanel'
@@ -105,6 +107,9 @@ export default function ExecutivePage() {
       breadcrumb={[{ label: 'Home', href: '/' }, { label: 'Executive' }]}
     >
       <AdminQuickLinks />
+
+      <TRApprovalSection />
+      <WaybillApprovalSection />
 
       <KpiStrip
         avgCycleHours={avgCycleHours}

@@ -72,7 +72,7 @@ export const MOCK_CONVERSATIONS: Conversation[] = [
     avatarColor: '#10B981',
     messages: [
       { id: 'm1', conversationId: 'conv-001', senderId: 'WH1', senderName: 'Emeka Okonkwo', senderRole: 'Warehouse', body: 'Morning — can you confirm the priority on DEL-24-1301?', timestamp: ago(25), status: 'read' },
-      { id: 'm2', conversationId: 'conv-001', senderId: 'ME',  senderName: 'You',            senderRole: 'Exec', body: 'High priority — Bonga FPSO is waiting on that valve. Please fast-track.', timestamp: ago(20), status: 'read' },
+      { id: 'm2', conversationId: 'conv-001', senderId: 'ME',  senderName: 'You',            senderRole: 'Exec', body: 'High priority — Akpo is waiting on that valve. Please fast-track.', timestamp: ago(20), status: 'read' },
       { id: 'm3', conversationId: 'conv-001', senderId: 'WH1', senderName: 'Emeka Okonkwo', senderRole: 'Warehouse', body: 'Understood. Moving it to the front of the picking queue now.', timestamp: ago(15), status: 'read' },
       { id: 'm4', conversationId: 'conv-001', senderId: 'WH1', senderName: 'Emeka Okonkwo', senderRole: 'Warehouse', body: 'The GI for DEL-24-1301 has been created.', timestamp: ago(5), status: 'delivered' },
     ],
@@ -127,7 +127,7 @@ export const MOCK_CONVERSATIONS: Conversation[] = [
     avatarInitials: 'SN',
     avatarColor: '#64748B',
     messages: [
-      { id: 'm10', conversationId: 'conv-004', senderId: 'SYSTEM', senderName: 'System', senderRole: 'Automated', body: 'New work order DEL-24-1320 submitted — High urgency, Bonga FPSO.', timestamp: ago(180), status: 'read', isSystem: true },
+      { id: 'm10', conversationId: 'conv-004', senderId: 'SYSTEM', senderName: 'System', senderRole: 'Automated', body: 'New work order DEL-24-1320 submitted — High urgency, Akpo.', timestamp: ago(180), status: 'read', isSystem: true },
       { id: 'm11', conversationId: 'conv-004', senderId: 'SYSTEM', senderName: 'System', senderRole: 'Automated', body: 'SLA warning: DEL-24-1315 is at 85% of stage SLA.', timestamp: ago(45), status: 'read', isSystem: true },
       { id: 'm12', conversationId: 'conv-004', senderId: 'SYSTEM', senderName: 'System', senderRole: 'Automated', body: 'SLA breach: DEL-24-1288 has been in Dispatch Assigned for 19h (SLA: 12h).', timestamp: ago(10), status: 'delivered', isSystem: true },
     ],

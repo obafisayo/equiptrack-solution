@@ -117,7 +117,7 @@ export function ContainerDetailPanel({ detail, onClose, onToggleAvailable }: Pro
               className={[
                 'shrink-0 px-4 py-2.5 text-[12px] font-semibold border-b-2 transition-colors whitespace-nowrap',
                 activeTab === t.id
-                  ? 'border-brand-500 text-brand-500'
+                  ? 'border-brand-accent text-brand-accent'
                   : 'border-transparent text-gray-500 hover:text-gray-700',
               ].join(' ')}
             >
@@ -186,7 +186,7 @@ export function ContainerDetailPanel({ detail, onClose, onToggleAvailable }: Pro
                   <span className="text-sm font-semibold text-neutral-700">Available in pool</span>
                   <button type="button" role="switch" aria-checked={detail.available}
                     onClick={() => onToggleAvailable(detail.serialNumber)}
-                    className={`relative inline-flex h-5 w-9 shrink-0 items-center rounded-full transition-colors duration-200 ${detail.available ? 'bg-brand-500' : 'bg-neutral-200'}`}>
+                    className={`relative inline-flex h-5 w-9 shrink-0 items-center rounded-full transition-colors duration-200 ${detail.available ? 'bg-brand-accent' : 'bg-neutral-200'}`}>
                     <span className={`inline-block h-3.5 w-3.5 transform rounded-full bg-white shadow transition-transform duration-200 ${detail.available ? 'translate-x-4' : 'translate-x-0.5'}`} />
                   </button>
                 </div>

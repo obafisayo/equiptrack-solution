@@ -68,7 +68,7 @@ export function SSOForm({ form, setForm, onSave, saving, saved }: SSOFormProps) 
               onClick={() => setForm({ ...form, autoProvision: !form.autoProvision })}
               style={{
                 width: 36, height: 20, borderRadius: 10, border: 'none', cursor: 'pointer', flexShrink: 0,
-                background: form.autoProvision ? '#F04A4A' : '#D1D5DB',
+                background: form.autoProvision ? '#1A6FBF' : '#D1D5DB',
                 position: 'relative', transition: 'background 150ms',
               }}
             >
@@ -92,7 +92,7 @@ export function SSOForm({ form, setForm, onSave, saving, saved }: SSOFormProps) 
           style={{
             marginTop: 20, width: '100%', padding: '10px 0',
             border: 'none', borderRadius: 7, cursor: saving ? 'not-allowed' : 'pointer',
-            background: saved ? '#16A34A' : '#F04A4A',
+            background: saved ? '#16A34A' : '#1A6FBF',
             fontSize: 13, fontWeight: 600, color: '#fff',
             display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
             transition: 'background 150ms',

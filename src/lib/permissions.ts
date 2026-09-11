@@ -62,7 +62,7 @@ const ROLE_LABELS: Record<UserRole, string> = {
   qaqc_officer:          'QA/QC Officer',
   exec_viewer:           'Executive Viewer',
   safety_officer:        'Safety Officer',
-  logistics_coordinator: 'Logistics Coordinator',
+  logistics_coordinator: 'Vessel Coordinator',
   inventory_manager:     'Inventory Manager',
   rig_manager:           'Rig Manager',
   crane_operator:        'Crane Operator',

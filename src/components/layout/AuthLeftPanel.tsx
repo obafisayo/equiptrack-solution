@@ -3,7 +3,7 @@ export function AuthLeftPanel() {
   return (
     <div
       className="hidden md:flex flex-col shrink-0 relative overflow-hidden"
-      style={{ width: '50%', height: '100vh', background: '#F04A4A' }}
+      style={{ width: '50%', height: '100vh', background: '#1F3E61' }}
     >
       {/* Dot-grid overlay */}
       <div
@@ -53,7 +53,7 @@ export function AuthLeftPanel() {
 function MockDashboardUI() {
   const STAGE_COLORS = [
     '#94A3B8',
-    '#3B82F6','#3B82F6','#3B82F6','#3B82F6','#3B82F6',
+    '#1F3E61','#1F3E61','#1F3E61','#1F3E61','#1F3E61',
     '#8B5CF6',
     '#E2E8F0','#E2E8F0','#E2E8F0','#E2E8F0','#E2E8F0','#E2E8F0','#E2E8F0','#E2E8F0','#E2E8F0',
   ]
@@ -102,7 +102,7 @@ function MockDashboardUI() {
         boxShadow: '0 8px 24px rgba(0,0,0,0.10)',
       }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 7 }}>
-          <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11.5, fontWeight: 600, color: '#F04A4A' }}>
+          <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11.5, fontWeight: 600, color: '#1F3E61' }}>
             #EQ-2847-0924
           </span>
           <span style={{
@@ -118,7 +118,7 @@ function MockDashboardUI() {
 
         {/* Progress bar */}
         <div style={{ height: 3.5, background: '#F3F4F6', borderRadius: 2, marginBottom: 5, overflow: 'hidden' }}>
-          <div style={{ width: '65%', height: '100%', background: '#F04A4A', borderRadius: 2 }} />
+          <div style={{ width: '65%', height: '100%', background: '#1F3E61', borderRadius: 2 }} />
         </div>
         <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 9.5, color: '#9CA3AF', marginBottom: 9 }}>
           <span>Stage 7 of 16 · 65%</span>

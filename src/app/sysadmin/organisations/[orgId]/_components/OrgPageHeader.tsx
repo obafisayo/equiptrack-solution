@@ -27,10 +27,10 @@ export function OrgPageHeader({ org }: OrgPageHeaderProps) {
       <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
         <div style={{
           width: 44, height: 44, borderRadius: 10,
-          background: '#F04A4A18', display: 'flex', alignItems: 'center', justifyContent: 'center',
+          background: '#1A6FBF18', display: 'flex', alignItems: 'center', justifyContent: 'center',
           flexShrink: 0,
         }}>
-          <span style={{ fontSize: 16, fontWeight: 700, color: '#F04A4A' }}>
+          <span style={{ fontSize: 16, fontWeight: 700, color: '#1A6FBF' }}>
             {org.name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase()}
           </span>
         </div>

@@ -1,6 +1,6 @@
 'use client'
 
-import { X } from 'lucide-react'
+import { X, Package } from 'lucide-react'
 import type { WorkOrder } from '@/lib/mock-data'
 import type { Role } from '@/lib/lifecycle'
 import { STAGE_REVERSAL } from '@/lib/lifecycle'
@@ -103,6 +103,23 @@ export function DetailPanel({ order, onClose, onAssign, onReverse, role }: Detai
                     <span className="text-gray-500 font-medium ml-2 shrink-0">{item.qty} {item.unit}</span>
                   </div>
                 ))}
+              </div>
+            </section>
+          )}
+
+          {/* Container info — shown when order has been containerized */}
+          {order.containerId && (
+            <section className="pt-5 border-t border-gray-100">
+              <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-widest mb-3">Containerized</p>
+              <div className="flex items-center gap-3 rounded-lg bg-violet-50 border border-violet-200 px-4 py-3">
+                <Package size={16} className="text-violet-500 shrink-0" />
+                <div>
+                  <p className="text-sm font-bold text-violet-800 font-mono">{order.containerId}</p>
+                  <p className="text-xs text-violet-600 mt-0.5">
+                    Packed by {order.assignedToName ?? 'Dispatch Personnel'}
+                    {order.cargoClass && order.cargoClass !== 'normal' ? ` · ${order.cargoClass}` : ''}
+                  </p>
+                </div>
               </div>
             </section>
           )}

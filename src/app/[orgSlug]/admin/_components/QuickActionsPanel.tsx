@@ -12,10 +12,10 @@ export function QuickActionsPanel({ orgSlug }: QuickActionsPanelProps) {
     <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
       <QuickAction
         href={`/${orgSlug}/admin/invite`}
-        icon={<UserPlus size={17} color="#F04A4A" />}
+        icon={<UserPlus size={17} color="#1A6FBF" />}
         label="Invite Member"
         description="Add a new team member"
-        color="#F04A4A"
+        color="#1A6FBF"
       />
       <QuickAction
         href={`/${orgSlug}/admin/sso`}

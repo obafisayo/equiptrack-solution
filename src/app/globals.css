@@ -8,41 +8,63 @@
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, monospace;
 
-  /* Brand palette (primary red) */
-  --color-brand-50:  #FFF5F5;
-  --color-brand-100: #FEE2E2;
-  --color-brand-200: #FECACA;
-  --color-brand-300: #FCA5A5;
-  --color-brand-400: #F87171;
-  --color-brand-500: #F04A4A;
-  --color-brand-600: #E02828;
-  --color-brand-700: #C41A1A;
+  /* Brand palette — deep navy + steel blue (replaced legacy red) */
+  --color-brand-navy:         #0E2240;  /* sidebar, logo background */
+  --color-brand-accent:       #1A6FBF;  /* CTAs, active states, toggles */
+  --color-brand-accent-hover: #155FA0;  /* hover on accent elements */
+  --color-brand-tint:         #EFF6FF;  /* selected rows, hover surfaces */
+
+  /* Brand scale (maps brand-* Tailwind classes → steel blue family) */
+  --color-brand-50:  #EFF6FF;
+  --color-brand-100: #DBEAFE;
+  --color-brand-200: #BFDBFE;
+  --color-brand-300: #93C5FD;
+  --color-brand-400: #60A5FA;
+  --color-brand-500: #1A6FBF;
+  --color-brand-600: #155FA0;
+  --color-brand-700: #0F4C81;
 
   /* Sidebar */
-  --color-sidebar: #131722;
+  --color-sidebar: #0E2240;
 
   /* Page / surface */
-  --color-page-bg:  #F5F5F5;
+  --color-page-bg:  #F0F4F8;
   --color-surface:  #FFFFFF;
 
   /* Borders */
   --color-border-default: #E2E8F0;
-  --color-border-subtle:  #F3F4F6;
+  --color-border-subtle:  #F1F5F9;
   --color-border-strong:  #CBD5E1;
-  --color-border-brand-100: #FEE2E2;
-  --color-border-brand-200: #FECACA;
-  --color-border-brand-300: #FCA5A5;
-  --color-border-brand-500: #F04A4A;
+  --color-border-brand-100: #DBEAFE;
+  --color-border-brand-200: #BFDBFE;
+  --color-border-brand-300: #93C5FD;
+  --color-border-brand-500: #1A6FBF;
 
-  /* Status – SLA / urgency / alerts */
-  --color-status-critical:    #EF4444;
-  --color-status-critical-bg: #FEF2F2;
-  --color-status-medium:      #F59E0B;
-  --color-status-medium-bg:   #FFFBEB;
-  --color-status-success:     #10B981;
-  --color-status-success-bg:  #ECFDF5;
-  --color-status-info:        #3B82F6;
+  /* Status — semantic, strict contract (no crossover with brand) */
+  /* success = good performance / available / on-target */
+  --color-status-success:     #16A34A;
+  --color-status-success-bg:  #F0FDF4;
+  /* warning = nearing danger / approaching limit */
+  --color-status-warning:     #D97706;
+  --color-status-warning-bg:  #FFFBEB;
+  /* danger = danger zone ONLY — breach / rejected / critical */
+  --color-status-danger:      #DC2626;
+  --color-status-danger-bg:   #FEF2F2;
+  /* info = neutral informational, non-performance labels */
+  --color-status-info:        #2563EB;
   --color-status-info-bg:     #EFF6FF;
+  /* major = severity between warning and danger (anomalies, non-critical failures) */
+  --color-status-major:       #EA580C;
+  --color-status-major-bg:    #FFF7ED;
+  /* neutral = pending / inactive / no signal */
+  --color-status-neutral:     #64748B;
+  --color-status-neutral-bg:  #F1F5F9;
+
+  /* Legacy aliases (keep for SLA components that reference these directly) */
+  --color-status-critical:    #DC2626;
+  --color-status-critical-bg: #FEF2F2;
+  --color-status-medium:      #D97706;
+  --color-status-medium-bg:   #FFFBEB;
 
   /* Shadows */
   --shadow-card:    0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
@@ -125,8 +147,8 @@
 .et-input:hover:not(:disabled) { border-color: #CBD5E1; }
 .et-input:focus {
   outline: none;
-  border-color: #F04A4A;
-  box-shadow: 0 0 0 3px rgba(240, 74, 74, 0.14);
+  border-color: #1A6FBF;
+  box-shadow: 0 0 0 3px rgba(26, 111, 191, 0.14);
 }
 .et-input:disabled { opacity: 0.45; cursor: not-allowed; }
 
@@ -158,7 +180,7 @@
   border-radius: 4px;
   border: 1.5px solid #D1D5DB;
   cursor: pointer;
-  accent-color: #F04A4A;
+  accent-color: #1A6FBF;
   flex-shrink: 0;
 }
 
@@ -179,6 +201,29 @@
   from { background-position: -400px 0; }
   to   { background-position: 400px 0; }
 }
+
+/* ── Shared form input base ─────────────────────────────────────────────────── */
+
+.input-base {
+  display: block;
+  width: 100%;
+  height: 36px;
+  padding: 0 12px;
+  font-size: 13px;
+  color: #1E293B;
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+.input-base:focus {
+  border-color: #1A6FBF;
+  box-shadow: 0 0 0 3px rgba(26, 111, 191, 0.15);
+}
+.input-base::placeholder { color: #94A3B8; }
+.input-base[disabled]    { opacity: 0.5; cursor: not-allowed; background: #F8FAFC; }
+textarea.input-base      { height: auto; padding: 8px 12px; }
 
 /* ── Sidebar nav scrollbar — thin, matching dark sidebar bg ──────────────── */
 .sidebar-scroll::-webkit-scrollbar {

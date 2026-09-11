@@ -19,14 +19,14 @@ interface ButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'onC
 }
 
 const variantClasses: Record<Variant, string> = {
-  primary:   'bg-neutral-900 hover:bg-neutral-800 active:bg-neutral-700 text-white border-transparent',
+  primary:   'bg-brand-500 hover:bg-brand-600 active:bg-brand-700 text-white border-transparent',
   brand:     'bg-brand-500 hover:bg-brand-600 active:bg-brand-700 text-white border-transparent',
-  secondary: 'bg-white hover:bg-neutral-50 text-neutral-700 border border-border-default',
-  ghost:     'bg-transparent hover:bg-neutral-100 text-neutral-500 hover:text-neutral-700 border-transparent',
-  danger:    'bg-red-500 hover:bg-red-600 active:bg-red-700 text-white border-transparent',
-  dark:      'bg-sidebar hover:bg-neutral-800 text-white border-transparent',
-  outline:   'bg-transparent hover:bg-brand-50 text-brand-500 border border-brand-500 hover:border-brand-600',
-  success:   'bg-emerald-500 hover:bg-emerald-600 active:bg-emerald-700 text-white border-transparent',
+  secondary: 'bg-white hover:bg-slate-50 text-slate-700 border border-border-default',
+  ghost:     'bg-transparent hover:bg-slate-100 text-slate-500 hover:text-slate-700 border-transparent',
+  danger:    'bg-red-600 hover:bg-red-700 active:bg-red-800 text-white border-transparent',
+  dark:      'bg-sidebar hover:bg-brand-navy text-white border-transparent',
+  outline:   'bg-transparent hover:bg-brand-tint text-brand-500 border border-brand-500 hover:border-brand-600',
+  success:   'bg-green-600 hover:bg-green-700 active:bg-green-800 text-white border-transparent',
 }
 
 const sizeClasses: Record<Size, string> = {
@@ -58,7 +58,7 @@ export function Button({
       className={[
         'inline-flex items-center justify-center font-semibold rounded-button',
         'transition-colors duration-150 whitespace-nowrap select-none',
-        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-1',
+        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:ring-offset-1',
         variantClasses[variant],
         sizeClasses[size],
         fullWidth ? 'w-full' : '',

@@ -36,7 +36,7 @@ export function SubscriptionCard({ orgSlug, subscription }: SubscriptionCardProp
       <p style={{ fontSize: 14, fontWeight: 600, color: '#111827', margin: '0 0 14px' }}>Subscription</p>
       <div style={{ display: 'flex', gap: 8, marginBottom: 14 }}>
         <span style={{
-          background: '#FFF1F1', color: '#F04A4A', fontSize: 12, fontWeight: 700,
+          background: '#EFF6FF', color: '#1A6FBF', fontSize: 12, fontWeight: 700,
           padding: '3px 10px', borderRadius: 9999,
         }}>{TIER_LABEL[subscription.tier]}</span>
         <span style={{
@@ -74,7 +74,7 @@ export function SubscriptionCard({ orgSlug, subscription }: SubscriptionCardProp
         href={`/${orgSlug}/admin/billing`}
         style={{
           display: 'block', marginTop: 12, textAlign: 'center',
-          padding: '8px 0', background: '#F04A4A', color: '#fff',
+          padding: '8px 0', background: '#1A6FBF', color: '#fff',
           borderRadius: 6, fontSize: 12, fontWeight: 600, textDecoration: 'none',
         }}
       >

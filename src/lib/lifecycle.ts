@@ -2,7 +2,7 @@ export const LIFECYCLE = [
   'Pending Base Coordinator Approval',
   'New Request',
   'Warehouse Assigned',
-  'Processing',
+  'Picking',
   'GI Created',
   'Transferred to Dispatch',
   'Dispatch Queue',
@@ -25,7 +25,7 @@ export const STAGE_DEPARTMENT: Record<Stage, Department> = {
   'Pending Base Coordinator Approval': 'pending',
   'New Request': 'warehouse',
   'Warehouse Assigned': 'warehouse',
-  'Processing': 'warehouse',
+  'Picking': 'warehouse',
   'GI Created': 'warehouse',
   'Transferred to Dispatch': 'warehouse',
   'Dispatch Queue': 'dispatch',
@@ -42,7 +42,7 @@ export const STAGE_DEPARTMENT: Record<Stage, Department> = {
 
 export const DEPARTMENT_COLOR: Record<Department, string> = {
   pending:   '#94A3B8',
-  warehouse: '#10B981',
+  warehouse: '#3B82F6',
   dispatch:  '#8B5CF6',
   qaqc:      '#F59E0B',
   final:     '#22C55E',
@@ -52,7 +52,7 @@ export const STAGE_COLOR: Record<Stage, string> = Object.fromEntries(
   LIFECYCLE.map(s => [s, DEPARTMENT_COLOR[STAGE_DEPARTMENT[s]]])
 ) as Record<Stage, string>
 
-export type Role = 'requester' | 'wh_sup' | 'wh_per' | 'dsp_sup' | 'dsp_per' | 'qaqc' | 'site_logistics' | 'exec' | 'safety' | 'logistics' | 'inventory' | 'maintenance' | 'sysadmin'
+export type Role = 'requester' | 'wh_sup' | 'wh_per' | 'dsp_sup' | 'dsp_per' | 'qaqc' | 'site_logistics' | 'site_return' | 'exec' | 'safety' | 'logistics' | 'inventory' | 'maintenance' | 'sysadmin'
 
 export const ROLE_LABEL: Record<Role, string> = {
   requester:     'Requester',
@@ -62,9 +62,10 @@ export const ROLE_LABEL: Record<Role, string> = {
   dsp_per:       'Dispatch Personnel',
   qaqc:          'QAQC Officer',
   site_logistics: 'Site Logistics',
+  site_return:   'Site Return — Egina',
   exec:          'Executive',
   safety:        'Safety Officer',
-  logistics:     'Logistics Coordinator',
+  logistics:     'Vessel Coordinator',
   inventory:     'Inventory Manager',
   maintenance:   'Maintenance Technician',
   sysadmin:      'Sysadmin',
@@ -78,6 +79,7 @@ export const ROLE_ROUTE: Record<Role, string> = {
   dsp_per:       '/dispatch-personnel',
   qaqc:          '/qaqc',
   site_logistics: '/site-logistics',
+  site_return:   '/site-return',
   exec:          '/executive',
   safety:        '/safety',
   logistics:     '/logistics',
@@ -89,23 +91,24 @@ export const ROLE_ROUTE: Record<Role, string> = {
 export const ROLE_STAGES: Record<Role, Stage[]> = {
   requester:     [...LIFECYCLE],
   wh_sup:        [...LIFECYCLE],
-  wh_per:        ['New Request', 'Warehouse Assigned', 'Processing', 'GI Created'],
+  wh_per:        ['New Request', 'Warehouse Assigned', 'Picking', 'GI Created'],
   dsp_sup:       ['Dispatch Queue', 'Dispatch Assigned', 'Preload QAQC', 'Containerization', 'Post QAQC', 'Waybill Pending Signature', 'Waybill Done', 'Awaiting Deckspace'],
   dsp_per:       ['Dispatch Assigned', 'Containerization', 'Waybill Pending Signature', 'Waybill Done', 'Awaiting Deckspace'],
   qaqc:          ['Preload QAQC', 'Containerization', 'Post QAQC'],
   site_logistics: [],
+  site_return:   ['Completed'],
   exec:          [...LIFECYCLE],
   safety:        [...LIFECYCLE],
   logistics:     ['Dispatch Queue', 'Dispatch Assigned', 'Awaiting Deckspace', 'Shipped'],
   inventory:     [...LIFECYCLE],
-  maintenance:   ['New Request', 'Warehouse Assigned', 'Processing'],
+  maintenance:   ['New Request', 'Warehouse Assigned', 'Picking'],
   sysadmin:      [],
 }
 
 export const STAGE_REVERSAL: Partial<Record<Stage, Stage>> = {
   'Warehouse Assigned':        'New Request',
-  'Processing':                'Warehouse Assigned',
-  'GI Created':                'Processing',
+  'Picking':                'Warehouse Assigned',
+  'GI Created':                'Picking',
   'Transferred to Dispatch':   'GI Created',
   'Dispatch Assigned':         'Dispatch Queue',
   'Preload QAQC':              'Dispatch Assigned',

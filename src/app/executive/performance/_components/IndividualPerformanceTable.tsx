@@ -38,7 +38,7 @@ export function IndividualPerformanceTable({ mode, deptFilter }: Props) {
         <span className="text-[12px] text-gray-400 capitalize">{mode} view</span>
       </div>
       <table className="w-full text-sm">
-        <thead className="bg-gray-50 border-b border-border-default">
+        <thead className="bg-slate-50 border-b border-border-default">
           <tr>
             {['Name', 'Dept', 'Orders Completed', 'Avg Hours / Order', 'SLA Hit Rate', 'Load'].map(h => (
               <th key={h} className="px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-wide text-gray-400">{h}</th>

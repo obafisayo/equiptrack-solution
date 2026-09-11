@@ -10,7 +10,7 @@ interface StageTrend {
 }
 
 const STAGE_TRENDS: StageTrend[] = [
-  { stage: 'Processing',          change: +1.2, note: 'Warehouse backlog building' },
+  { stage: 'Picking',          change: +1.2, note: 'Warehouse backlog building' },
   { stage: 'Post QAQC',           change: +2.1, note: 'Inspector throughput reduced' },
   { stage: 'Dispatch Queue',       change: -0.5, note: 'Improved assignment speed' },
   { stage: 'Containerization',     change: +0.8, note: 'Container shortage' },

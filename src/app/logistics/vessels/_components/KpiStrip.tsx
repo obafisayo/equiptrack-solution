@@ -9,8 +9,8 @@ interface Props {
 
 export function KpiStrip({ total, inTransit, atPort, urgent }: Props) {
   const kpis: { label: string; value: string | number; color: string; icon: React.ReactNode }[] = [
-    { label: 'Total Vessels', value: total, color: '#3B82F6', icon: <Ship size={16}/> },
-    { label: 'In Transit', value: inTransit, color: '#3B82F6', icon: <ArrowRight size={16}/> },
+    { label: 'Total Vessels', value: total, color: '#1A6FBF', icon: <Ship size={16}/> },
+    { label: 'In Transit', value: inTransit, color: '#1A6FBF', icon: <ArrowRight size={16}/> },
     { label: 'At Port', value: atPort, color: '#16A34A', icon: <Anchor size={16}/> },
     { label: 'Urgent Cargo', value: urgent, color: '#DC2626', icon: <AlertTriangle size={16}/> },
   ]

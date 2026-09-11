@@ -131,10 +131,10 @@ export default function VesselRequests() {
     >
       {/* KPI row */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <StatCard label="Awaiting Allocation" value={awaitingCount}  color={awaitingCount>0?'#F97316':'#22C55E'} icon={AlertTriangle}/>
-        <StatCard label="Vessels Available"   value={availableCount} color="#22C55E" icon={Navigation}/>
-        <StatCard label="Currently Loading"   value={loadingCount}   color="#F59E0B" icon={Package}/>
-        <StatCard label="In Transit"          value={inTransit}      color="#3B82F6" icon={Anchor}/>
+        <StatCard label="Awaiting Allocation" value={awaitingCount}  color={awaitingCount>0?'#F97316':'#16A34A'} icon={AlertTriangle}/>
+        <StatCard label="Vessels Available"   value={availableCount} color="#16A34A" icon={Navigation}/>
+        <StatCard label="Currently Loading"   value={loadingCount}   color="#D97706" icon={Package}/>
+        <StatCard label="In Transit"          value={inTransit}      color="#1A6FBF" icon={Anchor}/>
       </div>
 
       {/* Requests */}

@@ -14,7 +14,7 @@ export function PersonHandlingTable({ personStats }: PersonHandlingTableProps) {
       <SectionTitle title="Avg Handling Time per Person (Top 10 Slowest)" />
       <div className="mt-3 bg-white border border-border-default rounded-card shadow-card overflow-x-auto">
         <table className="w-full text-sm">
-          <thead className="bg-gray-50 border-b border-border-default">
+          <thead className="bg-slate-50 border-b border-border-default">
             <tr>
               {['Person', 'Stages Handled', 'Avg Time per Stage', 'Note'].map(h => (
                 <th key={h} className="text-left text-xs font-semibold text-gray-500 uppercase tracking-wider px-4 py-3">{h}</th>

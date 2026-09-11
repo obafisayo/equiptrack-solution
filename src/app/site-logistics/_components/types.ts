@@ -59,7 +59,7 @@ export const MOCK_RETURNS: ReturnOrder[] = [
   {
     id: 'RTB-2026-001',
     origin: 'site',
-    siteName: 'Bonga FPSO',
+    siteName: 'Akpo',
     cargoClass: 'normal',
     items: [
       { id: 'RI-001', description: 'Gate Valve 6" 900#', qty: 1, unit: 'Pcs', weight: 45, condition: 'damaged' },
@@ -74,7 +74,7 @@ export const MOCK_RETURNS: ReturnOrder[] = [
   {
     id: 'RTB-2026-002',
     origin: 'site',
-    siteName: 'Agbami FPSO',
+    siteName: 'Amadi-Base',
     cargoClass: 'dangerous',
     items: [
       { id: 'RI-003', description: 'Chemical drum 200L', qty: 4, unit: 'Drums', weight: 180, condition: 'good' },

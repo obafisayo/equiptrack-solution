@@ -67,12 +67,12 @@ export function StageTimingSection() {
       <div className="border border-border-default rounded-lg overflow-hidden">
         <table className="w-full text-xs">
           <thead>
-            <tr className="bg-gray-50 border-b border-border-default">
-              <th className="text-left px-4 py-2.5 font-semibold text-gray-600">Stage</th>
-              <th className="text-right px-4 py-2.5 font-semibold text-gray-600">Avg Actual</th>
-              <th className="text-right px-4 py-2.5 font-semibold text-gray-600">SLA Target</th>
-              <th className="text-right px-4 py-2.5 font-semibold text-gray-600">% of SLA</th>
-              <th className="text-right px-4 py-2.5 font-semibold text-gray-600">Status</th>
+            <tr className="bg-slate-50 border-b border-border-default">
+              <th className="text-left px-4 py-2.5 font-semibold text-slate-600">Stage</th>
+              <th className="text-right px-4 py-2.5 font-semibold text-slate-600">Avg Actual</th>
+              <th className="text-right px-4 py-2.5 font-semibold text-slate-600">SLA Target</th>
+              <th className="text-right px-4 py-2.5 font-semibold text-slate-600">% of SLA</th>
+              <th className="text-right px-4 py-2.5 font-semibold text-slate-600">Status</th>
             </tr>
           </thead>
           <tbody>

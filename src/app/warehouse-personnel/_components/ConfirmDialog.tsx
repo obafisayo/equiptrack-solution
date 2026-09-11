@@ -22,7 +22,7 @@ export function ConfirmDialog({ title, description, confirmLabel, onConfirm, onC
             onClick={onCancel}
             className="flex-1 h-9 rounded-button border border-border-default text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors"
           >
-            Cancel
+            Go Back
           </button>
           <button
             type="button"

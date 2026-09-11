@@ -69,9 +69,9 @@ export default function DispatchPersonnelPage() {
       {/* STATS */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         <StatCard label="Total Active Orders" value={totalActive}       color="#8B5CF6"                              icon={Package} />
-        <StatCard label="Unassigned"          value={unassigned}        color={unassigned > 0 ? '#EF4444' : '#22C55E'} icon={AlertCircle} />
-        <StatCard label="Personnel"           value={personnel.length}  color="#3B82F6"                              icon={Users} />
-        <StatCard label="Overloaded"          value={overloaded}        color={overloaded > 0 ? '#F97316' : '#22C55E'} icon={AlertTriangle} />
+        <StatCard label="Unassigned"          value={unassigned}        color={unassigned > 0 ? '#DC2626' : '#16A34A'} icon={AlertCircle} />
+        <StatCard label="Personnel"           value={personnel.length}  color="#1A6FBF"                              icon={Users} />
+        <StatCard label="Overloaded"          value={overloaded}        color={overloaded > 0 ? '#F97316' : '#16A34A'} icon={AlertTriangle} />
       </div>
 
       {/* PERSONNEL LOAD VISUAL */}

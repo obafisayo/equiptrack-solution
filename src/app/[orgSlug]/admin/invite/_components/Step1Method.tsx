@@ -27,8 +27,8 @@ export function Step1Method({ method, onSelect, onNext }: Step1MethodProps) {
               onClick={() => onSelect(opt.key)}
               style={{
                 display: 'flex', alignItems: 'center', gap: 14,
-                padding: '16px 18px', border: `2px solid ${selected ? '#F04A4A' : '#E2E8F0'}`,
-                borderRadius: 8, background: selected ? '#FFF1F1' : '#fff',
+                padding: '16px 18px', border: `2px solid ${selected ? '#1A6FBF' : '#E2E8F0'}`,
+                borderRadius: 8, background: selected ? '#EFF6FF' : '#fff',
                 cursor: 'pointer', textAlign: 'left', width: '100%',
               }}
             >
@@ -45,7 +45,7 @@ export function Step1Method({ method, onSelect, onNext }: Step1MethodProps) {
               </div>
               {selected && (
                 <div style={{
-                  width: 20, height: 20, borderRadius: '50%', background: '#F04A4A',
+                  width: 20, height: 20, borderRadius: '50%', background: '#1A6FBF',
                   display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
                 }}>
                   <Check size={12} color="#fff" />
@@ -57,7 +57,7 @@ export function Step1Method({ method, onSelect, onNext }: Step1MethodProps) {
       </div>
       <button onClick={onNext} style={{
         marginTop: 24, width: '100%', padding: '10px 0',
-        background: '#F04A4A', color: '#fff', border: 'none',
+        background: '#1A6FBF', color: '#fff', border: 'none',
         borderRadius: 7, fontSize: 13, fontWeight: 600, cursor: 'pointer',
         display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
       }}>

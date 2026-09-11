@@ -20,8 +20,12 @@ export interface OrderItem {
   description: string
   qty: number
   unit: string
-  partNumber?: string
+  partNumber?: string  // also used as PR/WO number on TR documents
+  plant?: string       // SAP plant code, e.g. "NG31"
+  binLoc?: string      // warehouse bin location, e.g. "4242"
 }
+
+export type EntityType = 'FOPS' | 'TECHLOG' | 'ECP' | 'DRILLING' | 'PROJECT'
 
 export interface WorkOrder {
   id: string
@@ -34,6 +38,7 @@ export interface WorkOrder {
   assignedToName: string | null
   requestedBy?: string
   requestedByName?: string
+  entity?: EntityType
   elapsedHours: number
   totalElapsedHours: number
   stageHistory: StageHistoryEntry[]
@@ -41,11 +46,16 @@ export interface WorkOrder {
   notes?: string
   createdAt: string
   expectedDeliveryDate: string | null
+  returnDate?: string
   rejectionReason?: string
   containerId?: string
+  assignedCCUSerial?: string
   waybillNumber?: string
+  waybillApproved?: boolean
+  allocatedVessel?: string
   status?: 'active' | 'rejected' | 'completed'
   cargoClass?: DangerousGoodsClass
+  trDepartment?: string
 }
 
 export type PersonnelDept = 'warehouse' | 'dispatch' | 'qaqc'
@@ -73,6 +83,8 @@ export interface Container {
   destination?: string
   lastInspected?: string
   notes?: string
+  assignedToPersonnelId?: string   // set by QAQC; dispatch personnel sees this on their right panel
+  assignedToPersonnelName?: string
 }
 
 // ─── Personnel ────────────────────────────────────────────────────────────────
@@ -86,6 +98,7 @@ export const PERSONNEL: Personnel[] = [
   { id: 'DP1', name: 'Biodun Adekunle', dept: 'dispatch',  role: 'Senior Dispatch Officer',   active: 8,  capacity: 12, email: 'b.adekunle@equiptrack.ng' },
   { id: 'DP2', name: 'Chika Obi',       dept: 'dispatch',  role: 'Dispatch Officer',          active: 3,  capacity: 12, email: 'c.obi@equiptrack.ng' },
   { id: 'DP3', name: 'Kola Martins',    dept: 'dispatch',  role: 'Dispatch Officer',          active: 6,  capacity: 12, email: 'k.martins@equiptrack.ng' },
+  { id: 'DP4', name: 'Tunde Bello',     dept: 'dispatch',  role: 'Dispatch Officer',          active: 4,  capacity: 12, email: 't.bello@equiptrack.ng'    },
   { id: 'QA1', name: 'Femi Emmanuel',   dept: 'qaqc',      role: 'Senior QAQC Inspector',     active: 4,  capacity: 10, email: 'f.emmanuel@equiptrack.ng' },
   { id: 'QA2', name: 'Ngozi Okafor',    dept: 'qaqc',      role: 'QAQC Inspector',            active: 2,  capacity: 10, email: 'n.okafor@equiptrack.ng' },
 ]
@@ -94,15 +107,15 @@ export const PERSONNEL: Personnel[] = [
 
 export const CONTAINERS: Container[] = [
   { id: 'CNT-001', size: '20ft', status: 'available',   yard: 'Yard A',   lengthFt: 20, widthFt: 8, heightFt: 8.6, weightKg: 2200, workOrderIds: [],                   lastInspected: '2026-06-20' },
-  { id: 'CNT-002', size: '40ft', status: 'in-use',      yard: 'Yard B',   lengthFt: 40, widthFt: 8, heightFt: 8.6, weightKg: 3800, workOrderIds: ['DEL-24-1301'],      destination: 'Bonga FPSO',        lastInspected: '2026-06-18' },
+  { id: 'CNT-002', size: '40ft', status: 'in-use',      yard: 'Yard B',   lengthFt: 40, widthFt: 8, heightFt: 8.6, weightKg: 3800, workOrderIds: ['DEL-24-1301'],      destination: 'Akpo',        lastInspected: '2026-06-18' },
   { id: 'CNT-003', size: '20ft', status: 'available',   yard: 'Yard A',   lengthFt: 20, widthFt: 8, heightFt: 8.6, weightKg: 2200, workOrderIds: [],                   lastInspected: '2026-06-22' },
   { id: 'CNT-004', size: '40ft', status: 'inspection',  yard: 'Workshop', lengthFt: 40, widthFt: 8, heightFt: 8.6, weightKg: 3750, workOrderIds: [],                   lastInspected: '2026-06-10', notes: 'Awaiting structural sign-off' },
   { id: 'CNT-005', size: '20ft', status: 'available',   yard: 'Yard C',   lengthFt: 20, widthFt: 8, heightFt: 8.6, weightKg: 2180, workOrderIds: [],                   lastInspected: '2026-06-21' },
   { id: 'CNT-006', size: '40ft', status: 'available',   yard: 'Yard C',   lengthFt: 40, widthFt: 8, heightFt: 8.6, weightKg: 3820, workOrderIds: [],                   lastInspected: '2026-06-19' },
-  { id: 'CNT-007', size: '20ft', status: 'in-use',      yard: 'Yard B',   lengthFt: 20, widthFt: 8, heightFt: 8.6, weightKg: 2250, workOrderIds: ['DEL-24-1288'],      destination: 'Escravos Terminal', lastInspected: '2026-06-17' },
+  { id: 'CNT-007', size: '20ft', status: 'in-use',      yard: 'Yard B',   lengthFt: 20, widthFt: 8, heightFt: 8.6, weightKg: 2250, workOrderIds: ['DEL-24-1288'],      destination: 'Hosh-1', lastInspected: '2026-06-17' },
   { id: 'CNT-008', size: '40ft', status: 'maintenance', yard: 'Workshop', lengthFt: 40, widthFt: 8, heightFt: 8.6, weightKg: 3800, workOrderIds: [],                   lastInspected: '2026-06-05', notes: 'Floor panel replacement in progress' },
   { id: 'CNT-009', size: '20ft', status: 'available',   yard: 'Yard A',   lengthFt: 20, widthFt: 8, heightFt: 8.6, weightKg: 2200, workOrderIds: [],                   lastInspected: '2026-06-23' },
-  { id: 'CNT-010', size: '40ft', status: 'in-use',      yard: 'Yard D',   lengthFt: 40, widthFt: 8, heightFt: 8.6, weightKg: 3900, workOrderIds: ['DEL-24-1275'],      destination: 'Agbami FPSO',       lastInspected: '2026-06-15' },
+  { id: 'CNT-010', size: '40ft', status: 'in-use',      yard: 'Yard D',   lengthFt: 40, widthFt: 8, heightFt: 8.6, weightKg: 3900, workOrderIds: ['DEL-24-1275'],      destination: 'Amadi-Base',       lastInspected: '2026-06-15' },
 ]
 
 // ─── Work Orders ──────────────────────────────────────────────────────────────
@@ -113,7 +126,7 @@ export const WORK_ORDERS: WorkOrder[] = [
     id: 'DEL-24-1320',
     workOrderNumber: 'WO-24-441',
     requestType: 'TR',
-    destination: 'Bonga FPSO',
+    destination: 'Akpo',
     urgency: 'High',
     stage: 'Pending Base Coordinator Approval',
     assignedTo: null,
@@ -126,19 +139,20 @@ export const WORK_ORDERS: WorkOrder[] = [
       { stage: 'Pending Base Coordinator Approval', personId: null, personName: 'Base Coordinator', startedAt: '2024-06-25T08:00:00Z' },
     ],
     items: [
-      { description: 'Gate Valve 6" 900# RTJ', qty: 2, unit: 'Pcs', partNumber: 'GV-6900-RTJ' },
-      { description: 'Pressure Gauge 0-3000 PSI', qty: 4, unit: 'Pcs' },
+      { description: 'Gate Valve 6" 900# RTJ', qty: 2, unit: 'Pcs', partNumber: 'GV-6900-RTJ', plant: 'NG31', binLoc: '4242' },
+      { description: 'Pressure Gauge 0-3000 PSI', qty: 4, unit: 'Pcs', plant: 'NG31', binLoc: '4185' },
     ],
     notes: 'Urgent replacement required — wellhead integrity issue.',
     createdAt: '2024-06-25T08:00:00Z',
     expectedDeliveryDate: '2024-06-28T08:00:00Z',
+    trDepartment: 'DeepWater',
     status: 'active',
   },
   {
     id: 'DEL-24-1318',
     workOrderNumber: 'WO-24-440',
     requestType: 'TR',
-    destination: 'Agbami FPSO',
+    destination: 'Amadi-Base',
     urgency: 'Medium',
     stage: 'Pending Base Coordinator Approval',
     assignedTo: null,
@@ -151,10 +165,11 @@ export const WORK_ORDERS: WorkOrder[] = [
       { stage: 'Pending Base Coordinator Approval', personId: null, personName: 'Base Coordinator', startedAt: '2024-06-25T14:00:00Z' },
     ],
     items: [
-      { description: 'Choke Valve 2" Adjustable', qty: 1, unit: 'Pcs', partNumber: 'CV-2ADJ' },
+      { description: 'Choke Valve 2" Adjustable', qty: 1, unit: 'Pcs', partNumber: 'CV-2ADJ', plant: 'NG32', binLoc: '3018' },
     ],
     createdAt: '2024-06-25T14:00:00Z',
     expectedDeliveryDate: '2024-06-30T14:00:00Z',
+    trDepartment: 'Production',
     status: 'active',
   },
 
@@ -163,7 +178,7 @@ export const WORK_ORDERS: WorkOrder[] = [
     id: 'DEL-24-1315',
     workOrderNumber: 'WO-24-438',
     requestType: 'SAP',
-    destination: 'Forcados Terminal',
+    destination: 'Amenam',
     urgency: 'Urgent',
     stage: 'New Request',
     assignedTo: null,
@@ -189,7 +204,7 @@ export const WORK_ORDERS: WorkOrder[] = [
     id: 'DEL-24-1312',
     workOrderNumber: 'WO-24-436',
     requestType: 'SAP',
-    destination: 'Bonny Terminal',
+    destination: 'AMQ',
     urgency: 'High',
     stage: 'New Request',
     assignedTo: null,
@@ -214,7 +229,7 @@ export const WORK_ORDERS: WorkOrder[] = [
     id: 'DEL-24-1308',
     workOrderNumber: 'WO-24-433',
     requestType: 'SAP',
-    destination: 'Erha FPSO',
+    destination: 'Egina',
     urgency: 'Medium',
     stage: 'Warehouse Assigned',
     assignedTo: 'WH3',
@@ -237,7 +252,7 @@ export const WORK_ORDERS: WorkOrder[] = [
     id: 'DEL-24-1305',
     workOrderNumber: 'WO-24-431',
     requestType: 'SAP',
-    destination: 'Escravos Terminal',
+    destination: 'Hosh-1',
     urgency: 'Low',
     stage: 'Warehouse Assigned',
     assignedTo: 'WH4',
@@ -262,9 +277,9 @@ export const WORK_ORDERS: WorkOrder[] = [
     id: 'DEL-24-1301',
     workOrderNumber: 'WO-24-428',
     requestType: 'SAP',
-    destination: 'Bonga FPSO',
+    destination: 'Akpo',
     urgency: 'High',
-    stage: 'Processing',
+    stage: 'Picking',
     assignedTo: 'WH1',
     assignedToName: 'Emeka Okonkwo',
     elapsedHours: 4.3,
@@ -272,7 +287,7 @@ export const WORK_ORDERS: WorkOrder[] = [
     stageHistory: [
       { stage: 'New Request', personId: null, personName: null, startedAt: '2024-06-24T08:00:00Z', endedAt: '2024-06-24T10:00:00Z', durationHours: 2 },
       { stage: 'Warehouse Assigned', personId: 'WH1', personName: 'Emeka Okonkwo', startedAt: '2024-06-24T10:00:00Z', endedAt: '2024-06-24T12:00:00Z', durationHours: 2 },
-      { stage: 'Processing', personId: 'WH1', personName: 'Emeka Okonkwo', startedAt: '2024-06-25T13:30:00Z' },
+      { stage: 'Picking', personId: 'WH1', personName: 'Emeka Okonkwo', startedAt: '2024-06-25T13:30:00Z' },
     ],
     items: [
       { description: 'BOP Ram Seal Assembly 13-5/8" 10K', qty: 1, unit: 'Set', partNumber: 'BOP-1358-10K' },
@@ -288,9 +303,9 @@ export const WORK_ORDERS: WorkOrder[] = [
     id: 'DEL-24-1298',
     workOrderNumber: 'WO-24-426',
     requestType: 'TR',
-    destination: 'Egina FPSO',
+    destination: 'Odudu',
     urgency: 'Urgent',
-    stage: 'Processing',
+    stage: 'Picking',
     assignedTo: 'WH5',
     assignedToName: 'Segun Afolabi',
     elapsedHours: 9.1,
@@ -299,7 +314,7 @@ export const WORK_ORDERS: WorkOrder[] = [
       { stage: 'Pending Base Coordinator Approval', personId: null, personName: 'Base Coordinator', startedAt: '2024-06-24T06:00:00Z', endedAt: '2024-06-24T08:00:00Z', durationHours: 2 },
       { stage: 'New Request', personId: null, personName: null, startedAt: '2024-06-24T08:00:00Z', endedAt: '2024-06-24T10:00:00Z', durationHours: 2 },
       { stage: 'Warehouse Assigned', personId: 'WH5', personName: 'Segun Afolabi', startedAt: '2024-06-24T10:00:00Z', endedAt: '2024-06-24T11:00:00Z', durationHours: 1 },
-      { stage: 'Processing', personId: 'WH5', personName: 'Segun Afolabi', startedAt: '2024-06-24T11:00:00Z' },
+      { stage: 'Picking', personId: 'WH5', personName: 'Segun Afolabi', startedAt: '2024-06-24T11:00:00Z' },
     ],
     items: [
       { description: 'Subsea Tree Cap 10K 7-1/16"', qty: 1, unit: 'Pcs', partNumber: 'STC-716-10K' },
@@ -315,7 +330,7 @@ export const WORK_ORDERS: WorkOrder[] = [
     id: 'DEL-24-1292',
     workOrderNumber: 'WO-24-420',
     requestType: 'SAP',
-    destination: 'Usan FPSO',
+    destination: 'Ofon',
     urgency: 'Medium',
     stage: 'GI Created',
     assignedTo: 'WH2',
@@ -325,7 +340,7 @@ export const WORK_ORDERS: WorkOrder[] = [
     stageHistory: [
       { stage: 'New Request', personId: null, personName: null, startedAt: '2024-06-24T05:00:00Z', endedAt: '2024-06-24T08:00:00Z', durationHours: 3 },
       { stage: 'Warehouse Assigned', personId: 'WH2', personName: 'Sarah Adebayo', startedAt: '2024-06-24T08:00:00Z', endedAt: '2024-06-24T09:30:00Z', durationHours: 1.5 },
-      { stage: 'Processing', personId: 'WH2', personName: 'Sarah Adebayo', startedAt: '2024-06-24T09:30:00Z', endedAt: '2024-06-24T17:30:00Z', durationHours: 8 },
+      { stage: 'Picking', personId: 'WH2', personName: 'Sarah Adebayo', startedAt: '2024-06-24T09:30:00Z', endedAt: '2024-06-24T17:30:00Z', durationHours: 8 },
       { stage: 'GI Created', personId: 'WH2', personName: 'Sarah Adebayo', startedAt: '2024-06-25T15:00:00Z' },
     ],
     items: [
@@ -342,7 +357,7 @@ export const WORK_ORDERS: WorkOrder[] = [
     id: 'DEL-24-1288',
     workOrderNumber: 'WO-24-417',
     requestType: 'SAP',
-    destination: 'Forcados Terminal',
+    destination: 'Amenam',
     urgency: 'High',
     stage: 'Transferred to Dispatch',
     assignedTo: 'WH1',
@@ -352,7 +367,7 @@ export const WORK_ORDERS: WorkOrder[] = [
     stageHistory: [
       { stage: 'New Request', personId: null, personName: null, startedAt: '2024-06-24T01:00:00Z', endedAt: '2024-06-24T04:00:00Z', durationHours: 3 },
       { stage: 'Warehouse Assigned', personId: 'WH1', personName: 'Emeka Okonkwo', startedAt: '2024-06-24T04:00:00Z', endedAt: '2024-06-24T05:00:00Z', durationHours: 1 },
-      { stage: 'Processing', personId: 'WH1', personName: 'Emeka Okonkwo', startedAt: '2024-06-24T05:00:00Z', endedAt: '2024-06-24T14:00:00Z', durationHours: 9 },
+      { stage: 'Picking', personId: 'WH1', personName: 'Emeka Okonkwo', startedAt: '2024-06-24T05:00:00Z', endedAt: '2024-06-24T14:00:00Z', durationHours: 9 },
       { stage: 'GI Created', personId: 'WH1', personName: 'Emeka Okonkwo', startedAt: '2024-06-24T14:00:00Z', endedAt: '2024-06-24T15:30:00Z', durationHours: 1.5 },
       { stage: 'Transferred to Dispatch', personId: 'WH1', personName: 'Emeka Okonkwo', startedAt: '2024-06-25T16:30:00Z' },
     ],
@@ -371,7 +386,7 @@ export const WORK_ORDERS: WorkOrder[] = [
     id: 'DEL-24-1282',
     workOrderNumber: 'WO-24-412',
     requestType: 'SAP',
-    destination: 'Bonny Terminal',
+    destination: 'AMQ',
     urgency: 'Medium',
     stage: 'Dispatch Queue',
     assignedTo: null,
@@ -383,7 +398,7 @@ export const WORK_ORDERS: WorkOrder[] = [
     stageHistory: [
       { stage: 'New Request', personId: null, personName: null, startedAt: '2024-06-23T22:00:00Z', endedAt: '2024-06-23T24:00:00Z', durationHours: 2 },
       { stage: 'Warehouse Assigned', personId: 'WH3', personName: 'James Okeke', startedAt: '2024-06-24T00:00:00Z', endedAt: '2024-06-24T01:30:00Z', durationHours: 1.5 },
-      { stage: 'Processing', personId: 'WH3', personName: 'James Okeke', startedAt: '2024-06-24T01:30:00Z', endedAt: '2024-06-24T09:30:00Z', durationHours: 8 },
+      { stage: 'Picking', personId: 'WH3', personName: 'James Okeke', startedAt: '2024-06-24T01:30:00Z', endedAt: '2024-06-24T09:30:00Z', durationHours: 8 },
       { stage: 'GI Created', personId: 'WH3', personName: 'James Okeke', startedAt: '2024-06-24T09:30:00Z', endedAt: '2024-06-24T11:00:00Z', durationHours: 1.5 },
       { stage: 'Transferred to Dispatch', personId: 'WH3', personName: 'James Okeke', startedAt: '2024-06-24T11:00:00Z', endedAt: '2024-06-24T12:00:00Z', durationHours: 1 },
       { stage: 'Dispatch Queue', personId: null, personName: null, startedAt: '2024-06-25T14:00:00Z' },
@@ -400,7 +415,7 @@ export const WORK_ORDERS: WorkOrder[] = [
     id: 'DEL-24-1278',
     workOrderNumber: 'WO-24-409',
     requestType: 'VENDOR',
-    destination: 'Agbami FPSO',
+    destination: 'Amadi-Base',
     urgency: 'High',
     stage: 'Dispatch Queue',
     assignedTo: null,
@@ -426,7 +441,7 @@ export const WORK_ORDERS: WorkOrder[] = [
     id: 'DEL-24-1272',
     workOrderNumber: 'WO-24-404',
     requestType: 'SAP',
-    destination: 'Erha FPSO',
+    destination: 'Egina',
     urgency: 'Urgent',
     stage: 'Dispatch Assigned',
     assignedTo: 'DP1',
@@ -436,7 +451,7 @@ export const WORK_ORDERS: WorkOrder[] = [
     stageHistory: [
       { stage: 'New Request', personId: null, personName: null, startedAt: '2024-06-23T10:00:00Z', endedAt: '2024-06-23T13:00:00Z', durationHours: 3 },
       { stage: 'Warehouse Assigned', personId: 'WH4', personName: 'Amaka Eze', startedAt: '2024-06-23T13:00:00Z', endedAt: '2024-06-23T14:30:00Z', durationHours: 1.5 },
-      { stage: 'Processing', personId: 'WH4', personName: 'Amaka Eze', startedAt: '2024-06-23T14:30:00Z', endedAt: '2024-06-23T22:30:00Z', durationHours: 8 },
+      { stage: 'Picking', personId: 'WH4', personName: 'Amaka Eze', startedAt: '2024-06-23T14:30:00Z', endedAt: '2024-06-23T22:30:00Z', durationHours: 8 },
       { stage: 'GI Created', personId: 'WH4', personName: 'Amaka Eze', startedAt: '2024-06-23T22:30:00Z', endedAt: '2024-06-24T00:00:00Z', durationHours: 1.5 },
       { stage: 'Transferred to Dispatch', personId: 'WH4', personName: 'Amaka Eze', startedAt: '2024-06-24T00:00:00Z', endedAt: '2024-06-24T01:00:00Z', durationHours: 1 },
       { stage: 'Dispatch Queue', personId: null, personName: null, startedAt: '2024-06-24T01:00:00Z', endedAt: '2024-06-24T03:00:00Z', durationHours: 2 },
@@ -454,7 +469,7 @@ export const WORK_ORDERS: WorkOrder[] = [
     id: 'DEL-24-1268',
     workOrderNumber: 'WO-24-401',
     requestType: 'NON_STOCK',
-    destination: 'Escravos Terminal',
+    destination: 'Hosh-1',
     urgency: 'Medium',
     stage: 'Dispatch Assigned',
     assignedTo: 'DP2',
@@ -478,7 +493,7 @@ export const WORK_ORDERS: WorkOrder[] = [
     id: 'DEL-24-1261',
     workOrderNumber: 'WO-24-395',
     requestType: 'SAP',
-    destination: 'Bonga FPSO',
+    destination: 'Akpo',
     urgency: 'High',
     stage: 'Preload QAQC',
     assignedTo: 'QA1',
@@ -488,7 +503,7 @@ export const WORK_ORDERS: WorkOrder[] = [
     stageHistory: [
       { stage: 'New Request', personId: null, personName: null, startedAt: '2024-06-23T06:00:00Z', endedAt: '2024-06-23T09:00:00Z', durationHours: 3 },
       { stage: 'Warehouse Assigned', personId: 'WH2', personName: 'Sarah Adebayo', startedAt: '2024-06-23T09:00:00Z', endedAt: '2024-06-23T10:30:00Z', durationHours: 1.5 },
-      { stage: 'Processing', personId: 'WH2', personName: 'Sarah Adebayo', startedAt: '2024-06-23T10:30:00Z', endedAt: '2024-06-23T18:30:00Z', durationHours: 8 },
+      { stage: 'Picking', personId: 'WH2', personName: 'Sarah Adebayo', startedAt: '2024-06-23T10:30:00Z', endedAt: '2024-06-23T18:30:00Z', durationHours: 8 },
       { stage: 'GI Created', personId: 'WH2', personName: 'Sarah Adebayo', startedAt: '2024-06-23T18:30:00Z', endedAt: '2024-06-23T20:00:00Z', durationHours: 1.5 },
       { stage: 'Transferred to Dispatch', personId: 'WH2', personName: 'Sarah Adebayo', startedAt: '2024-06-23T20:00:00Z', endedAt: '2024-06-23T21:00:00Z', durationHours: 1 },
       { stage: 'Dispatch Queue', personId: null, personName: null, startedAt: '2024-06-23T21:00:00Z', endedAt: '2024-06-23T23:00:00Z', durationHours: 2 },
@@ -509,7 +524,7 @@ export const WORK_ORDERS: WorkOrder[] = [
     id: 'DEL-24-1255',
     workOrderNumber: 'WO-24-390',
     requestType: 'SAP',
-    destination: 'Agbami FPSO',
+    destination: 'Amadi-Base',
     urgency: 'Medium',
     stage: 'Containerization',
     assignedTo: 'DP1',
@@ -520,7 +535,7 @@ export const WORK_ORDERS: WorkOrder[] = [
     stageHistory: [
       { stage: 'New Request', personId: null, personName: null, startedAt: '2024-06-22T20:00:00Z', endedAt: '2024-06-22T23:00:00Z', durationHours: 3 },
       { stage: 'Warehouse Assigned', personId: 'WH5', personName: 'Segun Afolabi', startedAt: '2024-06-22T23:00:00Z', endedAt: '2024-06-23T00:30:00Z', durationHours: 1.5 },
-      { stage: 'Processing', personId: 'WH5', personName: 'Segun Afolabi', startedAt: '2024-06-23T00:30:00Z', endedAt: '2024-06-23T08:30:00Z', durationHours: 8 },
+      { stage: 'Picking', personId: 'WH5', personName: 'Segun Afolabi', startedAt: '2024-06-23T00:30:00Z', endedAt: '2024-06-23T08:30:00Z', durationHours: 8 },
       { stage: 'GI Created', personId: 'WH5', personName: 'Segun Afolabi', startedAt: '2024-06-23T08:30:00Z', endedAt: '2024-06-23T10:00:00Z', durationHours: 1.5 },
       { stage: 'Transferred to Dispatch', personId: 'WH5', personName: 'Segun Afolabi', startedAt: '2024-06-23T10:00:00Z', endedAt: '2024-06-23T11:00:00Z', durationHours: 1 },
       { stage: 'Dispatch Queue', personId: null, personName: null, startedAt: '2024-06-23T11:00:00Z', endedAt: '2024-06-23T13:00:00Z', durationHours: 2 },
@@ -543,7 +558,7 @@ export const WORK_ORDERS: WorkOrder[] = [
     id: 'DEL-24-1248',
     workOrderNumber: 'WO-24-383',
     requestType: 'SAP',
-    destination: 'Forcados Terminal',
+    destination: 'Amenam',
     urgency: 'High',
     stage: 'Post QAQC',
     assignedTo: 'QA1',
@@ -554,7 +569,7 @@ export const WORK_ORDERS: WorkOrder[] = [
     stageHistory: [
       { stage: 'New Request', personId: null, personName: null, startedAt: '2024-06-22T12:00:00Z', endedAt: '2024-06-22T15:00:00Z', durationHours: 3 },
       { stage: 'Warehouse Assigned', personId: 'WH3', personName: 'James Okeke', startedAt: '2024-06-22T15:00:00Z', endedAt: '2024-06-22T16:30:00Z', durationHours: 1.5 },
-      { stage: 'Processing', personId: 'WH3', personName: 'James Okeke', startedAt: '2024-06-22T16:30:00Z', endedAt: '2024-06-23T00:30:00Z', durationHours: 8 },
+      { stage: 'Picking', personId: 'WH3', personName: 'James Okeke', startedAt: '2024-06-22T16:30:00Z', endedAt: '2024-06-23T00:30:00Z', durationHours: 8 },
       { stage: 'GI Created', personId: 'WH3', personName: 'James Okeke', startedAt: '2024-06-23T00:30:00Z', endedAt: '2024-06-23T02:00:00Z', durationHours: 1.5 },
       { stage: 'Transferred to Dispatch', personId: 'WH3', personName: 'James Okeke', startedAt: '2024-06-23T02:00:00Z', endedAt: '2024-06-23T03:00:00Z', durationHours: 1 },
       { stage: 'Dispatch Queue', personId: null, personName: null, startedAt: '2024-06-23T03:00:00Z', endedAt: '2024-06-23T05:00:00Z', durationHours: 2 },
@@ -576,7 +591,7 @@ export const WORK_ORDERS: WorkOrder[] = [
     id: 'DEL-24-1240',
     workOrderNumber: 'WO-24-376',
     requestType: 'SAP',
-    destination: 'Egina FPSO',
+    destination: 'Odudu',
     urgency: 'Medium',
     stage: 'Waybill Pending Signature',
     assignedTo: 'DP2',
@@ -588,7 +603,7 @@ export const WORK_ORDERS: WorkOrder[] = [
     stageHistory: [
       { stage: 'New Request', personId: null, personName: null, startedAt: '2024-06-22T06:00:00Z', endedAt: '2024-06-22T09:00:00Z', durationHours: 3 },
       { stage: 'Warehouse Assigned', personId: 'WH4', personName: 'Amaka Eze', startedAt: '2024-06-22T09:00:00Z', endedAt: '2024-06-22T10:00:00Z', durationHours: 1 },
-      { stage: 'Processing', personId: 'WH4', personName: 'Amaka Eze', startedAt: '2024-06-22T10:00:00Z', endedAt: '2024-06-22T18:00:00Z', durationHours: 8 },
+      { stage: 'Picking', personId: 'WH4', personName: 'Amaka Eze', startedAt: '2024-06-22T10:00:00Z', endedAt: '2024-06-22T18:00:00Z', durationHours: 8 },
       { stage: 'GI Created', personId: 'WH4', personName: 'Amaka Eze', startedAt: '2024-06-22T18:00:00Z', endedAt: '2024-06-22T20:00:00Z', durationHours: 2 },
       { stage: 'Transferred to Dispatch', personId: 'WH4', personName: 'Amaka Eze', startedAt: '2024-06-22T20:00:00Z', endedAt: '2024-06-22T21:00:00Z', durationHours: 1 },
       { stage: 'Dispatch Queue', personId: null, personName: null, startedAt: '2024-06-22T21:00:00Z', endedAt: '2024-06-22T23:00:00Z', durationHours: 2 },
@@ -612,7 +627,7 @@ export const WORK_ORDERS: WorkOrder[] = [
     id: 'DEL-24-1231',
     workOrderNumber: 'WO-24-368',
     requestType: 'SAP',
-    destination: 'Bonny Terminal',
+    destination: 'AMQ',
     urgency: 'Low',
     stage: 'Waybill Done',
     assignedTo: 'DP3',
@@ -637,7 +652,7 @@ export const WORK_ORDERS: WorkOrder[] = [
     id: 'DEL-24-1220',
     workOrderNumber: 'WO-24-358',
     requestType: 'SAP',
-    destination: 'Erha FPSO',
+    destination: 'Egina',
     urgency: 'High',
     stage: 'Awaiting Deckspace',
     assignedTo: 'DP1',
@@ -659,7 +674,7 @@ export const WORK_ORDERS: WorkOrder[] = [
     id: 'DEL-24-1215',
     workOrderNumber: 'WO-24-354',
     requestType: 'VENDOR',
-    destination: 'Bonga FPSO',
+    destination: 'Akpo',
     urgency: 'Urgent',
     stage: 'Awaiting Deckspace',
     assignedTo: 'DP2',
@@ -691,7 +706,7 @@ export const WORK_ORDERS: WorkOrder[] = [
     id: 'DEL-24-1200',
     workOrderNumber: 'WO-24-340',
     requestType: 'SAP',
-    destination: 'Agbami FPSO',
+    destination: 'Amadi-Base',
     urgency: 'Medium',
     stage: 'Shipped',
     assignedTo: 'DP3',
@@ -716,7 +731,7 @@ export const WORK_ORDERS: WorkOrder[] = [
     id: 'DEL-24-1185',
     workOrderNumber: 'WO-24-325',
     requestType: 'SAP',
-    destination: 'Forcados Terminal',
+    destination: 'Amenam',
     urgency: 'Low',
     stage: 'Completed',
     assignedTo: 'DP1',
@@ -727,7 +742,7 @@ export const WORK_ORDERS: WorkOrder[] = [
     stageHistory: [
       { stage: 'New Request', personId: null, personName: null, startedAt: '2024-06-21T00:00:00Z', endedAt: '2024-06-21T03:00:00Z', durationHours: 3 },
       { stage: 'Warehouse Assigned', personId: 'WH1', personName: 'Emeka Okonkwo', startedAt: '2024-06-21T03:00:00Z', endedAt: '2024-06-21T04:30:00Z', durationHours: 1.5 },
-      { stage: 'Processing', personId: 'WH1', personName: 'Emeka Okonkwo', startedAt: '2024-06-21T04:30:00Z', endedAt: '2024-06-21T12:30:00Z', durationHours: 8 },
+      { stage: 'Picking', personId: 'WH1', personName: 'Emeka Okonkwo', startedAt: '2024-06-21T04:30:00Z', endedAt: '2024-06-21T12:30:00Z', durationHours: 8 },
       { stage: 'GI Created', personId: 'WH1', personName: 'Emeka Okonkwo', startedAt: '2024-06-21T12:30:00Z', endedAt: '2024-06-21T14:00:00Z', durationHours: 1.5 },
       { stage: 'Transferred to Dispatch', personId: 'WH1', personName: 'Emeka Okonkwo', startedAt: '2024-06-21T14:00:00Z', endedAt: '2024-06-21T15:00:00Z', durationHours: 1 },
       { stage: 'Dispatch Queue', personId: null, personName: null, startedAt: '2024-06-21T15:00:00Z', endedAt: '2024-06-21T17:00:00Z', durationHours: 2 },
@@ -753,7 +768,7 @@ export const WORK_ORDERS: WorkOrder[] = [
     id: 'DEL-24-1170',
     workOrderNumber: 'WO-24-310',
     requestType: 'TR',
-    destination: 'Bonny Terminal',
+    destination: 'AMQ',
     urgency: 'Medium',
     stage: 'Completed',
     assignedTo: 'DP2',
@@ -770,6 +785,123 @@ export const WORK_ORDERS: WorkOrder[] = [
     ],
     createdAt: '2024-06-20T10:00:00Z',
     expectedDeliveryDate: '2024-06-25T10:00:00Z',
+    status: 'completed',
+  },
+
+  // ── Completed — Egina (available for return processing) ──
+  {
+    id: 'DEL-24-1142',
+    workOrderNumber: 'WO-24-282',
+    requestType: 'SAP',
+    destination: 'Egina',
+    urgency: 'High',
+    stage: 'Completed',
+    assignedTo: 'DP1',
+    assignedToName: 'Biodun Adekunle',
+    elapsedHours: 0,
+    totalElapsedHours: 76.5,
+    waybillNumber: 'WB-24-0790',
+    stageHistory: [
+      { stage: 'New Request', personId: null, personName: null, startedAt: '2024-06-15T06:00:00Z', endedAt: '2024-06-15T08:00:00Z', durationHours: 2 },
+      { stage: 'Warehouse Assigned', personId: 'WH2', personName: 'Sarah Adebayo', startedAt: '2024-06-15T08:00:00Z', endedAt: '2024-06-15T10:00:00Z', durationHours: 2 },
+      { stage: 'Picking', personId: 'WH2', personName: 'Sarah Adebayo', startedAt: '2024-06-15T10:00:00Z', endedAt: '2024-06-15T18:00:00Z', durationHours: 8 },
+      { stage: 'GI Created', personId: 'WH2', personName: 'Sarah Adebayo', startedAt: '2024-06-15T18:00:00Z', endedAt: '2024-06-16T00:00:00Z', durationHours: 6 },
+      { stage: 'Transferred to Dispatch', personId: 'WH2', personName: 'Sarah Adebayo', startedAt: '2024-06-16T00:00:00Z', endedAt: '2024-06-16T02:00:00Z', durationHours: 2 },
+      { stage: 'Dispatch Queue', personId: null, personName: null, startedAt: '2024-06-16T02:00:00Z', endedAt: '2024-06-16T04:00:00Z', durationHours: 2 },
+      { stage: 'Dispatch Assigned', personId: 'DP1', personName: 'Biodun Adekunle', startedAt: '2024-06-16T04:00:00Z', endedAt: '2024-06-16T10:00:00Z', durationHours: 6 },
+      { stage: 'Preload QAQC', personId: 'QA1', personName: 'Femi Emmanuel', startedAt: '2024-06-16T10:00:00Z', endedAt: '2024-06-16T12:00:00Z', durationHours: 2 },
+      { stage: 'Containerization', personId: 'DP1', personName: 'Biodun Adekunle', startedAt: '2024-06-16T12:00:00Z', endedAt: '2024-06-17T00:00:00Z', durationHours: 12 },
+      { stage: 'Post QAQC', personId: 'QA1', personName: 'Femi Emmanuel', startedAt: '2024-06-17T00:00:00Z', endedAt: '2024-06-17T02:00:00Z', durationHours: 2 },
+      { stage: 'Waybill Pending Signature', personId: 'DP1', personName: 'Biodun Adekunle', startedAt: '2024-06-17T02:00:00Z', endedAt: '2024-06-17T05:00:00Z', durationHours: 3 },
+      { stage: 'Waybill Done', personId: 'DP1', personName: 'Biodun Adekunle', startedAt: '2024-06-17T05:00:00Z', endedAt: '2024-06-17T06:00:00Z', durationHours: 1 },
+      { stage: 'Awaiting Deckspace', personId: 'DP1', personName: 'Biodun Adekunle', startedAt: '2024-06-17T06:00:00Z', endedAt: '2024-06-18T14:00:00Z', durationHours: 8 },
+      { stage: 'Shipped', personId: 'DP1', personName: 'Biodun Adekunle', startedAt: '2024-06-18T14:00:00Z', endedAt: '2024-06-19T12:00:00Z', durationHours: 22 },
+      { stage: 'Completed', personId: 'DP1', personName: 'Biodun Adekunle', startedAt: '2024-06-19T12:00:00Z', endedAt: '2024-06-19T12:00:00Z', durationHours: 0 },
+    ],
+    items: [
+      { description: 'Subsea Gate Valve 4" 5000 PSI', qty: 2, unit: 'Pcs', partNumber: 'SV-4-5K-001' },
+      { description: 'Hydraulic Control Line 1/4"', qty: 120, unit: 'm', partNumber: 'HCL-025-SS' },
+      { description: 'Subsea Chemical Injection Valve', qty: 4, unit: 'Pcs', partNumber: 'CIV-SUB-002' },
+    ],
+    createdAt: '2024-06-15T06:00:00Z',
+    expectedDeliveryDate: '2024-06-19T00:00:00Z',
+    status: 'completed',
+  },
+  {
+    id: 'DEL-24-1158',
+    workOrderNumber: 'WO-24-298',
+    requestType: 'VENDOR',
+    destination: 'Egina',
+    urgency: 'Urgent',
+    stage: 'Completed',
+    assignedTo: 'DP3',
+    assignedToName: 'Kola Martins',
+    elapsedHours: 0,
+    totalElapsedHours: 58.0,
+    waybillNumber: 'WB-24-0804',
+    stageHistory: [
+      { stage: 'New Request', personId: null, personName: null, startedAt: '2024-06-18T09:00:00Z', endedAt: '2024-06-18T10:00:00Z', durationHours: 1 },
+      { stage: 'Warehouse Assigned', personId: 'WH3', personName: 'James Okeke', startedAt: '2024-06-18T10:00:00Z', endedAt: '2024-06-18T11:00:00Z', durationHours: 1 },
+      { stage: 'Picking', personId: 'WH3', personName: 'James Okeke', startedAt: '2024-06-18T11:00:00Z', endedAt: '2024-06-18T18:00:00Z', durationHours: 7 },
+      { stage: 'GI Created', personId: 'WH3', personName: 'James Okeke', startedAt: '2024-06-18T18:00:00Z', endedAt: '2024-06-18T20:00:00Z', durationHours: 2 },
+      { stage: 'Transferred to Dispatch', personId: 'WH3', personName: 'James Okeke', startedAt: '2024-06-18T20:00:00Z', endedAt: '2024-06-18T21:00:00Z', durationHours: 1 },
+      { stage: 'Dispatch Queue', personId: null, personName: null, startedAt: '2024-06-18T21:00:00Z', endedAt: '2024-06-18T22:00:00Z', durationHours: 1 },
+      { stage: 'Dispatch Assigned', personId: 'DP3', personName: 'Kola Martins', startedAt: '2024-06-18T22:00:00Z', endedAt: '2024-06-19T04:00:00Z', durationHours: 6 },
+      { stage: 'Preload QAQC', personId: 'QA2', personName: 'Ngozi Okafor', startedAt: '2024-06-19T04:00:00Z', endedAt: '2024-06-19T06:00:00Z', durationHours: 2 },
+      { stage: 'Containerization', personId: 'DP3', personName: 'Kola Martins', startedAt: '2024-06-19T06:00:00Z', endedAt: '2024-06-19T14:00:00Z', durationHours: 8 },
+      { stage: 'Post QAQC', personId: 'QA2', personName: 'Ngozi Okafor', startedAt: '2024-06-19T14:00:00Z', endedAt: '2024-06-19T15:30:00Z', durationHours: 1.5 },
+      { stage: 'Waybill Pending Signature', personId: 'DP3', personName: 'Kola Martins', startedAt: '2024-06-19T15:30:00Z', endedAt: '2024-06-19T18:00:00Z', durationHours: 2.5 },
+      { stage: 'Waybill Done', personId: 'DP3', personName: 'Kola Martins', startedAt: '2024-06-19T18:00:00Z', endedAt: '2024-06-19T18:30:00Z', durationHours: 0.5 },
+      { stage: 'Awaiting Deckspace', personId: 'DP3', personName: 'Kola Martins', startedAt: '2024-06-19T18:30:00Z', endedAt: '2024-06-20T08:00:00Z', durationHours: 13.5 },
+      { stage: 'Shipped', personId: 'DP3', personName: 'Kola Martins', startedAt: '2024-06-20T08:00:00Z', endedAt: '2024-06-20T22:00:00Z', durationHours: 14 },
+      { stage: 'Completed', personId: 'DP3', personName: 'Kola Martins', startedAt: '2024-06-20T22:00:00Z', endedAt: '2024-06-20T22:00:00Z', durationHours: 0 },
+    ],
+    items: [
+      { description: 'Chemical Injection Pump 5 LPH', qty: 1, unit: 'Unit', partNumber: 'CIP-005-EX' },
+      { description: 'Corrosion Inhibitor CI-2200 (Drums)', qty: 4, unit: 'Drums', partNumber: 'CI-2200-D' },
+      { description: 'Scale Inhibitor SI-1400', qty: 2, unit: 'Drums', partNumber: 'SI-1400-D' },
+      { description: 'Sample Cylinder SS 500cc', qty: 6, unit: 'Pcs', partNumber: 'SC-500-SS' },
+    ],
+    createdAt: '2024-06-18T09:00:00Z',
+    expectedDeliveryDate: '2024-06-20T00:00:00Z',
+    status: 'completed',
+  },
+  {
+    id: 'DEL-24-1163',
+    workOrderNumber: 'WO-24-303',
+    requestType: 'SAP',
+    destination: 'Egina',
+    urgency: 'Medium',
+    stage: 'Completed',
+    assignedTo: 'DP2',
+    assignedToName: 'Chika Obi',
+    elapsedHours: 0,
+    totalElapsedHours: 91.0,
+    waybillNumber: 'WB-24-0807',
+    stageHistory: [
+      { stage: 'New Request', personId: null, personName: null, startedAt: '2024-06-17T07:00:00Z', endedAt: '2024-06-17T10:00:00Z', durationHours: 3 },
+      { stage: 'Warehouse Assigned', personId: 'WH4', personName: 'Amaka Eze', startedAt: '2024-06-17T10:00:00Z', endedAt: '2024-06-17T11:30:00Z', durationHours: 1.5 },
+      { stage: 'Picking', personId: 'WH4', personName: 'Amaka Eze', startedAt: '2024-06-17T11:30:00Z', endedAt: '2024-06-18T00:00:00Z', durationHours: 12.5 },
+      { stage: 'GI Created', personId: 'WH4', personName: 'Amaka Eze', startedAt: '2024-06-18T00:00:00Z', endedAt: '2024-06-18T02:00:00Z', durationHours: 2 },
+      { stage: 'Transferred to Dispatch', personId: 'WH4', personName: 'Amaka Eze', startedAt: '2024-06-18T02:00:00Z', endedAt: '2024-06-18T03:00:00Z', durationHours: 1 },
+      { stage: 'Dispatch Queue', personId: null, personName: null, startedAt: '2024-06-18T03:00:00Z', endedAt: '2024-06-18T05:00:00Z', durationHours: 2 },
+      { stage: 'Dispatch Assigned', personId: 'DP2', personName: 'Chika Obi', startedAt: '2024-06-18T05:00:00Z', endedAt: '2024-06-18T12:00:00Z', durationHours: 7 },
+      { stage: 'Preload QAQC', personId: 'QA1', personName: 'Femi Emmanuel', startedAt: '2024-06-18T12:00:00Z', endedAt: '2024-06-18T14:00:00Z', durationHours: 2 },
+      { stage: 'Containerization', personId: 'DP2', personName: 'Chika Obi', startedAt: '2024-06-18T14:00:00Z', endedAt: '2024-06-19T02:00:00Z', durationHours: 12 },
+      { stage: 'Post QAQC', personId: 'QA1', personName: 'Femi Emmanuel', startedAt: '2024-06-19T02:00:00Z', endedAt: '2024-06-19T04:00:00Z', durationHours: 2 },
+      { stage: 'Waybill Pending Signature', personId: 'DP2', personName: 'Chika Obi', startedAt: '2024-06-19T04:00:00Z', endedAt: '2024-06-19T06:00:00Z', durationHours: 2 },
+      { stage: 'Waybill Done', personId: 'DP2', personName: 'Chika Obi', startedAt: '2024-06-19T06:00:00Z', endedAt: '2024-06-19T06:30:00Z', durationHours: 0.5 },
+      { stage: 'Awaiting Deckspace', personId: 'DP2', personName: 'Chika Obi', startedAt: '2024-06-19T06:30:00Z', endedAt: '2024-06-21T00:00:00Z', durationHours: 17.5 },
+      { stage: 'Shipped', personId: 'DP2', personName: 'Chika Obi', startedAt: '2024-06-21T00:00:00Z', endedAt: '2024-06-21T22:00:00Z', durationHours: 22 },
+      { stage: 'Completed', personId: 'DP2', personName: 'Chika Obi', startedAt: '2024-06-21T22:00:00Z', endedAt: '2024-06-21T22:00:00Z', durationHours: 0 },
+    ],
+    items: [
+      { description: 'Choke Manifold 4" x 5000 PSI', qty: 1, unit: 'Unit', partNumber: 'CM-4-5K-007' },
+      { description: 'Pressure Gauge 0-5000 PSI SS', qty: 8, unit: 'Pcs', partNumber: 'PG-5K-SS' },
+      { description: 'Flowline Hose Assembly 3"', qty: 3, unit: 'Pcs', partNumber: 'FHA-3-HY' },
+    ],
+    createdAt: '2024-06-17T07:00:00Z',
+    expectedDeliveryDate: '2024-06-22T00:00:00Z',
     status: 'completed',
   },
 ]
@@ -833,27 +965,27 @@ export interface Vessel {
 export const VESSELS: Vessel[] = [
   {
     id: 'VSL-001', name: 'MV SEPLAT PRIDE',
-    status: 'loading', port: 'Warri Port', destination: 'Bonga FPSO',
+    status: 'loading', port: 'Warri Port', destination: 'Akpo',
     departure: '28 Jun 08:00', allocatedUnits: 306, capacityUnits: 479,
   },
   {
     id: 'VSL-002', name: 'MV DELTA EAGLE',
-    status: 'available', port: 'Warri Port', destination: 'Agbami FPSO',
+    status: 'available', port: 'Warri Port', destination: 'Amadi-Base',
     departure: '30 Jun 06:00', allocatedUnits: 120, capacityUnits: 350,
   },
   {
     id: 'VSL-003', name: 'MV NIGER CROWN',
-    status: 'available', port: 'Port Harcourt', destination: 'Forcados Terminal',
+    status: 'available', port: 'Port Harcourt', destination: 'Amenam',
     departure: '03 Jul 09:00', allocatedUnits: 0, capacityUnits: 420,
   },
   {
     id: 'VSL-004', name: 'MV OGUN STAR',
-    status: 'available', port: 'Warri Port', destination: 'Escravos Terminal',
+    status: 'available', port: 'Warri Port', destination: 'Hosh-1',
     departure: '07 Jul 07:00', allocatedUnits: 88, capacityUnits: 310,
   },
   {
     id: 'VSL-005', name: 'MV ESCRAVOS STAR',
-    status: 'in-transit', port: 'Warri Port', destination: 'Escravos Terminal',
+    status: 'in-transit', port: 'Warri Port', destination: 'Hosh-1',
     departure: '22 Jun 07:00', allocatedUnits: 479, capacityUnits: 479,
   },
 ]
@@ -874,7 +1006,7 @@ export interface Truck {
 export const TRUCKS: Truck[] = [
   {
     id: 'TRK-001', plateNumber: 'LSD-445-XY', driver: 'Emeka Trucks Ltd',
-    status: 'in-use', yard: 'Gate A', destination: 'Bonga FPSO',
+    status: 'in-use', yard: 'Gate A', destination: 'Akpo',
     workOrderIds: ['WO-0042', 'WO-0058'],
   },
   {

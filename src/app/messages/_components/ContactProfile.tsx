@@ -94,7 +94,7 @@ export function ContactProfile({ conversation, onClose }: Props) {
             <div className="flex gap-1">
               {(['Image', 'Video', 'Audio'] as const).map((t, i) => (
                 <button key={t} className={`px-2 py-0.5 rounded text-[10px] font-semibold transition-colors ${
-                  i === 0 ? 'bg-gray-900 text-white' : 'text-gray-400 hover:bg-gray-100'
+                  i === 0 ? 'bg-brand-navy text-white' : 'text-gray-400 hover:bg-gray-100'
                 }`}>
                   {t} {i === 0 ? `(${imgs.length})` : '(0)'}
                 </button>

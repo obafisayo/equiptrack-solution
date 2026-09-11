@@ -16,7 +16,7 @@ const TYPE_ICON: Record<AppNotification['type'], React.ElementType> = {
 
 const TYPE_COLOR: Record<AppNotification['type'], string> = {
   sla_breach:           'text-red-600 bg-red-50',
-  new_message:          'text-brand-500 bg-red-50',
+  new_message:          'text-brand-accent bg-brand-tint',
   contractor_response:  'text-amber-700 bg-amber-50',
   order_update:         'text-green-700 bg-green-50',
   assignment:           'text-purple-700 bg-purple-50',

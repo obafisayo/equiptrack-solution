@@ -1,8 +1,8 @@
 'use client'
 
-export type StageTab = 'Assigned' | 'Containerization' | 'Waybill Pending' | 'Waybill Done' | 'Awaiting Deckspace'
+export type StageTab = 'Assigned' | 'Containerization' | 'Waybill Pending' | 'Waybill Done' | 'Awaiting Deckspace' | 'Shipped'
 
-export const STAGE_TABS: StageTab[] = ['Assigned', 'Containerization', 'Waybill Pending', 'Waybill Done', 'Awaiting Deckspace']
+export const STAGE_TABS: StageTab[] = ['Assigned', 'Containerization', 'Waybill Pending', 'Waybill Done', 'Awaiting Deckspace', 'Shipped']
 
 interface StageTabBarProps {
   active: StageTab

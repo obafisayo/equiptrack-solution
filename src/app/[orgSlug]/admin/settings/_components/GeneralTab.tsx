@@ -72,7 +72,7 @@ export function GeneralTab({ org }: GeneralTabProps) {
           style={{
             display: 'flex', alignItems: 'center', gap: 7,
             padding: '9px 20px', border: 'none', borderRadius: 7,
-            background: saved ? '#16A34A' : '#F04A4A', color: '#fff',
+            background: saved ? '#16A34A' : '#1A6FBF', color: '#fff',
             fontSize: 13, fontWeight: 600, cursor: 'pointer',
             transition: 'background 150ms ease',
           }}

@@ -9,9 +9,9 @@ import { NewRequestDialog } from './_components/NewRequestDialog'
 import { ResponseDialog } from './_components/ResponseDialog'
 
 export default function CCURequestsPage() {
-  const [requests, setRequests]       = useState<ContainerRequest[]>(MOCK_REQUESTS)
-  const [showNew, setShowNew]         = useState(false)
-  const [responseId, setResponseId]   = useState<string | null>(null)
+  const [requests, setRequests]         = useState<ContainerRequest[]>(MOCK_REQUESTS)
+  const [showNew, setShowNew]           = useState(false)
+  const [responseId, setResponseId]     = useState<string | null>(null)
   const [statusFilter, setStatusFilter] = useState<string>('All')
 
   const stats = useMemo(() => ({
@@ -45,7 +45,7 @@ export default function CCURequestsPage() {
     setResponseId(null)
   }
 
-  const responseRequest = responseId ? requests.find(r => r.id === responseId) : null
+  const responseRequest = responseId ? requests.find(r => r.id === responseId) ?? null : null
 
   const STATUS_FILTERS: RequestStatus[] = ['Sent', 'Awaiting Response', 'Partially Accepted', 'Completed', 'Rejected']
 
@@ -58,7 +58,7 @@ export default function CCURequestsPage() {
       actions={
         <button
           onClick={() => setShowNew(true)}
-          className="flex items-center gap-2 px-4 py-2 text-[13px] font-semibold rounded-lg bg-brand-500 text-white hover:bg-brand-600 transition-colors"
+          className="flex items-center gap-2 px-4 py-2 text-[13px] font-semibold rounded-lg bg-brand-accent text-white hover:bg-brand-accent-hover transition-colors"
         >
           <Plus size={14} />
           New Request
@@ -67,10 +67,10 @@ export default function CCURequestsPage() {
     >
       {/* Stats */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <StatCard label="Total Requests"    value={stats.total}     color="#10B981" icon={Package} />
-        <StatCard label="Sent / In Progress" value={stats.sent}     color="#F59E0B" icon={MessageSquare} />
-        <StatCard label="Awaiting Response" value={stats.pending}   color="#F59E0B" icon={Clock} />
-        <StatCard label="Completed"          value={stats.completed} color="#22C55E" icon={CheckCircle2} />
+        <StatCard label="Total Requests"     value={stats.total}     color="#1A6FBF" icon={Package} />
+        <StatCard label="Sent / In Progress" value={stats.sent}      color="#D97706" icon={MessageSquare} />
+        <StatCard label="Awaiting Response"  value={stats.pending}   color="#D97706" icon={Clock} />
+        <StatCard label="Completed"          value={stats.completed} color="#16A34A" icon={CheckCircle2} />
       </div>
 
       {/* Filter tabs */}
@@ -82,8 +82,8 @@ export default function CCURequestsPage() {
             className={[
               'text-[12px] font-semibold px-3 py-1.5 rounded-lg border transition-colors duration-150',
               statusFilter === f
-                ? 'bg-gray-900 text-white border-gray-900'
-                : 'bg-white text-gray-600 border-border-default hover:bg-gray-50',
+                ? 'bg-brand-navy text-white border-brand-navy'
+                : 'bg-white text-slate-600 border-border-default hover:bg-slate-50',
             ].join(' ')}
           >
             {f}
@@ -94,25 +94,25 @@ export default function CCURequestsPage() {
       {/* Request list */}
       <div className="bg-white border border-border-default rounded-card shadow-card overflow-hidden">
         <table className="w-full text-sm">
-          <thead className="bg-gray-50 border-b border-border-default">
+          <thead className="bg-slate-50 border-b border-border-default">
             <tr>
               {['Request ID', 'Contractor', 'CCU Types', 'Status', 'Created By', 'Date', 'Action'].map(h => (
-                <th key={h} className="px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-wide text-gray-400 whitespace-nowrap">{h}</th>
+                <th key={h} className="px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-wide text-slate-400 whitespace-nowrap">{h}</th>
               ))}
             </tr>
           </thead>
           <tbody className="divide-y divide-border-default">
             {filtered.length === 0 && (
-              <tr><td colSpan={7} className="px-4 py-10 text-center text-sm text-gray-400">No requests</td></tr>
+              <tr><td colSpan={7} className="px-4 py-10 text-center text-sm text-slate-400">No requests</td></tr>
             )}
             {filtered.map(req => (
-              <tr key={req.id} className="hover:bg-gray-50">
-                <td className="px-4 py-3 font-mono text-[12px] font-semibold text-gray-800">{req.id}</td>
-                <td className="px-4 py-3 text-[13px] text-gray-700">{req.contractorName}</td>
+              <tr key={req.id} className="hover:bg-slate-50">
+                <td className="px-4 py-3 font-mono text-[12px] font-semibold text-slate-800">{req.id}</td>
+                <td className="px-4 py-3 text-[13px] text-slate-700">{req.contractorName}</td>
                 <td className="px-4 py-3">
                   <div className="space-y-0.5">
                     {req.lineItems.map((li, i) => (
-                      <p key={i} className="text-[11px] text-gray-600">{li.quantity}× {li.type}</p>
+                      <p key={i} className="text-[11px] text-slate-600">{li.quantity}× {li.type}</p>
                     ))}
                   </div>
                 </td>
@@ -121,13 +121,13 @@ export default function CCURequestsPage() {
                     {req.status}
                   </span>
                 </td>
-                <td className="px-4 py-3 text-[12px] text-gray-600">{req.createdBy}</td>
-                <td className="px-4 py-3 text-[12px] text-gray-500">{req.createdAt.slice(0, 10)}</td>
+                <td className="px-4 py-3 text-[12px] text-slate-600">{req.createdBy}</td>
+                <td className="px-4 py-3 text-[12px] text-slate-500">{req.createdAt.slice(0, 10)}</td>
                 <td className="px-4 py-3">
                   {(req.status === 'Sent' || req.status === 'Awaiting Response') && (
                     <button
                       onClick={() => setResponseId(req.id)}
-                      className="text-[11px] font-semibold px-2.5 py-1 rounded-lg bg-brand-500/10 text-brand-500 hover:bg-brand-500/20 transition-colors"
+                      className="text-[11px] font-semibold px-2.5 py-1 rounded-lg bg-brand-accent/10 text-brand-accent hover:bg-brand-accent/20 transition-colors"
                     >
                       Record Response
                     </button>
@@ -147,20 +147,18 @@ export default function CCURequestsPage() {
         </span>
       </div>
 
-      {/* Dialogs */}
-      {showNew && (
-        <NewRequestDialog
-          onConfirm={handleNewRequest}
-          onClose={() => setShowNew(false)}
-        />
-      )}
-      {responseRequest && (
-        <ResponseDialog
-          request={responseRequest}
-          onConfirm={handleResponseConfirm}
-          onClose={() => setResponseId(null)}
-        />
-      )}
+      {/* Panels — always mounted for slide animation */}
+      <NewRequestDialog
+        open={showNew}
+        onConfirm={handleNewRequest}
+        onClose={() => setShowNew(false)}
+      />
+      <ResponseDialog
+        request={responseRequest}
+        open={!!responseRequest}
+        onConfirm={handleResponseConfirm}
+        onClose={() => setResponseId(null)}
+      />
     </AppShell>
   )
 }

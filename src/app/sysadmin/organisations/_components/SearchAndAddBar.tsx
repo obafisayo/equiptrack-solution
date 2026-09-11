@@ -25,7 +25,7 @@ export function SearchAndAddBar({ search, onSearchChange, onAddClick }: SearchAn
         style={{
           display: 'flex', alignItems: 'center', gap: 6,
           padding: '8px 16px', border: 'none', borderRadius: 7,
-          background: '#F04A4A', color: '#fff',
+          background: '#1A6FBF', color: '#fff',
           fontSize: 13, fontWeight: 600, cursor: 'pointer',
           flexShrink: 0,
         }}
