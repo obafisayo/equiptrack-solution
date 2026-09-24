@@ -105,12 +105,16 @@ export function rejectOrder(id: string, reason: string): void {
 
 let _waybillSeq = 2000
 
-export function setWaybillPending(id: string): string {
+export function setWaybillPending(id: string, personnelId: string, personnelName: string): string {
   const order = LIVE_ORDERS.find(o => o.id === id)
   if (!order) return ''
+  const now = new Date().toISOString()
+  const cur = order.stageHistory[order.stageHistory.length - 1]
+  if (cur && !cur.endedAt) { cur.endedAt = now; cur.durationHours = order.elapsedHours }
   const wb = `WB-26-${++_waybillSeq}`
   order.waybillNumber   = wb
   order.waybillApproved = false
+  order.stageHistory.push({ stage: 'Waybill Pending Signature', personId: personnelId, personName: personnelName, startedAt: now })
   return wb
 }
 
@@ -147,14 +151,14 @@ export function allocateDeckspace(id: string, vesselName: string): void {
 
 // ── Mark Shipped (dispatch personnel, after vessel allocated) ─────────────────
 
-export function markShipped(id: string): void {
+export function markShipped(id: string, personnelId: string, personnelName: string): void {
   const order = LIVE_ORDERS.find(o => o.id === id)
   if (!order) return
   const now = new Date().toISOString()
   const cur = order.stageHistory[order.stageHistory.length - 1]
-  if (cur && !cur.endedAt) cur.endedAt = now
+  if (cur && !cur.endedAt) { cur.endedAt = now; cur.durationHours = order.elapsedHours }
   order.stage = 'Shipped'
-  order.stageHistory.push({ stage: 'Shipped', personId: null, personName: null, startedAt: now })
+  order.stageHistory.push({ stage: 'Shipped', personId: personnelId, personName: personnelName, startedAt: now })
 }
 
 // ── Mark Received (requester → Completed) ────────────────────────────────────

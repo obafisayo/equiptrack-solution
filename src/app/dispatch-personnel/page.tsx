@@ -109,7 +109,7 @@ export default function DispatchPersonnelTasksPage() {
   }
 
   function handleMarkShipped(orderId: string) {
-    markShipped(orderId)
+    markShipped(orderId, MY_ID, MY_NAME)
     setOrders(prev => prev.map(o => o.id === orderId ? { ...o, stage: 'Shipped' as Stage, elapsedHours: 0 } : o))
     setActiveTab('Shipped')
   }
@@ -182,7 +182,7 @@ export default function DispatchPersonnelTasksPage() {
           order={waybillOrder}
           onClose={() => setWaybillOrder(null)}
           onConfirm={() => {
-            const wb = setWaybillPending(waybillOrder.id)
+            const wb = setWaybillPending(waybillOrder.id, MY_ID, MY_NAME)
             setOrders(prev => prev.map(o => o.id === waybillOrder.id ? { ...o, waybillNumber: wb, waybillApproved: false } : o))
             setWaybillOrder(null)
             showToast(`Waybill ${wb} sent successfully — awaiting executive signature.`)

@@ -16,6 +16,9 @@ import { QueueView } from './_components/QueueView'
 import { PersonnelTasksView } from './_components/PersonnelTasksView'
 import { DISPATCH_STAGES, type MainTab } from './_components/constants'
 
+const SUPERVISOR_ID   = 'DSP1'
+const SUPERVISOR_NAME = 'Chika Obi'
+
 export default function DispatchSupervisorPage() {
   const [orders, setOrders] = useState<WorkOrder[]>(() =>
     sortNewestFirst(LIVE_ORDERS.filter(o => DISPATCH_STAGES.includes(o.stage)))
@@ -59,8 +62,23 @@ export default function DispatchSupervisorPage() {
 
   function handleAssign(personnelId: string, personnelName: string) {
     if (!assigningOrder) return
+    const now  = new Date().toISOString()
     const live = LIVE_ORDERS.find(o => o.id === assigningOrder.id)
-    if (live) { live.assignedTo = personnelId; live.assignedToName = personnelName; live.stage = 'Dispatch Assigned'; live.elapsedHours = 0 }
+    if (live) {
+      // Close out the Dispatch Queue stage and attribute it to the supervisor
+      const cur = live.stageHistory[live.stageHistory.length - 1]
+      if (cur && !cur.endedAt) {
+        cur.endedAt    = now
+        cur.personId   = SUPERVISOR_ID
+        cur.personName = SUPERVISOR_NAME
+        cur.durationHours = live.elapsedHours
+      }
+      live.assignedTo     = personnelId
+      live.assignedToName = personnelName
+      live.stage          = 'Dispatch Assigned'
+      live.elapsedHours   = 0
+      live.stageHistory.push({ stage: 'Dispatch Assigned', personId: personnelId, personName: personnelName, startedAt: now })
+    }
     setOrders(prev => prev.map(o =>
       o.id === assigningOrder.id
         ? { ...o, assignedTo: personnelId, assignedToName: personnelName, stage: 'Dispatch Assigned', elapsedHours: 0 }
