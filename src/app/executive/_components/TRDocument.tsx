@@ -110,7 +110,7 @@ export function TRDocument({ order, onClose }: Props) {
                       <div style={{ textAlign: 'center' }}>
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
-                          src="https://www.citypng.com/photo/26268/hd-total-energies-logo-transparent-png"
+                          src="/totalenergies-logo.png"
                           alt="TotalEnergies"
                           style={{ maxWidth: '90px', maxHeight: '50px', objectFit: 'contain' }}
                         />
