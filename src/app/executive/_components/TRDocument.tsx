@@ -106,14 +106,14 @@ export function TRDocument({ order, onClose }: Props) {
                   {/* ── Row 1: Logo | Title | Company ── */}
                   <tr>
                     <td style={{ border: '1.5px solid #000', padding: '8px 12px', width: '15%', verticalAlign: 'middle' }}>
-                      {/* TotalEnergies logo approximation */}
+                      {/* TotalEnergies logo */}
                       <div style={{ textAlign: 'center' }}>
-                        <div style={{ display: 'flex', justifyContent: 'center', gap: '2px', marginBottom: '3px' }}>
-                          {['#E30613','#F28C00','#FFED00','#009B4E'].map((c, i) => (
-                            <div key={i} style={{ width: '6px', height: '18px', backgroundColor: c, borderRadius: '1px', transform: `rotate(${-10 + i * 5}deg)` }} />
-                          ))}
-                        </div>
-                        <div style={{ fontSize: '8pt', fontWeight: 'bold', color: '#E30613', letterSpacing: '0.5px' }}>TotalEnergies</div>
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src="https://www.citypng.com/photo/26268/hd-total-energies-logo-transparent-png"
+                          alt="TotalEnergies"
+                          style={{ maxWidth: '90px', maxHeight: '50px', objectFit: 'contain' }}
+                        />
                       </div>
                     </td>
                     <td style={{ border: '1.5px solid #000', padding: '12px', textAlign: 'center', width: '55%', verticalAlign: 'middle' }}>
