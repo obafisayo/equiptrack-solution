@@ -17,6 +17,7 @@ import { ShippedTab } from './_components/ShippedTab'
 import { WaybillDialog } from './_components/WaybillDialog'
 import { WaybillDocument } from './_components/WaybillDocument'
 import { VesselRequestDialog } from './_components/VesselRequestDialog'
+import { Toast } from '@/app/warehouse-personnel/_components/Toast'
 
 const MY_ID   = 'DP4'
 const MY_NAME = 'Tunde Bello'
@@ -59,6 +60,12 @@ export default function DispatchPersonnelTasksPage() {
   const [waybillOrder, setWaybillOrder] = useState<WorkOrder | null>(null)
   const [printWaybillOrder, setPrintWaybillOrder] = useState<WorkOrder | null>(null)
   const [vesselOrder, setVesselOrder] = useState<WorkOrder | null>(null)
+  const [toast, setToast] = useState<string | null>(null)
+
+  function showToast(msg: string) {
+    setToast(msg)
+    setTimeout(() => setToast(null), 3500)
+  }
 
   const tabCounts = useMemo(() => {
     const counts = {} as Record<StageTab, number>
@@ -178,6 +185,7 @@ export default function DispatchPersonnelTasksPage() {
             const wb = setWaybillPending(waybillOrder.id)
             setOrders(prev => prev.map(o => o.id === waybillOrder.id ? { ...o, waybillNumber: wb, waybillApproved: false } : o))
             setWaybillOrder(null)
+            showToast(`Waybill ${wb} sent successfully — awaiting executive signature.`)
           }}
         />
       )}
@@ -197,6 +205,8 @@ export default function DispatchPersonnelTasksPage() {
           onClose={() => setVesselOrder(null)}
         />
       )}
+
+      {toast && <Toast message={toast} />}
     </AppShell>
   )
 }
