@@ -1,4 +1,5 @@
-import type { Stage, Role } from '@/lib/lifecycle'
+import type { Stage } from '@/lib/lifecycle'
+import type { WorkspaceRole as Role } from '@/lib/domain/roles'
 import type { UrgencyLevel } from '@/config/sla'
 import { STAGE_SLA_HOURS } from '@/config/sla'
 

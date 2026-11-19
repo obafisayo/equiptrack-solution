@@ -1,3 +1,4 @@
+import { ORG_BRANDING } from '@/config/organization'
 export type LMTSDecision  = 'validated' | 'pending' | 'cancelled' | 'rejected'
 export type VoyageEntity  = 'DRILL' | 'FOPS' | 'ECP' | 'PROJECT' | 'TECHLOG'
 export type VoyagePriority = 'High' | 'Medium' | 'Low'
@@ -181,10 +182,10 @@ export const VOYAGES: Voyage[] = [
     transitTo: 'DW / JV ASSET',
     departureDate: '2026-04-17',
     bookings: [
-      { id: 'd1', sn: 1, responsible: 'Martin Deki', ccuId: 'OEGU 144093-0', ccuType: '10FT Basket',  contractor: 'TOTALENERGIES', entity: 'FOPS', weightTons: 2.1, deckSpaceM2: 7.20, destination: 'LADOL', priority: 'High', eddOnSite: '2026-04-12', lmtsDecision: 'validated', t1FWB: true,  loaded: true  },
-      { id: 'd2', sn: 2, responsible: 'Martin Deki', ccuId: 'OEGU 144042-1', ccuType: '10FT Basket',  contractor: 'TOTALENERGIES', entity: 'FOPS', weightTons: 2.1, deckSpaceM2: 7.20, destination: 'LADOL', priority: 'High', eddOnSite: '2026-04-12', lmtsDecision: 'validated', t1FWB: false, loaded: true  },
-      { id: 'd3', sn: 3, responsible: 'Martin Deki', ccuId: '696342',        ccuType: 'Mini Container',contractor: 'TOTALENERGIES', entity: 'FOPS', weightTons: 1.7, deckSpaceM2: 3.04, destination: 'LADOL', priority: 'High', eddOnSite: '2026-04-12', lmtsDecision: 'validated', t1FWB: false, loaded: true  },
-      { id: 'd4', sn: 4, responsible: 'Martin Deki', ccuId: 'OEGU 144062-7', ccuType: '10FT Basket',  contractor: 'TOTALENERGIES', entity: 'FOPS', weightTons: 2.1, deckSpaceM2: 7.20, destination: 'LADOL', priority: 'High', eddOnSite: '2026-04-12', lmtsDecision: 'validated', t1FWB: false, loaded: true  },
+      { id: 'd1', sn: 1, responsible: 'Martin Deki', ccuId: 'OEGU 144093-0', ccuType: '10FT Basket',  contractor: ORG_BRANDING.shortName.toUpperCase(), entity: 'FOPS', weightTons: 2.1, deckSpaceM2: 7.20, destination: 'LADOL', priority: 'High', eddOnSite: '2026-04-12', lmtsDecision: 'validated', t1FWB: true,  loaded: true  },
+      { id: 'd2', sn: 2, responsible: 'Martin Deki', ccuId: 'OEGU 144042-1', ccuType: '10FT Basket',  contractor: ORG_BRANDING.shortName.toUpperCase(), entity: 'FOPS', weightTons: 2.1, deckSpaceM2: 7.20, destination: 'LADOL', priority: 'High', eddOnSite: '2026-04-12', lmtsDecision: 'validated', t1FWB: false, loaded: true  },
+      { id: 'd3', sn: 3, responsible: 'Martin Deki', ccuId: '696342',        ccuType: 'Mini Container',contractor: ORG_BRANDING.shortName.toUpperCase(), entity: 'FOPS', weightTons: 1.7, deckSpaceM2: 3.04, destination: 'LADOL', priority: 'High', eddOnSite: '2026-04-12', lmtsDecision: 'validated', t1FWB: false, loaded: true  },
+      { id: 'd4', sn: 4, responsible: 'Martin Deki', ccuId: 'OEGU 144062-7', ccuType: '10FT Basket',  contractor: ORG_BRANDING.shortName.toUpperCase(), entity: 'FOPS', weightTons: 2.1, deckSpaceM2: 7.20, destination: 'LADOL', priority: 'High', eddOnSite: '2026-04-12', lmtsDecision: 'validated', t1FWB: false, loaded: true  },
     ],
   },
   {

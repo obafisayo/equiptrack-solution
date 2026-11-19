@@ -131,7 +131,7 @@ export function TRApprovalSection() {
                     </div>
 
                     {order.notes && (
-                      <p className="text-[11px] text-gray-400 italic mt-1.5">"{order.notes}"</p>
+                      <p className="text-[11px] text-gray-400 italic mt-1.5">&quot;{order.notes}&quot;</p>
                     )}
                   </div>
 

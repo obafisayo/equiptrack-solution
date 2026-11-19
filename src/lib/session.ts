@@ -1,33 +1,22 @@
-import type { Role } from '@/lib/lifecycle'
+import { isRole, type WorkspaceRole as Role } from '@/lib/domain/roles'
 
+/**
+ * DEMO-ONLY client session. The role is a browser value and is NOT a security
+ * boundary — real authorisation is enforced by the EquipTrack API (see
+ * backend/). Do not rely on this for anything beyond prototype navigation.
+ */
 export const SESSION_ROLE_KEY = 'equiptrack_role'
 
-// Maps login-page slugs (from roles.ts) → Role type (from lifecycle.ts)
-export const SLUG_TO_ROLE: Record<string, Role> = {
-  'requester':            'requester',
-  'warehouse-supervisor': 'wh_sup',
-  'warehouse-personnel':  'wh_per',
-  'dispatch-supervisor':  'dsp_sup',
-  'dispatch-personnel':   'dsp_per',
-  'qaqc-officer':         'qaqc',
-  'site-logistics':       'site_logistics',
-  'executive':            'exec',
-  'safety':               'safety',
-  'logistics':            'logistics',
-  'inventory':            'inventory',
-  'maintenance':          'maintenance',
-  'sysadmin':             'sysadmin',
-}
-
-export function setSessionRole(slug: string): void {
+export function setSessionRole(role: Role): void {
   if (typeof window === 'undefined') return
-  const role = SLUG_TO_ROLE[slug] ?? (slug as Role)
   localStorage.setItem(SESSION_ROLE_KEY, role)
 }
 
 export function getSessionRole(): Role | null {
   if (typeof window === 'undefined') return null
-  return (localStorage.getItem(SESSION_ROLE_KEY) as Role) ?? null
+  const stored = localStorage.getItem(SESSION_ROLE_KEY)
+  // Reject unknown / legacy values (e.g. old URL slugs) instead of trusting them.
+  return isRole(stored) && stored !== 'org_admin' ? stored : null
 }
 
 export function clearSessionRole(): void {
@@ -51,6 +40,7 @@ export const ROUTE_ACCESS: [prefix: string, roles: Role[]][] = [
   ['/qaqc/messages',                ['qaqc']],
   ['/qaqc',                         ['qaqc']],
   ['/site-logistics',               ['site_logistics']],
+  ['/site-return',                  ['site_return']],
   ['/executive/messages',           ['exec']],
   ['/executive',                    ['exec']],
   ['/safety',                       ['safety']],
@@ -59,7 +49,7 @@ export const ROUTE_ACCESS: [prefix: string, roles: Role[]][] = [
   ['/maintenance',                  ['maintenance']],
   ['/sysadmin',                     ['sysadmin']],
   // /messages is now a redirect — allow all authenticated roles through
-  ['/messages',                     ['requester','wh_sup','wh_per','dsp_sup','dsp_per','qaqc','site_logistics','exec','safety','logistics','inventory','maintenance','sysadmin']],
+  ['/messages',                     ['requester','wh_sup','wh_per','dsp_sup','dsp_per','qaqc','site_logistics','site_return','exec','safety','logistics','inventory','maintenance','sysadmin']],
 ]
 
 /** Return the allowed roles for the given path, or null if unrestricted */

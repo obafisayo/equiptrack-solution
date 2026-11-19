@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useMemo } from 'react'
-import { BarChart2, TrendingUp, Clock, AlertTriangle, CheckCircle, Users } from 'lucide-react'
+import { BarChart2, Clock, AlertTriangle, CheckCircle, Users } from 'lucide-react'
 import AppShell from '@/components/layout/AppShell'
 import { StatCard } from '@/components/domain/StatCard'
 import { WORK_ORDERS, getPersonnelByDept } from '@/lib/mock-data'
@@ -96,7 +96,6 @@ export default function DispatchAnalyticsPage() {
     })),
     [dispatchOrders, personnel]
   )
-  const maxPersonnelLoad = Math.max(...personnelLoad.map(p => p.capacity), 1)
 
   const STAGE_COLORS: Record<string, string> = {
     'Dispatch Queue': '#8B5CF6', 'Dispatch Assigned': '#6D28D9',

@@ -1,5 +1,8 @@
+import type { WorkspaceRole } from '@/lib/domain/roles'
+
+/** Demo-login metadata per role. Keyed by the canonical role code. */
 export interface RoleMeta {
-  slug: string
+  role: WorkspaceRole
   label: string
   shortLabel: string
   dept: string
@@ -11,9 +14,9 @@ export interface RoleMeta {
   dashboardPath: string
 }
 
-export const ROLE_META: Record<string, RoleMeta> = {
+export const ROLE_META: Partial<Record<WorkspaceRole, RoleMeta>> = {
   requester: {
-    slug: 'requester',
+    role: 'requester',
     label: 'Requester',
     shortLabel: 'REQ',
     dept: 'Operations',
@@ -29,8 +32,8 @@ export const ROLE_META: Record<string, RoleMeta> = {
     demoPassword: 'Req#Demo2024',
     dashboardPath: '/requester',
   },
-  'warehouse-supervisor': {
-    slug: 'warehouse-supervisor',
+  wh_sup: {
+    role: 'wh_sup',
     label: 'Warehouse Supervisor',
     shortLabel: 'WH-SUP',
     dept: 'Warehouse',
@@ -46,8 +49,8 @@ export const ROLE_META: Record<string, RoleMeta> = {
     demoPassword: 'WhSup#Demo2024',
     dashboardPath: '/warehouse',
   },
-  'warehouse-personnel': {
-    slug: 'warehouse-personnel',
+  wh_per: {
+    role: 'wh_per',
     label: 'Warehouse Personnel',
     shortLabel: 'WH-PER',
     dept: 'Warehouse',
@@ -63,8 +66,8 @@ export const ROLE_META: Record<string, RoleMeta> = {
     demoPassword: 'WhPer#Demo2024',
     dashboardPath: '/warehouse-personnel',
   },
-  'dispatch-supervisor': {
-    slug: 'dispatch-supervisor',
+  dsp_sup: {
+    role: 'dsp_sup',
     label: 'Dispatch Supervisor',
     shortLabel: 'DSP-SUP',
     dept: 'Dispatch',
@@ -80,8 +83,8 @@ export const ROLE_META: Record<string, RoleMeta> = {
     demoPassword: 'DspSup#Demo2024',
     dashboardPath: '/dispatch',
   },
-  'dispatch-personnel': {
-    slug: 'dispatch-personnel',
+  dsp_per: {
+    role: 'dsp_per',
     label: 'Dispatch Personnel',
     shortLabel: 'DSP-PER',
     dept: 'Dispatch',
@@ -97,8 +100,8 @@ export const ROLE_META: Record<string, RoleMeta> = {
     demoPassword: 'DspPer#Demo2024',
     dashboardPath: '/dispatch-personnel',
   },
-  'qaqc-officer': {
-    slug: 'qaqc-officer',
+  qaqc: {
+    role: 'qaqc',
     label: 'QAQC Officer',
     shortLabel: 'QAQC',
     dept: 'Quality & Compliance',
@@ -114,8 +117,8 @@ export const ROLE_META: Record<string, RoleMeta> = {
     demoPassword: 'Qaqc#Demo2024',
     dashboardPath: '/qaqc',
   },
-  executive: {
-    slug: 'executive',
+  exec: {
+    role: 'exec',
     label: 'Executive',
     shortLabel: 'EXEC',
     dept: 'Leadership',
@@ -131,25 +134,25 @@ export const ROLE_META: Record<string, RoleMeta> = {
     demoPassword: 'Exec#Demo2024',
     dashboardPath: '/executive',
   },
-  'site-return': {
-    slug: 'site-return',
-    label: 'Site Return — Egina',
-    shortLabel: 'RTN-EGN',
+  site_return: {
+    role: 'site_return',
+    label: 'Site Return',
+    shortLabel: 'RTN',
     dept: 'Offshore Operations',
     deptColor: '#14B8A6',
-    description: 'Process and return completed equipment from Egina back to base, vendors, or other destinations.',
+    description: 'Process and return completed equipment from site back to base, vendors, or other destinations.',
     capabilities: [
-      'View completed orders delivered to Egina',
+      'View completed orders delivered to site',
       'Categorize items by disposition and hazard class',
       'Group items into return containers',
       'Submit and track deckspace requests',
     ],
-    demoEmail: 'tunde.egina@demo.equiptrack.io',
+    demoEmail: 'tunde.site@demo.equiptrack.io',
     demoPassword: 'SiteRtn#Demo2024',
     dashboardPath: '/site-return',
   },
   logistics: {
-    slug: 'logistics',
+    role: 'logistics',
     label: 'Vessel Coordinator',
     shortLabel: 'LOG',
     dept: 'Logistics',
@@ -166,7 +169,7 @@ export const ROLE_META: Record<string, RoleMeta> = {
     dashboardPath: '/logistics',
   },
   inventory: {
-    slug: 'inventory',
+    role: 'inventory',
     label: 'Inventory Manager',
     shortLabel: 'INV',
     dept: 'Supply Chain',
@@ -183,7 +186,7 @@ export const ROLE_META: Record<string, RoleMeta> = {
     dashboardPath: '/inventory',
   },
   maintenance: {
-    slug: 'maintenance',
+    role: 'maintenance',
     label: 'Maintenance Technician',
     shortLabel: 'MAINT',
     dept: 'Maintenance',
@@ -199,8 +202,8 @@ export const ROLE_META: Record<string, RoleMeta> = {
     demoPassword: 'Maint#Demo2024',
     dashboardPath: '/maintenance',
   },
-  'site-logistics': {
-    slug: 'site-logistics',
+  site_logistics: {
+    role: 'site_logistics',
     label: 'Site Logistics',
     shortLabel: 'SITE-LOG',
     dept: 'Offshore Operations',
@@ -218,4 +221,4 @@ export const ROLE_META: Record<string, RoleMeta> = {
   },
 }
 
-export const ROLE_LIST = Object.values(ROLE_META)
+export const ROLE_LIST = Object.values(ROLE_META) as RoleMeta[]

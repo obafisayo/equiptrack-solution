@@ -75,24 +75,11 @@ export interface WaitlistEntry {
 
 /* ── Users & Roles ───────────────────────────────────────────────────────── */
 
-export type SystemRole = 'sysadmin'
-export type OrgRole =
-  | 'org_admin'
-  | 'requester'
-  | 'wh_supervisor'
-  | 'wh_personnel'
-  | 'dsp_supervisor'
-  | 'dsp_personnel'
-  | 'qaqc_officer'
-  | 'exec_viewer'
-  | 'safety_officer'
-  | 'logistics_coordinator'
-  | 'inventory_manager'
-  | 'rig_manager'
-  | 'crane_operator'
-  | 'maintenance_tech'
+import type { Role, SystemRole, OrgRole } from '@/lib/domain/roles'
+export type { SystemRole, OrgRole }
 
-export type UserRole = SystemRole | OrgRole
+/** @deprecated alias — use `Role` from '@/lib/domain/roles'. */
+export type UserRole = Role
 
 export type AuthProvider = 'email' | 'microsoft_sso' | 'google_sso'
 export type UserStatus = 'invited' | 'active' | 'suspended' | 'deactivated'

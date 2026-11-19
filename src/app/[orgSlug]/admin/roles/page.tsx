@@ -10,15 +10,15 @@ import { getDefaultPermissions } from '@/lib/permissions'
 const ROLES: { role: OrgRole; label: string; dept: string; color: string }[] = [
   { role: 'org_admin',             label: 'Org Admin',        dept: 'Admin',      color: '#1A6FBF' },
   { role: 'requester',             label: 'Requester',        dept: 'Field',      color: '#3B82F6' },
-  { role: 'wh_supervisor',         label: 'WH Supervisor',    dept: 'Warehouse',  color: '#3B82F6' },
-  { role: 'wh_personnel',          label: 'WH Personnel',     dept: 'Warehouse',  color: '#3B82F6' },
-  { role: 'dsp_supervisor',        label: 'DSP Supervisor',   dept: 'Dispatch',   color: '#8B5CF6' },
-  { role: 'dsp_personnel',         label: 'DSP Personnel',    dept: 'Dispatch',   color: '#8B5CF6' },
-  { role: 'qaqc_officer',          label: 'QAQC Officer',     dept: 'QAQC',       color: '#F59E0B' },
-  { role: 'exec_viewer',           label: 'Exec Viewer',      dept: 'Executive',  color: '#10B981' },
-  { role: 'safety_officer',        label: 'Safety Officer',   dept: 'Safety',     color: '#EF4444' },
-  { role: 'logistics_coordinator', label: 'Logistics Coord.', dept: 'Logistics',  color: '#F97316' },
-  { role: 'inventory_manager',     label: 'Inventory Mgr',    dept: 'Inventory',  color: '#06B6D4' },
+  { role: 'wh_sup',         label: 'WH Supervisor',    dept: 'Warehouse',  color: '#3B82F6' },
+  { role: 'wh_per',          label: 'WH Personnel',     dept: 'Warehouse',  color: '#3B82F6' },
+  { role: 'dsp_sup',        label: 'DSP Supervisor',   dept: 'Dispatch',   color: '#8B5CF6' },
+  { role: 'dsp_per',         label: 'DSP Personnel',    dept: 'Dispatch',   color: '#8B5CF6' },
+  { role: 'qaqc',          label: 'QAQC Officer',     dept: 'QAQC',       color: '#F59E0B' },
+  { role: 'exec',           label: 'Exec Viewer',      dept: 'Executive',  color: '#10B981' },
+  { role: 'safety',        label: 'Safety Officer',   dept: 'Safety',     color: '#EF4444' },
+  { role: 'logistics', label: 'Logistics Coord.', dept: 'Logistics',  color: '#F97316' },
+  { role: 'inventory',     label: 'Inventory Mgr',    dept: 'Inventory',  color: '#06B6D4' },
 ]
 
 interface PermGroup {

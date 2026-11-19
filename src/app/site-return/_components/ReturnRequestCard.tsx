@@ -56,7 +56,7 @@ export function ReturnRequestCard({ request }: Props) {
 
       {request.notes && (
         <p className="text-[11px] text-gray-500 italic border-t border-border-default pt-2 mb-3">
-          "{request.notes}"
+          &quot;{request.notes}&quot;
         </p>
       )}
 

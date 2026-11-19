@@ -2,6 +2,10 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { Check, ArrowRight } from 'lucide-react'
 import { NewsletterForm } from '@/components/marketing/NewsletterForm'
+import { PRICING_PLANS, formatPlanPrice } from '@/config/pricing'
+import { LIFECYCLE, STAGE_DEPARTMENT } from '@/lib/lifecycle'
+
+const DEPARTMENT_COUNT = new Set(Object.values(STAGE_DEPARTMENT)).size
 
 function LogoMark({ size = 36 }: { size?: number }) {
   return (
@@ -46,54 +50,6 @@ const HOW_IT_WORKS = [
     step: '04',
     title: 'Delivered & audited',
     body: 'Equipment reaches its destination with a complete, timestamped trail from request to delivery, ready for review at any time.',
-  },
-]
-
-const PRICING_PLANS = [
-  {
-    name: 'Starter',
-    price: '$249',
-    period: '/month',
-    tagline: 'For single-site teams getting equipment tracking under control.',
-    features: [
-      'Up to 5 active user roles',
-      'Core lifecycle tracking (16 stages)',
-      'SLA alerts & breach indicators',
-      'Standard reporting',
-      'Email support',
-    ],
-    cta: 'Join Waitlist',
-    highlighted: false,
-  },
-  {
-    name: 'Professional',
-    price: '$699',
-    period: '/month',
-    tagline: 'For multi-department operations that need full visibility.',
-    features: [
-      'Unlimited user roles',
-      'Full lifecycle & dispatch automation',
-      'Executive analytics & bottleneck heatmaps',
-      'QAQC container fleet management',
-      'Priority support with onboarding',
-    ],
-    cta: 'Join Waitlist',
-    highlighted: true,
-  },
-  {
-    name: 'Enterprise',
-    price: 'Custom',
-    period: '',
-    tagline: 'For organisations running multiple yards, vessels, or regions.',
-    features: [
-      'Multi-site & multi-organisation support',
-      'Single sign-on (SSO) & custom roles',
-      'Dedicated account manager',
-      'Custom integrations & API access',
-      '24/7 priority support',
-    ],
-    cta: 'Talk to Sales',
-    highlighted: false,
   },
 ]
 
@@ -152,8 +108,8 @@ export default function LandingPage() {
                 <Check size={16} className="text-status-success" strokeWidth={2.5} />
               </div>
               <div>
-                <div className="font-bold text-sm text-neutral-900 leading-tight">100% Traceable</div>
-                <div className="text-xs text-neutral-500">From request to delivery</div>
+                <div className="font-bold text-sm text-neutral-900 leading-tight">Named owner, every stage</div>
+                <div className="text-xs text-neutral-500">Each handoff is timestamped</div>
               </div>
             </div>
           </div>
@@ -192,10 +148,10 @@ export default function LandingPage() {
       <div className="border-y border-border-default bg-white py-10 px-6">
         <div className="max-w-6xl mx-auto flex flex-wrap justify-center gap-10 md:gap-20">
           {[
-            { value: '16', label: 'Lifecycle Stages', color: 'text-stage-warehouse' },
-            { value: '7', label: 'User Roles', color: 'text-stage-dispatch' },
-            { value: '5', label: 'Departments', color: 'text-stage-qaqc' },
-            { value: '100%', label: 'Traceability', color: 'text-stage-final' },
+            { value: String(LIFECYCLE.length), label: 'Lifecycle Stages', color: 'text-stage-warehouse' },
+            { value: String(DEPARTMENT_COUNT), label: 'Departments', color: 'text-stage-dispatch' },
+            { value: '1', label: 'Named Owner per Stage', color: 'text-stage-qaqc' },
+            { value: '0', label: 'Untimestamped Handoffs', color: 'text-stage-final' },
           ].map(s => (
             <div key={s.label} className="text-center">
               <div className={`font-black text-3xl md:text-4xl ${s.color} mb-1.5`}>{s.value}</div>
@@ -259,8 +215,8 @@ export default function LandingPage() {
                   <polyline points="12 6 12 12 16 14" />
                 </svg>
               ),
-              title: 'Real-Time Pipeline Visibility',
-              body: 'Know exactly where every equipment order is right now, which stage, which person, and for how long, without a single phone call.',
+              title: 'Pipeline Visibility',
+              body: 'Know exactly where every equipment order is right now, which stage, which person, and for how long, without chasing updates by phone.',
             },
             {
               accentClass: 'text-brand-500 bg-brand-50',
@@ -283,7 +239,7 @@ export default function LandingPage() {
                 </svg>
               ),
               title: 'SLA Intelligence',
-              body: 'Automatic breach detection surfaces orders at risk before they breach, with color-coded severity, department heatmaps, and built-in escalation paths.',
+              body: 'Stage timers flag orders approaching their SLA before they breach, with color-coded severity and department heatmaps.',
             },
             {
               accentClass: 'text-stage-final bg-status-success-bg',
@@ -321,14 +277,14 @@ export default function LandingPage() {
             Plans for every size of operation
           </h2>
           <p className="text-lg text-neutral-600 max-w-xl mx-auto">
-            Start small and scale up as your fleet and team grow. All plans include onboarding support.
+            Start small and scale up as your fleet and team grow.
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
           {PRICING_PLANS.map(plan => (
             <div
-              key={plan.name}
+              key={plan.tier}
               className={[
                 'rounded-xl p-8 flex flex-col h-full',
                 plan.highlighted
@@ -349,11 +305,11 @@ export default function LandingPage() {
               </p>
               <div className="mb-6">
                 <span className={`font-black text-4xl tracking-tight ${plan.highlighted ? 'text-white' : 'text-neutral-900'}`}>
-                  {plan.price}
+                  {formatPlanPrice(plan)}
                 </span>
-                {plan.period && (
+                {plan.monthlyPriceUsd !== null && (
                   <span className={`text-sm font-medium ${plan.highlighted ? 'text-neutral-400' : 'text-neutral-500'}`}>
-                    {plan.period}
+                    /month
                   </span>
                 )}
               </div>

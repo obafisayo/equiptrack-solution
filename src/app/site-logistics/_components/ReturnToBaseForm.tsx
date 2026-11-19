@@ -5,6 +5,7 @@ import { X, Plus, Trash2 } from 'lucide-react'
 import type { ReturnOrder, ReturnItem } from './types'
 import type { DangerousGoodsClass } from '@/lib/mock-data'
 import { DESTINATIONS } from '@/lib/destinations'
+import { ORG_BRANDING } from '@/config/organization'
 
 const DG_OPTIONS: { value: DangerousGoodsClass; label: string; color: string }[] = [
   { value: 'normal',       label: 'Normal',       color: 'border-gray-200 text-gray-700'   },
@@ -100,7 +101,7 @@ export function ReturnToBaseForm({ onClose, onSubmit }: Props) {
                       origin === o ? 'border-brand-500 bg-red-50' : 'border-border-default hover:border-gray-300'
                     }`}
                   >
-                    <p className="text-[13px] font-bold capitalize">{o === 'site' ? 'TotalEnergies Site' : 'Vendor Return'}</p>
+                    <p className="text-[13px] font-bold capitalize">{o === 'site' ? `${ORG_BRANDING.shortName} Site` : 'Vendor Return'}</p>
                     <p className="text-[11px] text-gray-400 mt-1">
                       {o === 'site' ? 'Equipment from an offshore or onshore site' : 'Equipment being returned to a vendor'}
                     </p>

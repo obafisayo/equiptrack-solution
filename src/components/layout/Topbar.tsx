@@ -3,7 +3,7 @@
 import { Search, Menu, ChevronRight } from 'lucide-react'
 import Link from 'next/link'
 import type { ReactNode } from 'react'
-import type { Role } from '@/lib/lifecycle'
+import type { WorkspaceRole as Role } from '@/lib/domain/roles'
 import { Avatar } from '@/components/ui/Avatar'
 import { NotificationBell } from './NotificationBell'
 

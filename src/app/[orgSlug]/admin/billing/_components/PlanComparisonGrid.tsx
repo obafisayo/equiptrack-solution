@@ -38,10 +38,10 @@ export function PlanComparisonGrid({ sub }: PlanComparisonGridProps) {
               {TIER_LABEL[plan.tier]}
             </span>
             <p style={{ fontSize: 22, fontWeight: 700, color: '#111827', margin: '0 0 4px' }}>
-              {formatCurrency(plan.price)}<span style={{ fontSize: 12, color: '#9CA3AF', fontWeight: 400 }}>/mo</span>
+              {plan.price === null ? 'Custom' : <>{formatCurrency(plan.price)}<span style={{ fontSize: 12, color: '#9CA3AF', fontWeight: 400 }}>/mo</span></>}
             </p>
             <p style={{ fontSize: 11, color: '#6B7280', margin: '0 0 14px' }}>{plan.description}</p>
-            <p style={{ fontSize: 11, color: '#6B7280', margin: '0 0 12px' }}>Up to {plan.seats} seats</p>
+            <p style={{ fontSize: 11, color: '#6B7280', margin: '0 0 12px' }}>{plan.seats === null ? 'Seats by agreement' : `Up to ${plan.seats} seats`}</p>
             <button
               disabled={isCurrent}
               style={{
@@ -52,7 +52,7 @@ export function PlanComparisonGrid({ sub }: PlanComparisonGridProps) {
                 cursor: isCurrent ? 'not-allowed' : 'pointer',
               }}
             >
-              {isCurrent ? 'Current plan' : plan.tier === 'enterprise' && sub.tier !== 'enterprise' ? 'Contact sales' : plan.price > sub.monthlyPrice ? 'Upgrade' : 'Downgrade'}
+              {isCurrent ? 'Current plan' : plan.tier === 'enterprise' && sub.tier !== 'enterprise' ? 'Contact sales' : (plan.price ?? Infinity) > sub.monthlyPrice ? 'Upgrade' : 'Downgrade'}
             </button>
           </div>
         )

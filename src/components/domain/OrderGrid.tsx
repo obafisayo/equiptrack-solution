@@ -1,5 +1,5 @@
 import type { WorkOrder } from '@/lib/mock-data'
-import type { Role } from '@/lib/lifecycle'
+import type { WorkspaceRole as Role } from '@/lib/domain/roles'
 import { WorkOrderCard } from './WorkOrderCard'
 
 export function SectionTitle({ title, count, action, className = '' }: { title: string; count?: number; action?: React.ReactNode; className?: string }) {

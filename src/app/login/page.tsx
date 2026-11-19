@@ -7,6 +7,7 @@ import Link from 'next/link'
 import { ROLE_LIST, ROLE_META } from '@/lib/roles'
 import { AuthLeftPanel } from '@/components/layout/AuthLeftPanel'
 import { setSessionRole } from '@/lib/session'
+import type { WorkspaceRole } from '@/lib/domain/roles'
 
 /* ── Eye icon ────────────────────────────────────────────────────────────── */
 function EyeIcon({ open }: { open: boolean }) {
@@ -24,16 +25,16 @@ function EyeIcon({ open }: { open: boolean }) {
 }
 
 /* ── Role icons ──────────────────────────────────────────────────────────── */
-const ROLE_ICONS: Record<string, React.ReactNode> = {
+const ROLE_ICONS: Partial<Record<WorkspaceRole, React.ReactNode>> = {
   requester:              <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><path d="M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2"/><path d="M9 12h6M9 16h4"/></svg>,
-  'warehouse-supervisor': <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg>,
-  'warehouse-personnel':  <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="M3.27 6.96L12 12.01l8.73-5.05M12 22.08V12"/></svg>,
-  'dispatch-supervisor':  <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 5v3h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>,
-  'dispatch-personnel':   <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round"><path d="M12 2l9 4.9V17L12 22l-9-5.1V7L12 2z"/><path d="M12 22V12M3.27 6.96L12 12l8.73-5.04"/></svg>,
-  'qaqc-officer':         <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>,
-  executive:              <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>,
-  'site-logistics':       <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="M3.27 6.96L12 12.01l8.73-5.05M12 22.08V12"/></svg>,
-  'site-return':          <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>,
+  wh_sup:                 <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg>,
+  wh_per:                 <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="M3.27 6.96L12 12.01l8.73-5.05M12 22.08V12"/></svg>,
+  dsp_sup:                <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 5v3h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>,
+  dsp_per:                <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round"><path d="M12 2l9 4.9V17L12 22l-9-5.1V7L12 2z"/><path d="M12 22V12M3.27 6.96L12 12l8.73-5.04"/></svg>,
+  qaqc:                   <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>,
+  exec:                   <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>,
+  site_logistics:         <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="M3.27 6.96L12 12.01l8.73-5.05M12 22.08V12"/></svg>,
+  site_return:            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>,
   logistics:              <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 5v3h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>,
   inventory:              <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>,
   maintenance:            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>,
@@ -49,17 +50,17 @@ export default function LoginPage() {
   const [rememberMe,   setRememberMe]   = useState(false)
   const [loading,      setLoading]      = useState(false)
   const [demoOpen,     setDemoOpen]     = useState(false)
-  const [activeRole,   setActiveRole]   = useState<string | null>(null)
+  const [activeRole,   setActiveRole]   = useState<WorkspaceRole | null>(null)
 
   const scrollRef = useRef<HTMLDivElement>(null)
 
-  function pickDemoRole(slug: string) {
-    const meta = ROLE_META[slug]
+  function pickDemoRole(role: WorkspaceRole) {
+    const meta = ROLE_META[role]
     if (!meta) return
     setEmail(meta.demoEmail)
     setPassword(meta.demoPassword)
-    setActiveRole(slug)
-    setSessionRole(slug)
+    setActiveRole(role)
+    setSessionRole(role)
     setDemoOpen(false)
     setTimeout(() => scrollRef.current?.scrollTo({ top: 0, behavior: 'smooth' }), 80)
   }
@@ -69,7 +70,7 @@ export default function LoginPage() {
     setLoading(true)
     const matchedRole = Object.values(ROLE_META).find(m => m.demoEmail === email)
     const path = matchedRole?.dashboardPath ?? '/requester'
-    if (matchedRole) setSessionRole(matchedRole.slug)
+    if (matchedRole) setSessionRole(matchedRole.role)
     setTimeout(() => router.push(path), 800)
   }
 
@@ -102,7 +103,7 @@ export default function LoginPage() {
                   className="inline-flex items-center gap-1.5 text-[11px] font-semibold tracking-widest uppercase px-3 py-1.5 rounded-full"
                   style={{ color: activeMeta.deptColor, background: `${activeMeta.deptColor}14`, border: `1px solid ${activeMeta.deptColor}28` }}
                 >
-                  {ROLE_ICONS[activeMeta.slug]}
+                  {ROLE_ICONS[activeMeta.role]}
                   Demo: {activeMeta.shortLabel} &mdash; {activeMeta.dept}
                 </span>
               </div>
@@ -225,11 +226,11 @@ export default function LoginPage() {
                     <div className="grid grid-cols-2 gap-1.5">
                       {ROLE_LIST.map(role => (
                         <button
-                          key={role.slug}
+                          key={role.role}
                           type="button"
-                          onClick={() => pickDemoRole(role.slug)}
+                          onClick={() => pickDemoRole(role.role)}
                           className={`flex items-center gap-2 px-2.5 py-2 rounded-lg border text-left transition-all duration-150 cursor-pointer ${
-                            activeRole === role.slug
+                            activeRole === role.role
                               ? 'border-brand-400 bg-brand-50'
                               : 'border-neutral-200 bg-neutral-50 hover:border-neutral-300 hover:bg-white'
                           }`}
@@ -238,7 +239,7 @@ export default function LoginPage() {
                             className="w-6 h-6 rounded-md flex items-center justify-center shrink-0"
                             style={{ background: `${role.deptColor}15`, color: role.deptColor }}
                           >
-                            {ROLE_ICONS[role.slug]}
+                            {ROLE_ICONS[role.role]}
                           </span>
                           <div className="min-w-0">
                             <p className="text-[11px] font-bold text-neutral-800 truncate leading-tight">{role.shortLabel}</p>

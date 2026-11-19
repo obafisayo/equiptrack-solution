@@ -8,22 +8,8 @@ import { Input } from '@/components/ui/Form'
 
 /* ── Helpers ──────────────────────────────────────────────────────────────── */
 
-const ROLE_LABEL: Record<string, string> = {
-  org_admin:            'Organisation Admin',
-  requester:            'Requester',
-  wh_supervisor:        'Warehouse Supervisor',
-  wh_personnel:         'Warehouse Personnel',
-  dsp_supervisor:       'Dispatch Supervisor',
-  dsp_personnel:        'Dispatch Personnel',
-  qaqc_officer:         'QAQC Officer',
-  exec_viewer:          'Executive Viewer',
-  safety_officer:       'Safety Officer',
-  logistics_coordinator:'Vessel Coordinator',
-  inventory_manager:    'Inventory Manager',
-  rig_manager:          'Rig Manager',
-  crane_operator:       'Crane Operator',
-  maintenance_tech:     'Maintenance Technician',
-}
+import { ROLE_LABEL as ROLE_LABEL_MAP } from '@/lib/domain/roles'
+const ROLE_LABEL: Record<string, string> = ROLE_LABEL_MAP
 
 function LogoMark() {
   return (

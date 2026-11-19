@@ -3,6 +3,7 @@
 import { X, ExternalLink, FileText, Image } from 'lucide-react'
 import type { Conversation } from './types'
 import { Avatar } from '@/components/ui/Avatar'
+import { ORG_BRANDING } from '@/config/organization'
 
 interface Props {
   conversation: Conversation
@@ -52,7 +53,7 @@ export function ContactProfile({ conversation, onClose }: Props) {
           <h5 className="text-[11px] font-semibold uppercase tracking-wide text-gray-400 mb-2">About</h5>
           <p className="text-[12px] text-gray-600 leading-relaxed">
             {conversation.type === 'contractor'
-              ? 'CCU contractor supplying containers to TotalEnergies operations. All requests, responses, and billing are tracked in this thread.'
+              ? `CCU contractor supplying containers to ${ORG_BRANDING.shortName} operations. All requests, responses, and billing are tracked in this thread.`
               : conversation.type === 'system'
               ? 'Automated system notifications for SLA breaches, order updates, and assignment alerts.'
               : `${conversation.participantRole} — part of the EquipTrack operations team. ${msgCount} message${msgCount !== 1 ? 's' : ''} in this thread.`

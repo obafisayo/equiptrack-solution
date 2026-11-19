@@ -18,10 +18,6 @@ function fmtDate(iso: string) {
   const [y, m, d] = iso.split('-')
   return `${parseInt(d)} ${MONTHS[parseInt(m) - 1]} ${y}`
 }
-function fmtShort(iso: string) {
-  const [, m, d] = iso.split('-')
-  return `${parseInt(d)} ${MONTHS[parseInt(m) - 1]}`
-}
 
 const TODAY = new Date().toISOString().split('T')[0]
 

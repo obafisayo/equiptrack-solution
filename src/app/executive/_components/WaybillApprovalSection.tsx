@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { FileText, CheckCircle, XCircle, Clock, ChevronDown, ChevronUp, AlertTriangle, Package } from 'lucide-react'
+import { CheckCircle, XCircle, Clock, ChevronDown, ChevronUp, AlertTriangle, Package } from 'lucide-react'
 import { LIVE_ORDERS, approveWaybill, rejectWaybill } from '@/lib/workflow-store'
 import type { WorkOrder } from '@/lib/mock-data'
 

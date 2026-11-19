@@ -119,7 +119,7 @@ export function ContainerCard({ containerId, orders, onSubmitQAQC, onGenerateWay
 
                     {/* Notes */}
                     {o.notes && (
-                      <p className="text-[11px] text-gray-500 italic border-t border-border-default/60 pt-2">"{o.notes}"</p>
+                      <p className="text-[11px] text-gray-500 italic border-t border-border-default/60 pt-2">&quot;{o.notes}&quot;</p>
                     )}
                   </div>
                 )}

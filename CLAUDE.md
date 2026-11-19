@@ -129,3 +129,13 @@ Map design tokens to Tailwind's `theme.extend` in `tailwind.config.ts`:
 - Extend `fontFamily` with `sans: ['Inter', ...]` and `mono: ['JetBrains Mono', ...]`
 - Extend `spacing` and `borderRadius` to match the token scale
 - The CSS custom properties in `tokens/` are the authoritative source of truth
+
+---
+
+## Backend (ASP.NET Core 8) and single sources of truth
+
+- `backend/`: C# API (EF Core + PostgreSQL, Brevo for email and contact lists). See `backend/README.md`. It currently serves lead capture (`/api/leads/waitlist`, `/api/leads/newsletter`) through a retrying outbox.
+- **Roles**: `src/lib/domain/roles.ts` is the only role model (`wh_sup`, `dsp_per`, …). `backend/src/EquipTrack.Api/Domain/Roles.cs` mirrors it, and a backend test fails if they drift. Never add alias codes such as `wh_supervisor`.
+- **Pricing**: `src/config/pricing.ts`. Never hard-code a plan price.
+- **Client branding**: `src/config/organization.ts` (`NEXT_PUBLIC_ORG_*` env vars). Never hard-code a customer's name or logo.
+- CI (`.github/workflows/ci.yml`) runs lint, type-check, and build for the frontend, and build, test, and a pending-migration check for the backend.

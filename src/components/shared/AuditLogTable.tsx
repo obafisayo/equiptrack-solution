@@ -25,23 +25,8 @@ const TARGET_TYPE_STYLE: Record<string, { bg: string; color: string }> = {
   sso:          { bg: '#ECFEFF', color: '#0891B2' },
 }
 
-const ROLE_LABEL: Record<string, string> = {
-  sysadmin:             'Sysadmin',
-  org_admin:            'Org Admin',
-  requester:            'Requester',
-  wh_supervisor:        'WH Supervisor',
-  wh_personnel:         'WH Personnel',
-  dsp_supervisor:       'DSP Supervisor',
-  dsp_personnel:        'DSP Personnel',
-  qaqc_officer:         'QAQC Officer',
-  exec_viewer:          'Exec Viewer',
-  safety_officer:       'Safety Officer',
-  logistics_coordinator:'Logistics',
-  inventory_manager:    'Inventory',
-  rig_manager:          'Rig Manager',
-  crane_operator:       'Crane Op.',
-  maintenance_tech:     'Maintenance',
-}
+import { ROLE_SHORT_LABEL } from '@/lib/domain/roles'
+const ROLE_LABEL: Record<string, string> = ROLE_SHORT_LABEL
 
 /* ── Component ────────────────────────────────────────────────────────────── */
 
