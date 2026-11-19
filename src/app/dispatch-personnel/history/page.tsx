@@ -11,7 +11,6 @@ import { LIVE_ORDERS } from '@/lib/workflow-store'
 import { fmtHours } from '@/config/sla'
 
 const MY_ID   = 'DP4'
-const MY_NAME = 'Tunde Bello'
 
 const SHIPPED_STAGES = ['Shipped', 'Completed']
 

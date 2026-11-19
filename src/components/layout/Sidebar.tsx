@@ -12,7 +12,7 @@ import {
   RotateCcw, MessageSquare, ChevronLeft, ChevronRight, Anchor, Ship,
 } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
-import type { Role } from '@/lib/lifecycle'
+import type { WorkspaceRole as Role } from '@/lib/domain/roles'
 import { ROLE_LABEL } from '@/lib/lifecycle'
 import { Avatar } from '@/components/ui/Avatar'
 

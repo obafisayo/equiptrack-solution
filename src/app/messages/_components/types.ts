@@ -1,3 +1,4 @@
+import { ORG_BRANDING } from '@/config/organization'
 export type MessageStatus = 'sent' | 'delivered' | 'read'
 export type NotificationChannel = 'in-app' | 'email' | 'whatsapp'
 export type ConversationType = 'direct' | 'contractor' | 'system' | 'group'
@@ -91,7 +92,7 @@ export const MOCK_CONVERSATIONS: Conversation[] = [
     avatarColor: '#94A3B8',
     linkedRequestId: 'REQ-CCU-2026-002',
     messages: [
-      { id: 'm5', conversationId: 'conv-002', senderId: 'ME', senderName: 'You', senderRole: 'QAQC Officer', body: 'Dear Apex Offshore Ltd,\n\nWe at TotalEnergies require the following CCU containers:\n- 3× Dry Cargo Basket\n\nPlease confirm availability and provide serial numbers for each unit.\n\nRegards,\nOperations Team', timestamp: ago(120), status: 'read', isSystem: false },
+      { id: 'm5', conversationId: 'conv-002', senderId: 'ME', senderName: 'You', senderRole: 'QAQC Officer', body: `Dear Apex Offshore Ltd,\n\nWe at ${ORG_BRANDING.shortName} require the following CCU containers:\n- 3× Dry Cargo Basket\n\nPlease confirm availability and provide serial numbers for each unit.\n\nRegards,\nOperations Team`, timestamp: ago(120), status: 'read', isSystem: false },
       { id: 'm6', conversationId: 'conv-002', senderId: 'CONT-001', senderName: 'Apex Offshore Ltd', senderRole: 'Contractor', body: 'We can provide 3× Dry Cargo Baskets. Serials: AO-7841, AO-7842, AO-7843.', timestamp: ago(38), status: 'delivered' },
     ],
   },

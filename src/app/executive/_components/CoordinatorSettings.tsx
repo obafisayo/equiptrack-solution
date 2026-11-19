@@ -46,7 +46,7 @@ export function CoordinatorSettings() {
                 placeholder="e.g. Onne Base"
                 className="input-base text-sm"
               />
-              <p className="text-[10px] text-gray-400 mt-1">Used on TR document: "Approved by the [Base Name] Logistics Coordinator"</p>
+              <p className="text-[10px] text-gray-400 mt-1">Used on TR document: &quot;Approved by the [Base Name] Logistics Coordinator&quot;</p>
             </div>
 
             <div>

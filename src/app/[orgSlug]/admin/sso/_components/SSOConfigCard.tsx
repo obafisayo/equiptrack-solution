@@ -3,7 +3,7 @@
 import { ShieldCheck, CheckCircle, Copy } from 'lucide-react'
 
 const ROLE_LABEL: Record<string, string> = {
-  requester: 'Requester', wh_supervisor: 'WH Supervisor', exec_viewer: 'Exec Viewer',
+  requester: 'Requester', wh_sup: 'WH Supervisor', exec: 'Exec Viewer',
 }
 
 interface SSOConfigCardProps {

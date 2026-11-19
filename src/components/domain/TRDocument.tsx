@@ -4,6 +4,7 @@
 import { useRef } from 'react'
 import { X, Printer } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
+import { ORG_BRANDING } from '@/config/organization'
 
 export interface TRLineItem {
   material?: string
@@ -84,14 +85,14 @@ export function TRDocumentModal({ data, onClose }: TRDocumentProps) {
           </div>
 
           <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;">
-            <div style="font-size:20px;font-weight:bold;color:#e0001b;font-style:italic;">
-              ${data.company || 'Equiptrack'}
+            <div style="font-size:20px;font-weight:bold;color:${ORG_BRANDING.accentColor};font-style:italic;">
+              ${ORG_BRANDING.shortName}
             </div>
             <div style="text-align:center;flex:1;">
               <h1 style="font-size:18px;font-weight:bold;text-decoration:underline;letter-spacing:2px;">TEMPORARY REQUISITION</h1>
             </div>
             <div style="text-align:right;font-size:11px;font-weight:bold;line-height:1.5;">
-              ${data.company || 'EQUIPTRACK'}<br/>LOGISTICS NIG. LTD.
+              ${(data.company || ORG_BRANDING.legalName).toUpperCase()}
             </div>
           </div>
 
@@ -182,14 +183,14 @@ export function TRDocumentModal({ data, onClose }: TRDocumentProps) {
 
               {/* Brand + title row */}
               <div className="flex items-start justify-between mb-6">
-                <div className="text-red-600 font-bold text-xl italic leading-none" style={{fontFamily:'Arial,sans-serif'}}>
-                  {data.company || 'Equiptrack'}
+                <div className="font-bold text-xl italic leading-none" style={{fontFamily:'Arial,sans-serif', color: ORG_BRANDING.accentColor}}>
+                  {ORG_BRANDING.shortName}
                 </div>
                 <div className="flex-1 text-center">
                   <h1 className="text-lg font-bold underline tracking-widest">TEMPORARY REQUISITION</h1>
                 </div>
                 <div className="text-right text-xs font-bold leading-relaxed" style={{fontFamily:'Arial,sans-serif'}}>
-                  {(data.company || 'EQUIPTRACK').toUpperCase()} EP<br/>NIG. LTD.
+                  {(data.company || ORG_BRANDING.legalName).toUpperCase()}
                 </div>
               </div>
 

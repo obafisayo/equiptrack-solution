@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Anchor, Package, Clock, CheckCircle, XCircle, Navigation, AlertTriangle } from 'lucide-react'
+import { Anchor, Package, CheckCircle, XCircle, Navigation, AlertTriangle } from 'lucide-react'
 import AppShell from '@/components/layout/AppShell'
 import { StatCard } from '@/components/domain/StatCard'
 import { SectionTitle } from '@/components/domain/OrderGrid'
@@ -290,7 +290,7 @@ function ReturnRow({ request, onAction }: { request: ReturnRequest; onAction: ((
       </div>
 
       {request.notes && (
-        <p className="text-[11px] text-gray-500 italic mb-3">"{request.notes}"</p>
+        <p className="text-[11px] text-gray-500 italic mb-3">&quot;{request.notes}&quot;</p>
       )}
 
       {request.status === 'approved' && request.vessel && (

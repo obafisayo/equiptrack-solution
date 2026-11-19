@@ -4,7 +4,7 @@ import { DatePicker } from '@/components/ui/DatePicker'
 import { URGENCY_CONFIG } from '@/config/sla'
 import type { UrgencyLevel } from '@/config/sla'
 import { URGENCY_STYLE } from './constants'
-import { getExpectedDate, today, minDateForUrgency } from './helpers'
+import { getExpectedDate, minDateForUrgency } from './helpers'
 import { SectionHeader, Label, FieldError } from './FormHelpers'
 
 interface UrgencyScheduleSectionProps {

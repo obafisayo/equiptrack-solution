@@ -1,3 +1,4 @@
+import { ORG_BRANDING } from '@/config/organization'
 export type CCUType =
   | 'Waste Skip'
   | '23ft Half Height Basket'
@@ -117,7 +118,7 @@ export const CCU_TYPES_OPT = [
   '20ft Open Top Container','Gas Rack','Chemical Tote Tank','MUD SKID',
 ].map(v => ({ value: v, label: v }))
 
-export const OWNER_OPT = ['TotalEnergies','Schlumberger','Halliburton','Baker Hughes','Weatherford','Apex Offshore Ltd','Delta Marine Containers','Onne Container Services','Gulf Stream Logistics'].map(v => ({ value: v, label: v }))
+export const OWNER_OPT = [ORG_BRANDING.shortName,'Schlumberger','Halliburton','Baker Hughes','Weatherford','Apex Offshore Ltd','Delta Marine Containers','Onne Container Services','Gulf Stream Logistics'].map(v => ({ value: v, label: v }))
 export const LOCATION_OPT = ['Onne Base','Akpo','Amadi-Base','Egina','Hosh-1','AMQ','Odudu','Ofon','Amenam','Onne','Workshop','Quarantine Bay'].map(v => ({ value: v, label: v }))
 
 export const DIMS_DEFAULT: Record<CCUType, { footprintM2: number; lengthM: number; widthM: number; maxGrossWeightKg: number }> = {

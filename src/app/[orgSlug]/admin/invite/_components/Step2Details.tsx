@@ -18,7 +18,7 @@ interface Step2DetailsProps {
 
 export function Step2Details({ rows, onChangeRows, selectedRole, onSelectRole, method, onBack, onNext, tier }: Step2DetailsProps) {
   const availableRoles = tier === 'starter'
-    ? ROLE_OPTIONS.filter(r => !['safety_officer','logistics_coordinator','inventory_manager','rig_manager','crane_operator','maintenance_tech','org_admin'].includes(r.role))
+    ? ROLE_OPTIONS.filter(r => !['safety','logistics','inventory','maintenance','org_admin'].includes(r.role))
     : ROLE_OPTIONS
 
   function addRow() {

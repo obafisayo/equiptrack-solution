@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import type { Role } from '@/lib/lifecycle'
+import type { WorkspaceRole as Role } from '@/lib/domain/roles'
 import { getSessionRole } from '@/lib/session'
 
 export function useSessionRole(): { role: Role | null; loading: boolean } {

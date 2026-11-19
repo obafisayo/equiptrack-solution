@@ -1,4 +1,5 @@
 import type { CCUType } from '@/app/qaqc/containers/_components/types'
+import { ORG_BRANDING } from '@/config/organization'
 
 export type RequestStatus =
   | 'Draft'
@@ -49,7 +50,7 @@ export function composeContractorMessage(
   const itemLines = lineItems.map(i => `  - ${i.quantity}× ${i.type}`).join('\n')
   return `Dear ${contactName},
 
-We at TotalEnergies wish to request the following CCU containers for our operations:
+We at ${ORG_BRANDING.shortName} wish to request the following CCU containers for our operations:
 
 ${itemLines}
 
@@ -61,7 +62,7 @@ We look forward to your prompt response.
 
 Regards,
 Operations Team
-TotalEnergies E&P Nigeria`
+${ORG_BRANDING.legalName}`
 }
 
 export const REQUEST_STATUS_BADGE: Record<RequestStatus, string> = {

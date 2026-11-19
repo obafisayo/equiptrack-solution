@@ -5,6 +5,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { AuthLeftPanel } from '@/components/layout/AuthLeftPanel'
 import { Input, Select, Textarea } from '@/components/ui/Form'
+import { submitWaitlist, LeadSubmissionError } from '@/lib/api/leads'
 
 const INDUSTRIES = ['Oil & Gas', 'Mining', 'Marine / Offshore', 'Construction', 'Logistics & Transport', 'Manufacturing', 'Energy', 'Other']
 const COMPANY_SIZES = ['1–10', '11–50', '51–200', '201–500', '500+']
@@ -44,10 +45,29 @@ export default function WaitlistPage() {
     return true
   }
 
-  function next(e: React.FormEvent) {
+  const [submitting, setSubmitting] = useState(false)
+  const [submitError, setSubmitError] = useState<string | null>(null)
+
+  async function next(e: React.FormEvent) {
     e.preventDefault()
     if (step < 2) { setStep(s => s + 1); return }
-    setStep(3)
+    if (submitting) return
+    setSubmitting(true)
+    setSubmitError(null)
+    try {
+      await submitWaitlist({
+        ...form,
+        website: form.website.trim() || undefined,
+        contactPhone: form.contactPhone.trim() || undefined,
+        jobTitle: form.jobTitle.trim() || undefined,
+        additionalInfo: form.additionalInfo.trim() || undefined,
+      })
+      setStep(3)
+    } catch (err) {
+      setSubmitError(err instanceof LeadSubmissionError ? err.message : 'Something went wrong. Please try again.')
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   const STEPS = ['Company', 'Contact', 'Use Case']
@@ -111,7 +131,7 @@ export default function WaitlistPage() {
                   <>
                     <div>
                       <label className={labelCls}>Company Name <span className="text-brand-500">*</span></label>
-                      <Input value={form.companyName} onChange={F('companyName')} placeholder="e.g. Shell Nigeria Ltd" required />
+                      <Input value={form.companyName} onChange={F('companyName')} placeholder="e.g. Acme Energy Ltd" required />
                     </div>
                     <div className="grid grid-cols-2 gap-3">
                       <div>
@@ -213,19 +233,25 @@ export default function WaitlistPage() {
                   </>
                 )}
 
+                {submitError && (
+                  <p role="alert" className="text-[13px] text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2 m-0">
+                    {submitError}
+                  </p>
+                )}
+
                 {/* Navigation */}
                 <div className="flex gap-3 pt-1">
                   {step > 0 && (
-                    <button type="button" onClick={() => setStep(s => s - 1)}
+                    <button type="button" onClick={() => { setSubmitError(null); setStep(s => s - 1) }}
                       className="flex-1 h-10 border border-neutral-300 rounded-lg text-sm font-semibold text-neutral-700 hover:bg-neutral-50 transition-colors">
                       Back
                     </button>
                   )}
-                  <button type="submit" disabled={!canNext()}
+                  <button type="submit" disabled={!canNext() || submitting}
                     className={`flex-2 h-10 rounded-lg text-sm font-semibold text-white transition-colors ${
-                      canNext() ? 'bg-brand-500 hover:bg-brand-600' : 'bg-neutral-300 cursor-not-allowed'
+                      canNext() && !submitting ? 'bg-brand-500 hover:bg-brand-600' : 'bg-neutral-300 cursor-not-allowed'
                     }`}>
-                    {step < 2 ? 'Continue' : 'Submit Application'}
+                    {step < 2 ? 'Continue' : submitting ? 'Submitting…' : 'Submit Application'}
                   </button>
                 </div>
               </form>

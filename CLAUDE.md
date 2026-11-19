@@ -129,3 +129,13 @@ Map design tokens to Tailwind's `theme.extend` in `tailwind.config.ts`:
 - Extend `fontFamily` with `sans: ['Inter', ...]` and `mono: ['JetBrains Mono', ...]`
 - Extend `spacing` and `borderRadius` to match the token scale
 - The CSS custom properties in `tokens/` are the authoritative source of truth
+
+---
+
+## Backend (ASP.NET Core 8) and single sources of truth
+
+- The backend is a **separate repository**, `equiptrack-backend` (checked out as a sibling folder, `../equiptrack-backend`): an ASP.NET Core 8 API using EF Core + PostgreSQL, with Brevo for email and contact lists. The frontend calls it at `NEXT_PUBLIC_API_BASE_URL`. It currently serves lead capture (`/api/leads/waitlist`, `/api/leads/newsletter`) through a retrying outbox.
+- **Roles**: `src/lib/domain/roles.ts` is the only role model (`wh_sup`, `dsp_per`, …). `Domain/Roles.cs` in equiptrack-backend mirrors it, and that repo's `RoleContractTests` fail if the two drift, so update both repos together. Never add alias codes such as `wh_supervisor`.
+- **Pricing**: `src/config/pricing.ts`. Never hard-code a plan price.
+- **Client branding**: `src/config/organization.ts` (`NEXT_PUBLIC_ORG_*` env vars). Never hard-code a customer's name or logo.
+- CI (`.github/workflows/ci.yml`) runs lint, type-check, and build. Backend CI lives in its own repo.

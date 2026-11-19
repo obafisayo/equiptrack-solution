@@ -2,7 +2,7 @@
 
 import { X, Package } from 'lucide-react'
 import type { WorkOrder } from '@/lib/mock-data'
-import type { Role } from '@/lib/lifecycle'
+import type { WorkspaceRole as Role } from '@/lib/domain/roles'
 import { STAGE_REVERSAL } from '@/lib/lifecycle'
 import { STAGE_SLA_HOURS, fmtHours } from '@/config/sla'
 import { StagePill, UrgencyPill, TypeBadge } from './Pills'

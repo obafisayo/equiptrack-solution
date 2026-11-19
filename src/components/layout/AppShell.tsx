@@ -2,7 +2,7 @@
 
 import type { ReactNode } from 'react'
 import { useState, useEffect } from 'react'
-import type { Role } from '@/lib/lifecycle'
+import type { WorkspaceRole as Role } from '@/lib/domain/roles'
 import { Sidebar } from './Sidebar'
 import { Topbar } from './Topbar'
 import { AccessDenied } from './AccessDenied'

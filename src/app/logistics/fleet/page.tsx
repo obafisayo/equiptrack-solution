@@ -2,7 +2,6 @@
 
 import { useState, useMemo } from 'react'
 import AppShell from '@/components/layout/AppShell'
-import { Button } from '@/components/ui/Button'
 import { FLEET_VESSELS, getDocExpiryState, type FleetVessel } from './_components/types'
 import { FleetStats } from './_components/FleetStats'
 import { FilterBar } from './_components/FilterBar'

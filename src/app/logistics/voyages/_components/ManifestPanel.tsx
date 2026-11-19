@@ -175,7 +175,7 @@ export function ManifestPanel({ voyage, onClose }: Props) {
         <div className="flex-1 overflow-y-auto">
           {bookings.length === 0 ? (
             <div className="py-16 text-center text-sm text-gray-400">
-              No CCUs on this voyage yet. Click "Add CCU" to start the manifest.
+              No CCUs on this voyage yet. Click &quot;Add CCU&quot; to start the manifest.
             </div>
           ) : (
             <div className="overflow-x-auto">

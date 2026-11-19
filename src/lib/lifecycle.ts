@@ -52,43 +52,12 @@ export const STAGE_COLOR: Record<Stage, string> = Object.fromEntries(
   LIFECYCLE.map(s => [s, DEPARTMENT_COLOR[STAGE_DEPARTMENT[s]]])
 ) as Record<Stage, string>
 
-export type Role = 'requester' | 'wh_sup' | 'wh_per' | 'dsp_sup' | 'dsp_per' | 'qaqc' | 'site_logistics' | 'site_return' | 'exec' | 'safety' | 'logistics' | 'inventory' | 'maintenance' | 'sysadmin'
+// Role model lives in src/lib/domain/roles.ts — re-exported here for convenience.
+import type { WorkspaceRole } from '@/lib/domain/roles'
+export { ROLE_LABEL, ROLE_ROUTE } from '@/lib/domain/roles'
+export type { WorkspaceRole } from '@/lib/domain/roles'
 
-export const ROLE_LABEL: Record<Role, string> = {
-  requester:     'Requester',
-  wh_sup:        'Warehouse Supervisor',
-  wh_per:        'Warehouse Personnel',
-  dsp_sup:       'Dispatch Supervisor',
-  dsp_per:       'Dispatch Personnel',
-  qaqc:          'QAQC Officer',
-  site_logistics: 'Site Logistics',
-  site_return:   'Site Return — Egina',
-  exec:          'Executive',
-  safety:        'Safety Officer',
-  logistics:     'Vessel Coordinator',
-  inventory:     'Inventory Manager',
-  maintenance:   'Maintenance Technician',
-  sysadmin:      'Sysadmin',
-}
-
-export const ROLE_ROUTE: Record<Role, string> = {
-  requester:     '/requester',
-  wh_sup:        '/warehouse',
-  wh_per:        '/warehouse-personnel',
-  dsp_sup:       '/dispatch',
-  dsp_per:       '/dispatch-personnel',
-  qaqc:          '/qaqc',
-  site_logistics: '/site-logistics',
-  site_return:   '/site-return',
-  exec:          '/executive',
-  safety:        '/safety',
-  logistics:     '/logistics',
-  inventory:     '/inventory',
-  maintenance:   '/maintenance',
-  sysadmin:      '/sysadmin',
-}
-
-export const ROLE_STAGES: Record<Role, Stage[]> = {
+export const ROLE_STAGES: Record<WorkspaceRole, Stage[]> = {
   requester:     [...LIFECYCLE],
   wh_sup:        [...LIFECYCLE],
   wh_per:        ['New Request', 'Warehouse Assigned', 'Picking', 'GI Created'],

@@ -2,9 +2,9 @@
 
 import { useState } from 'react'
 import { X } from 'lucide-react'
+import { ORG_BRANDING } from '@/config/organization'
 import {
   CCU_TYPES, CCU_TYPE_M2, VOYAGE_DESTINATIONS, VOYAGE_ENTITIES,
-  ENTITY_COLOR,
   type Voyage, type CCUBooking, type VoyageEntity, type VoyagePriority,
 } from '@/lib/voyage-store'
 
@@ -14,7 +14,7 @@ interface Props {
   onAdd: (booking: Omit<CCUBooking, 'id' | 'sn'>) => void
 }
 
-const CONTRACTORS = ['TOTALENERGIES', 'SLB', 'HALDEN', 'COURDEAU', 'WHASSAN', 'S J ABED', 'TOTAL', 'AfrikDelta Marine Ltd.', 'Other']
+const CONTRACTORS = [ORG_BRANDING.shortName.toUpperCase(), 'SLB', 'HALDEN', 'COURDEAU', 'WHASSAN', 'S J ABED', 'AfrikDelta Marine Ltd.', 'Other']
 
 export function AddCCUModal({ voyage, onClose, onAdd }: Props) {
   const [ccuId,       setCcuId]       = useState('')

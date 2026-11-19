@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { ShieldOff } from 'lucide-react'
-import type { Role } from '@/lib/lifecycle'
+import type { WorkspaceRole as Role } from '@/lib/domain/roles'
 import { ROLE_LABEL, ROLE_ROUTE } from '@/lib/lifecycle'
 
 interface Props {

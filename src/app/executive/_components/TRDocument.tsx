@@ -3,6 +3,7 @@
 import { useRef } from 'react'
 import { X, Printer } from 'lucide-react'
 import { COORDINATOR_CONFIG } from '@/lib/coordinator-config'
+import { ORG_BRANDING } from '@/config/organization'
 import type { WorkOrder } from '@/lib/mock-data'
 
 interface Props {
@@ -106,14 +107,20 @@ export function TRDocument({ order, onClose }: Props) {
                   {/* ── Row 1: Logo | Title | Company ── */}
                   <tr>
                     <td style={{ border: '1.5px solid #000', padding: '8px 12px', width: '15%', verticalAlign: 'middle' }}>
-                      {/* TotalEnergies logo */}
+                      {/* Organisation logo (configurable per org) */}
                       <div style={{ textAlign: 'center' }}>
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img
-                          src="/totalenergies-logo.png"
-                          alt="TotalEnergies"
-                          style={{ maxWidth: '90px', maxHeight: '50px', objectFit: 'contain' }}
-                        />
+                        {ORG_BRANDING.logoUrl ? (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img
+                            src={ORG_BRANDING.logoUrl}
+                            alt={ORG_BRANDING.shortName}
+                            style={{ maxWidth: '90px', maxHeight: '50px', objectFit: 'contain' }}
+                          />
+                        ) : (
+                          <div style={{ fontWeight: 900, fontSize: '11pt', color: ORG_BRANDING.accentColor }}>
+                            {ORG_BRANDING.shortName}
+                          </div>
+                        )}
                       </div>
                     </td>
                     <td style={{ border: '1.5px solid #000', padding: '12px', textAlign: 'center', width: '55%', verticalAlign: 'middle' }}>
@@ -123,7 +130,7 @@ export function TRDocument({ order, onClose }: Props) {
                     </td>
                     <td style={{ border: '1.5px solid #000', padding: '8px 12px', textAlign: 'right', width: '30%', verticalAlign: 'middle' }}>
                       <div style={{ fontWeight: 'bold', fontSize: '10pt', lineHeight: '1.4' }}>
-                        TOTALENERGIES EP<br />NIG. LTD.
+                        {ORG_BRANDING.legalName.toUpperCase()}
                       </div>
                     </td>
                   </tr>

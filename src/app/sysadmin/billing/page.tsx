@@ -3,6 +3,7 @@
 
 import { ORGANISATIONS } from '@/lib/mock-platform'
 import type { SubscriptionTier, SubscriptionStatus } from '@/lib/types'
+import { PLAN_BY_TIER } from '@/config/pricing'
 
 /* ── Helpers ──────────────────────────────────────────────────────────────── */
 
@@ -26,11 +27,6 @@ const STATUS_COLOR: Record<SubscriptionStatus, { bg: string; color: string }> = 
   suspended: { bg: '#FEF2F2', color: '#DC2626' },
 }
 
-const TIER_PRICE: Record<SubscriptionTier, number> = {
-  starter:      199,
-  professional: 499,
-  enterprise:   2499,
-}
 
 function formatCurrency(n: number) {
   return `$${n.toLocaleString('en-US')}`
@@ -105,7 +101,7 @@ export default function SysadminBillingPage() {
                 }}>
                   {TIER_LABEL[t.tier]}
                 </span>
-                <span style={{ fontSize: 11, color: '#9CA3AF' }}>{formatCurrency(TIER_PRICE[t.tier])}/mo per org</span>
+                <span style={{ fontSize: 11, color: '#9CA3AF' }}>{PLAN_BY_TIER[t.tier].monthlyPriceUsd === null ? 'Custom pricing' : `${formatCurrency(PLAN_BY_TIER[t.tier].monthlyPriceUsd!)}/mo list`}</span>
               </div>
               <p style={{ fontSize: 24, fontWeight: 700, color: '#111827', margin: '0 0 2px' }}>{t.count}</p>
               <p style={{ fontSize: 12, color: '#6B7280', margin: '0 0 8px' }}>organisations</p>

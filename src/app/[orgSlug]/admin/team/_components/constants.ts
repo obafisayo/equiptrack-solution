@@ -12,22 +12,8 @@ export function fmtDate(iso: string) {
   return new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
 }
 
-export const ROLE_LABEL: Record<string, string> = {
-  org_admin:            'Org Admin',
-  requester:            'Requester',
-  wh_supervisor:        'WH Supervisor',
-  wh_personnel:         'WH Personnel',
-  dsp_supervisor:       'DSP Supervisor',
-  dsp_personnel:        'DSP Personnel',
-  qaqc_officer:         'QAQC Officer',
-  exec_viewer:          'Exec Viewer',
-  safety_officer:       'Safety Officer',
-  logistics_coordinator:'Logistics Coord.',
-  inventory_manager:    'Inventory Mgr',
-  rig_manager:          'Rig Manager',
-  crane_operator:       'Crane Operator',
-  maintenance_tech:     'Maintenance Tech',
-}
+import { ROLE_SHORT_LABEL } from '@/lib/domain/roles'
+export const ROLE_LABEL: Record<string, string> = ROLE_SHORT_LABEL
 
 export const STATUS_STYLE: Record<string, { bg: string; color: string }> = {
   active:    { bg: '#F0FDF4', color: '#16A34A' },

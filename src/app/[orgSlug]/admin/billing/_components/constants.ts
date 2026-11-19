@@ -1,4 +1,5 @@
 import type { SubscriptionTier } from '@/lib/types'
+import { PRICING_PLANS } from '@/config/pricing'
 
 export const TIER_LABEL: Record<SubscriptionTier, string> = {
   starter:      'Starter',
@@ -44,8 +45,6 @@ export function mockInvoices(monthlyPrice: number) {
   ]
 }
 
-export const PLANS: { tier: SubscriptionTier; price: number; seats: number; description: string }[] = [
-  { tier: 'starter',      price: 199,  seats: 10,  description: 'For small teams getting started with equipment tracking.' },
-  { tier: 'professional', price: 499,  seats: 50,  description: 'Advanced features for growing oil & gas operations.' },
-  { tier: 'enterprise',   price: 2499, seats: 250, description: 'Unlimited scale with dedicated support and SLAs.' },
-]
+// List prices come from the single pricing source — never hard-code them here.
+export const PLANS: { tier: SubscriptionTier; price: number | null; seats: number | null; description: string }[] =
+  PRICING_PLANS.map(p => ({ tier: p.tier, price: p.monthlyPriceUsd, seats: p.seats, description: p.tagline }))

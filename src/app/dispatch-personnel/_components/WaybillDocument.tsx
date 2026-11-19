@@ -2,6 +2,7 @@
 
 import { X, Printer } from 'lucide-react'
 import { COORDINATOR_CONFIG } from '@/lib/coordinator-config'
+import { ORG_BRANDING } from '@/config/organization'
 import type { WorkOrder } from '@/lib/mock-data'
 
 interface WaybillDocumentProps {
@@ -53,10 +54,10 @@ const LABEL: React.CSSProperties = {
 
 export function WaybillDocument({ order, mode, onClose, onSubmit }: WaybillDocumentProps) {
   const { baseName, coordinators } = COORDINATOR_CONFIG
-  const coordinator = coordinators[0] ?? 'Kenneth Omireh'
+  const coordinator = coordinators[0] ?? ''
   const nowStr = fmtNow()
   const dateStr = fmtWaybillDate(order.createdAt)
-  const origin = `ONNE FLT`
+  const origin = ORG_BRANDING.defaultOrigin
 
   function handlePrint() {
     const prev = document.title
@@ -132,20 +133,22 @@ export function WaybillDocument({ order, mode, onClose, onSubmit }: WaybillDocum
                 <tbody>
                   <tr>
                     <td style={{ border: 'none', padding: '0 0 4px 0', width: '60%' }}>
-                      <div style={{ fontSize: '16pt', fontWeight: 900, color: '#E2001A', letterSpacing: '-0.5px', lineHeight: 1 }}>
-                        TotalEnergies
+                      <div style={{ fontSize: '16pt', fontWeight: 900, color: ORG_BRANDING.accentColor, letterSpacing: '-0.5px', lineHeight: 1 }}>
+                        {ORG_BRANDING.shortName}
                       </div>
                       <div style={{ fontSize: '8pt', color: '#555', marginTop: 2 }}>
-                        TOTALENERGIES EP NIG. LTD. · {baseName.toUpperCase()}
+                        {ORG_BRANDING.legalName.toUpperCase()} · {baseName.toUpperCase()}
                       </div>
                     </td>
                     <td style={{ border: 'none', padding: '0 0 4px 0', textAlign: 'right' }}>
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        src="https://companieslogo.com/img/orig/TTE_BIG-cf13cf30.png?t=1720244494&download=true"
-                        alt="TotalEnergies"
-                        style={{ height: 40, objectFit: 'contain' }}
-                      />
+                      {ORG_BRANDING.logoUrl && (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                          src={ORG_BRANDING.logoUrl}
+                          alt={ORG_BRANDING.shortName}
+                          style={{ height: 40, objectFit: 'contain' }}
+                        />
+                      )}
                     </td>
                   </tr>
                 </tbody>
@@ -271,7 +274,7 @@ export function WaybillDocument({ order, mode, onClose, onSubmit }: WaybillDocum
                   <tr>
                     <th style={{ ...TH, width: '33%' }}>Consignor</th>
                     <th style={{ ...TH, width: '33%' }}>Entity</th>
-                    <th style={{ ...TH, width: '34%' }}>TotalEnergies EP Approval</th>
+                    <th style={{ ...TH, width: '34%' }}>{ORG_BRANDING.shortName} Approval</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -290,15 +293,18 @@ export function WaybillDocument({ order, mode, onClose, onSubmit }: WaybillDocum
                       </div>
                     </td>
                     <td style={{ ...TD, verticalAlign: 'bottom' }}>
-                      <div style={{ marginBottom: 4 }}>
-                        <img
-                          src="https://companieslogo.com/img/orig/TTE_BIG-cf13cf30.png?t=1720244494&download=true"
-                          alt="TotalEnergies"
-                          style={{ height: 18, objectFit: 'contain' }}
-                        />
-                      </div>
+                      {ORG_BRANDING.logoUrl && (
+                        <div style={{ marginBottom: 4 }}>
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            src={ORG_BRANDING.logoUrl}
+                            alt={ORG_BRANDING.shortName}
+                            style={{ height: 18, objectFit: 'contain' }}
+                          />
+                        </div>
+                      )}
                       <div style={{ fontSize: '7pt', fontWeight: 700, color: '#333' }}>
-                        TOTALENERGIES EP NIG. LTD.
+                        {ORG_BRANDING.legalName.toUpperCase()}
                       </div>
                       <div style={{ fontSize: '7pt', color: '#555' }}>
                         {baseName.toUpperCase()}

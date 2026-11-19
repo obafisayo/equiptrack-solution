@@ -62,7 +62,7 @@ export function ReturnWorkflowPanel({ order, onClose, onSubmit }: Props) {
           <div className="min-w-0 flex-1">
             <p className="text-[11px] font-semibold text-teal-600 uppercase tracking-wide mb-1">Process Return</p>
             <h2 className="text-base font-bold text-gray-900 font-mono">{order.id}</h2>
-            <p className="text-xs text-gray-400 mt-0.5">{order.workOrderNumber} · {order.requestType} · Egina</p>
+            <p className="text-xs text-gray-400 mt-0.5">{order.workOrderNumber} · {order.requestType} · {order.destination}</p>
           </div>
           <button
             type="button"
