@@ -1,5 +1,5 @@
 /**
- * Lead capture client — talks to the EquipTrack API (backend/EquipTrack.Api).
+ * Lead capture client — talks to the EquipTrack API (equiptrack-backend repo).
  * Leads are persisted server-side first, then synced to Brevo.
  */
 

@@ -2,8 +2,11 @@
  * Canonical role model — the ONLY place role codes are defined.
  *
  * Every other module (lifecycle, session, permissions, org admin, the
- * ASP.NET backend's Roles.cs) must use these codes. Do not introduce
+ * ASP.NET backend's Domain/Roles.cs in the equiptrack-backend repo) must use these codes. Do not introduce
  * aliases such as `wh_supervisor` or URL slugs as role identifiers.
+ *
+ * Changing this list? Update equiptrack-backend in the same change; its
+ * RoleContractTests compare the two lists and fail CI on drift.
  */
 
 export const ROLES = [

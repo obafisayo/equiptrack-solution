@@ -31,33 +31,3 @@ jobs:
         env:
           NEXT_TELEMETRY_DISABLED: 1
           NEXT_PUBLIC_API_BASE_URL: http://localhost:5080
-
-  backend:
-    name: Backend (build, test)
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: backend
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: 8.0.x
-
-      - run: dotnet restore EquipTrack.sln
-      - run: dotnet build EquipTrack.sln --no-restore --configuration Release
-      - run: dotnet test EquipTrack.sln --no-build --configuration Release --logger "trx;LogFileName=results.trx"
-
-      - name: Check EF model has no pending migration
-        run: |
-          dotnet tool restore
-          dotnet ef migrations has-pending-model-changes -p src/EquipTrack.Api --configuration Release --no-build
-        env:
-          ConnectionStrings__Default: Host=localhost
-
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: backend-test-results
-          path: backend/tests/**/TestResults/*.trx

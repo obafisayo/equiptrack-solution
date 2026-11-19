@@ -44,7 +44,3 @@ try*.sh
 /public/design-system-images
 AIP Session Presentations and workbooks-20261110T195834Z-1-001
 
-# .NET backend
-backend/**/bin/
-backend/**/obj/
-backend/**/TestResults/

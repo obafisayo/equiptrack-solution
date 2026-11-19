@@ -3,7 +3,7 @@ import { isRole, type WorkspaceRole as Role } from '@/lib/domain/roles'
 /**
  * DEMO-ONLY client session. The role is a browser value and is NOT a security
  * boundary — real authorisation is enforced by the EquipTrack API (see
- * backend/). Do not rely on this for anything beyond prototype navigation.
+ * the equiptrack-backend repo). Do not rely on this for anything beyond prototype navigation.
  */
 export const SESSION_ROLE_KEY = 'equiptrack_role'
 
