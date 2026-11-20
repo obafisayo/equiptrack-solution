@@ -9,6 +9,7 @@ import { TeamTabs } from './_components/TeamTabs'
 import { MembersTable } from './_components/MembersTable'
 import { InvitationsTable } from './_components/InvitationsTable'
 import { ROLE_LABEL, type TabKey } from './_components/constants'
+import { LiveTeam } from '@/components/orgadmin/LiveTeam'
 
 /* ── Page ─────────────────────────────────────────────────────────────────── */
 
@@ -22,6 +23,9 @@ export default function TeamPage({ params }: { params: Promise<{ orgSlug: string
   const org = ORGANISATIONS.find(o => o.slug === orgSlug)
   const members = USERS.filter(u => u.orgId === org?.id)
   const invitations = INVITATIONS.filter(i => i.orgId === org?.id)
+
+  // Real organisations (not in the demo fixtures) manage their team through the API.
+  if (!org) return <LiveTeam />
 
   function showToast(msg: string) {
     setToast(msg)
