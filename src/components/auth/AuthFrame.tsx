@@ -105,7 +105,11 @@ export function MicrosoftButton({ label = 'Sign in with Microsoft' }: { label?: 
       errorCallbackURL: `${origin}/auth/sso/error`,
     })
     if (error) {
-      setError(error.message ?? 'Microsoft sign-in is not available right now.')
+      // Neon returns code PROVIDER_NOT_SUPPORTED ("Provider is not supported or enabled for this project").
+      const detail = `${error.code ?? ''} ${error.message ?? ''} ${(error as { error?: string }).error ?? ''}`
+      setError(/PROVIDER_NOT_SUPPORTED|not (found|configured|enabled|supported)/i.test(detail)
+        ? 'Microsoft sign-in is not set up yet. Please sign in with your email and password.'
+        : error.message ?? 'Microsoft sign-in is not available right now.')
       setBusy(false)
     }
   }
