@@ -33,6 +33,12 @@ const NAV_ITEMS: NavItem[] = [
   { href: s => `/${s}/admin/settings`, label: 'Settings',          icon: Settings         },
 ]
 
+/**
+ * Sections wired to the EquipTrack API. Real organisations (not the demo
+ * fixtures) only see these; the rest still run on mock data.
+ */
+export const LIVE_SECTIONS = new Set(['Overview', 'Team Members', 'Invite'])
+
 const TITLE_MAP: Record<string, string> = {
   '/admin':         'Overview',
   '/admin/team':    'Team Members',
@@ -66,6 +72,8 @@ export function OrgAdminShell({ orgSlug, currentPath, children }: OrgAdminShellP
   const membership = me?.memberships.find(m => m.organizationSlug === orgSlug)
   const mockOrg = ORGANISATIONS.find(o => o.slug === orgSlug)
   const org = membership ? { name: membership.organizationName } : mockOrg
+  // A real organisation from the database (not one of the demo fixtures).
+  const isLiveOrg = !mockOrg
   const adminUser = me?.name
     ? { displayName: me.name }
     : USERS.find(u => u.orgId === mockOrg?.id && u.role === 'org_admin')
@@ -132,7 +140,7 @@ export function OrgAdminShell({ orgSlug, currentPath, children }: OrgAdminShellP
 
         {/* Nav */}
         <nav className="flex-1 overflow-y-auto py-3 px-2 space-y-0.5">
-          {NAV_ITEMS.map(item => {
+          {NAV_ITEMS.filter(item => !isLiveOrg || LIVE_SECTIONS.has(item.label)).map(item => {
             const href = item.href(orgSlug)
             const active = currentPath === href ||
               (currentPath.startsWith(href + '/') && href !== `/${orgSlug}/admin`)
