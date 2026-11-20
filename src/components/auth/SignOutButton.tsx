@@ -5,11 +5,13 @@ import { useRouter } from 'next/navigation'
 import { authClient, authCall } from '@/lib/auth/client'
 import { clearSessionRole } from '@/lib/session'
 import { clearCurrentUserCache } from '@/hooks/useCurrentUser'
+import { clearAccessToken } from '@/lib/api/client'
 
 export async function signOutEverywhere() {
   await authCall(() => authClient.signOut()) // clear local state even if the network call fails
   clearSessionRole()
   clearCurrentUserCache()
+  clearAccessToken()
 }
 
 export function SignOutButton({ className, label = 'Sign out' }: { className?: string; label?: string }) {

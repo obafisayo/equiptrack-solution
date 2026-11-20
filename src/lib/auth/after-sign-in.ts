@@ -2,7 +2,7 @@
 
 import { isRole, ROLE_ROUTE } from '@/lib/domain/roles'
 import { setSessionRole, clearSessionRole } from '@/lib/session'
-import { ApiError } from '@/lib/api/client'
+import { ApiError, clearAccessToken } from '@/lib/api/client'
 import { clearCurrentUserCache, loadCurrentUser } from '@/hooks/useCurrentUser'
 
 /**
@@ -12,6 +12,7 @@ import { clearCurrentUserCache, loadCurrentUser } from '@/hooks/useCurrentUser'
  */
 export async function destinationAfterSignIn(): Promise<string> {
   clearCurrentUserCache()
+  clearAccessToken() // a new sign-in means a new session: never reuse a previous user's token
   try {
     const me = await loadCurrentUser()
 
