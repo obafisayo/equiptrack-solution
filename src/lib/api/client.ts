@@ -1,6 +1,6 @@
 'use client'
 
-import { authClient } from '@/lib/auth/client'
+import { authClient, authCall } from '@/lib/auth/client'
 
 /**
  * Authenticated client for the EquipTrack API (equiptrack-backend).
@@ -19,7 +19,7 @@ export class ApiError extends Error {
 }
 
 export async function getAccessToken(): Promise<string | null> {
-  const { data } = await authClient.getSession()
+  const { data } = await authCall(() => authClient.getSession())
   return data?.session?.token ?? null
 }
 

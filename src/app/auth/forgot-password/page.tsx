@@ -3,7 +3,7 @@
 import { Suspense, useState } from 'react'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { authClient } from '@/lib/auth/client'
+import { authClient, authCall } from '@/lib/auth/client'
 import { AuthFrame, Field, FormError, FormNotice, PasswordInput } from '@/components/auth/AuthFrame'
 
 const MIN_PASSWORD = 8
@@ -23,10 +23,10 @@ function ForgotPasswordForm() {
     e?.preventDefault()
     setLoading(true)
     setError(null)
-    const { error } = await authClient.forgetPassword.emailOtp({ email: email.trim() })
+    const { error } = await authCall(() => authClient.forgetPassword.emailOtp({ email: email.trim() }))
     setLoading(false)
     if (error) {
-      setError(error.message ?? 'Could not send a reset code. Try again in a minute.')
+      setError(error.status === 429 ? 'Please wait a minute before requesting another code.' : error.message)
       return
     }
     // Same message whether or not the account exists (no account discovery).
@@ -42,7 +42,7 @@ function ForgotPasswordForm() {
     }
     setLoading(true)
     setError(null)
-    const { error } = await authClient.emailOtp.resetPassword({ email: email.trim(), otp: code.trim(), password })
+    const { error } = await authCall(() => authClient.emailOtp.resetPassword({ email: email.trim(), otp: code.trim(), password }))
     setLoading(false)
     if (error) {
       setError('That code is not valid or has expired. Request a new one.')

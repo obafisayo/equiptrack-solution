@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { authClient } from '@/lib/auth/client'
+import { authClient, authCall } from '@/lib/auth/client'
 import { AuthFrame, Divider, Field, FormError, MicrosoftButton, PasswordInput } from '@/components/auth/AuthFrame'
 
 const MIN_PASSWORD = 8
@@ -25,11 +25,12 @@ export default function SignUpPage() {
     setLoading(true)
     setError(null)
 
-    const { error } = await authClient.signUp.email({ name: name.trim(), email: email.trim(), password })
+    const { error } = await authCall(() => authClient.signUp.email({ name: name.trim(), email: email.trim(), password }))
     if (error) {
-      setError(/exist/i.test(error.message ?? '')
+      setError(error.code?.includes('EXIST') || /exist/i.test(error.message)
         ? 'An account with this email already exists. Sign in instead.'
-        : error.message ?? 'Could not create your account. Please try again.')
+        : error.code === 'PASSWORD_TOO_SHORT' ? `Use at least ${MIN_PASSWORD} characters for your password.`
+        : error.message)
       setLoading(false)
       return
     }

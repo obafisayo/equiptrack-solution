@@ -2,7 +2,7 @@
 
 import { useState, type ReactNode } from 'react'
 import { AuthLeftPanel } from '@/components/layout/AuthLeftPanel'
-import { authClient } from '@/lib/auth/client'
+import { authClient, authCall } from '@/lib/auth/client'
 
 /** Two-column auth layout: brand panel left, form right (matches the original login design). */
 export function AuthFrame({ title, subtitle, children }: { title: string; subtitle?: ReactNode; children: ReactNode }) {
@@ -99,17 +99,17 @@ export function MicrosoftButton({ label = 'Sign in with Microsoft' }: { label?: 
     setBusy(true)
     setError(null)
     const origin = window.location.origin
-    const { error } = await authClient.signIn.social({
+    const { error } = await authCall(() => authClient.signIn.social({
       provider: 'microsoft',
       callbackURL: `${origin}/auth/continue`,
       errorCallbackURL: `${origin}/auth/sso/error`,
-    })
+    }))
     if (error) {
       // Neon returns code PROVIDER_NOT_SUPPORTED ("Provider is not supported or enabled for this project").
-      const detail = `${error.code ?? ''} ${error.message ?? ''} ${(error as { error?: string }).error ?? ''}`
+      const detail = `${error.code ?? ''} ${error.message}`
       setError(/PROVIDER_NOT_SUPPORTED|not (found|configured|enabled|supported)/i.test(detail)
         ? 'Microsoft sign-in is not set up yet. Please sign in with your email and password.'
-        : error.message ?? 'Microsoft sign-in is not available right now.')
+        : error.message)
       setBusy(false)
     }
   }

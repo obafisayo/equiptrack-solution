@@ -2,12 +2,12 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { authClient } from '@/lib/auth/client'
+import { authClient, authCall } from '@/lib/auth/client'
 import { clearSessionRole } from '@/lib/session'
 import { clearCurrentUserCache } from '@/hooks/useCurrentUser'
 
 export async function signOutEverywhere() {
-  await authClient.signOut()
+  await authCall(() => authClient.signOut()) // clear local state even if the network call fails
   clearSessionRole()
   clearCurrentUserCache()
 }

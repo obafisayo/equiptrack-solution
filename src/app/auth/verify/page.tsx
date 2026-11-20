@@ -3,7 +3,7 @@
 import { Suspense, useState } from 'react'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { authClient } from '@/lib/auth/client'
+import { authClient, authCall } from '@/lib/auth/client'
 import { destinationAfterSignIn } from '@/lib/auth/after-sign-in'
 import { AuthFrame, Field, FormError, FormNotice } from '@/components/auth/AuthFrame'
 
@@ -23,9 +23,9 @@ function VerifyForm() {
     setError(null)
     setNotice(null)
 
-    const { data, error } = await authClient.emailOtp.verifyEmail({ email: email.trim(), otp: code.trim() })
+    const { data, error } = await authCall(() => authClient.emailOtp.verifyEmail({ email: email.trim(), otp: code.trim() }))
     if (error) {
-      setError(/attempt/i.test(error.message ?? '')
+      setError(error.code === 'TOO_MANY_ATTEMPTS' || /attempt/i.test(error.message)
         ? 'Too many attempts. Request a new code.'
         : 'That code is not valid or has expired. Check the latest email or request a new code.')
       setLoading(false)
@@ -33,7 +33,7 @@ function VerifyForm() {
     }
 
     // Auto sign-in after verification is on, so a session usually exists now.
-    if (data && 'session' in data && data.session) {
+    if (data && typeof data === 'object' && 'session' in data && data.session) {
       try {
         router.replace(await destinationAfterSignIn())
         return
@@ -51,9 +51,9 @@ function VerifyForm() {
     }
     setResending(true)
     setError(null)
-    const { error } = await authClient.emailOtp.sendVerificationOtp({ email: email.trim(), type: 'email-verification' })
+    const { error } = await authCall(() => authClient.emailOtp.sendVerificationOtp({ email: email.trim(), type: 'email-verification' }))
     setResending(false)
-    if (error) setError(error.message ?? 'Could not send a new code. Try again in a minute.')
+    if (error) setError(error.status === 429 ? 'Please wait a minute before requesting another code.' : error.message)
     else setNotice('A new code is on its way. It expires in 15 minutes.')
   }
 

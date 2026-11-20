@@ -3,7 +3,7 @@
 import { Suspense, useState } from 'react'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { authClient } from '@/lib/auth/client'
+import { authClient, authCall, isUnverifiedEmail } from '@/lib/auth/client'
 import { destinationAfterSignIn } from '@/lib/auth/after-sign-in'
 import { AuthFrame, Divider, Field, FormError, FormNotice, MicrosoftButton, PasswordInput } from '@/components/auth/AuthFrame'
 
@@ -21,16 +21,17 @@ function SignInForm() {
     setLoading(true)
     setError(null)
 
-    const { error } = await authClient.signIn.email({ email: email.trim(), password })
+    const { error } = await authCall(() => authClient.signIn.email({ email: email.trim(), password }))
     if (error) {
       // Unverified accounts get a fresh code (sent on sign-in) and go to the code screen.
-      if (error.status === 403 || /verif/i.test(error.message ?? '')) {
+      if (isUnverifiedEmail(error)) {
         router.push(`/auth/verify?email=${encodeURIComponent(email.trim())}`)
         return
       }
-      setError(error.status === 401 || /invalid/i.test(error.message ?? '')
+      setError(error.code === 'INVALID_EMAIL_OR_PASSWORD' || error.status === 401
         ? 'That email and password do not match.'
-        : error.message ?? 'Sign-in failed. Please try again.')
+        : error.status === 429 ? 'Too many attempts. Please wait a minute and try again.'
+        : error.message)
       setLoading(false)
       return
     }
