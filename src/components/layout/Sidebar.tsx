@@ -15,6 +15,8 @@ import type { LucideIcon } from 'lucide-react'
 import type { WorkspaceRole as Role } from '@/lib/domain/roles'
 import { ROLE_LABEL } from '@/lib/lifecycle'
 import { Avatar } from '@/components/ui/Avatar'
+import { useCurrentUser } from '@/hooks/useCurrentUser'
+import { SignOutButton } from '@/components/auth/SignOutButton'
 
 interface NavItem {
   type?: never
@@ -150,7 +152,9 @@ export function Sidebar({
   onToggleCollapse,
 }: SidebarProps) {
   const items     = NAV_ITEMS[role] ?? []
-  const userName  = ROLE_USER[role] ?? 'User'
+  const { me } = useCurrentUser()
+  // Signed-in user's real name from the API; demo name only as a fallback.
+  const userName  = me?.name ?? ROLE_USER[role] ?? 'User'
   const roleLabel = ROLE_LABEL[role]
 
   const navItems = items.filter((e): e is NavItem => !('type' in e))
@@ -284,12 +288,9 @@ export function Sidebar({
           )}
         </div>
         {!collapsed && (
-          <Link
-            href="/login"
-            className="block text-center py-1 rounded text-[11px] text-white/38 hover:text-white/65 transition-colors duration-150 no-underline"
-          >
-            Switch Role
-          </Link>
+          <SignOutButton
+            className="block w-full text-center py-1 rounded text-[11px] text-white/38 hover:text-white/65 transition-colors duration-150 bg-transparent border-none cursor-pointer"
+          />
         )}
       </div>
     </aside>

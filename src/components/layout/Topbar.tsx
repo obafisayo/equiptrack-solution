@@ -5,6 +5,7 @@ import Link from 'next/link'
 import type { ReactNode } from 'react'
 import type { WorkspaceRole as Role } from '@/lib/domain/roles'
 import { Avatar } from '@/components/ui/Avatar'
+import { useCurrentUser } from '@/hooks/useCurrentUser'
 import { NotificationBell } from './NotificationBell'
 
 const ROLE_USER: Record<Role, string> = {
@@ -45,7 +46,8 @@ export function Topbar({
   role,
   onMobileMenuToggle,
 }: TopbarProps) {
-  const userName = ROLE_USER[role]
+  const { me } = useCurrentUser()
+  const userName = me?.name ?? ROLE_USER[role]
 
   return (
     <header className="bg-white border-b border-border-default h-16 flex items-center justify-between px-4 lg:px-6 sticky top-0 z-20">

@@ -139,3 +139,6 @@ Map design tokens to Tailwind's `theme.extend` in `tailwind.config.ts`:
 - **Pricing**: `src/config/pricing.ts`. Never hard-code a plan price.
 - **Client branding**: `src/config/organization.ts` (`NEXT_PUBLIC_ORG_*` env vars). Never hard-code a customer's name or logo.
 - CI (`.github/workflows/ci.yml`) runs lint, type-check, and build. Backend CI lives in its own repo.
+- **Sign-in:** Neon Auth (Managed Better Auth), with email + password (OTP email verification) and Microsoft (Entra ID). `src/lib/auth/server.ts` + `/api/auth/[...path]` proxy; `src/lib/auth/client.ts` in the browser. `src/proxy.ts` (Next 16 middleware) guards workspace routes.
+- **Calling the API:** use `apiFetch` from `src/lib/api/client.ts`; it attaches the Neon JWT. The role comes from `GET /api/me`. The `localStorage` role written by `setSessionRole` only drives navigation chrome and is never trusted.
+- Next.js 16: there is no `next lint`; `npm run lint` runs ESLint with `eslint.config.mjs`. Route `params` must be awaited or read with `use()`.
