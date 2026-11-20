@@ -10,19 +10,15 @@ import { SubscriptionCard } from './_components/SubscriptionCard'
 import { QuickActionsPanel } from './_components/QuickActionsPanel'
 import { RecentActivityCard } from './_components/RecentActivityCard'
 import { PendingInvitesAlert } from './_components/PendingInvitesAlert'
+import { LiveOverview } from './_components/LiveOverview'
 
 export default function OrgAdminOverview({ params }: { params: Promise<{ orgSlug: string }> }) {
   const { orgSlug } = use(params)
 
   const org = ORGANISATIONS.find(o => o.slug === orgSlug)
 
-  if (!org) {
-    return (
-      <div style={{ textAlign: 'center', padding: 40 }}>
-        <p style={{ fontSize: 15, color: '#6B7280' }}>Organisation not found.</p>
-      </div>
-    )
-  }
+  // Real organisations (not in the demo fixtures) use live data from the API.
+  if (!org) return <LiveOverview orgSlug={orgSlug} />
 
   const members   = USERS.filter(u => u.orgId === org.id)
   const active    = members.filter(u => u.status === 'active')

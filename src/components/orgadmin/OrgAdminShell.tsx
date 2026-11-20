@@ -11,6 +11,8 @@ import {
 import type { LucideIcon } from 'lucide-react'
 import { Avatar } from '@/components/ui/Avatar'
 import { ORGANISATIONS, USERS } from '@/lib/mock-platform'
+import { useCurrentUser } from '@/hooks/useCurrentUser'
+import { SignOutButton } from '@/components/auth/SignOutButton'
 
 /* ── Nav items ────────────────────────────────────────────────────────────── */
 
@@ -59,8 +61,14 @@ export function OrgAdminShell({ orgSlug, currentPath, children }: OrgAdminShellP
   const [mobileOpen, setMobileOpen] = useState(false)
   const title = resolveTitle(orgSlug, currentPath)
 
-  const org = ORGANISATIONS.find(o => o.slug === orgSlug)
-  const adminUser = USERS.find(u => u.orgId === org?.id && u.role === 'org_admin')
+  // Real organisation + signed-in admin from the API; mock data only as a fallback for demo slugs.
+  const { me } = useCurrentUser()
+  const membership = me?.memberships.find(m => m.organizationSlug === orgSlug)
+  const mockOrg = ORGANISATIONS.find(o => o.slug === orgSlug)
+  const org = membership ? { name: membership.organizationName } : mockOrg
+  const adminUser = me?.name
+    ? { displayName: me.name }
+    : USERS.find(u => u.orgId === mockOrg?.id && u.role === 'org_admin')
 
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
@@ -193,6 +201,9 @@ export function OrgAdminShell({ orgSlug, currentPath, children }: OrgAdminShellP
             <ArrowLeft size={11} />
             Back to App
           </Link>
+          <SignOutButton
+            className="flex md:hidden lg:flex items-center py-1 bg-transparent border-none cursor-pointer text-[11px] text-white/38 hover:text-white/65 transition-colors duration-150 p-0"
+          />
         </div>
       </aside>
 
