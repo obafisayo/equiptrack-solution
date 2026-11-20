@@ -97,6 +97,7 @@ export default function LandingPage() {
                   src="/dashboard-mockup.png"
                   alt="Equiptrack dashboard interface"
                   fill
+                  sizes="(min-width: 1024px) 576px, 100vw"
                   className="object-cover object-top"
                   priority
                 />
